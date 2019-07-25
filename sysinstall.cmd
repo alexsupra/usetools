@@ -1,24 +1,17 @@
 :: usetools sysinstall
-@echo off
+@echo off &cls
 chcp 866 >nul
-cd /d "%~dp0"
-set sysinstall=%cd%
-set setupbin=%cd%\setupbin
-if not exist %setupbin% md %setupbin%
-set path=%path%;%sysinstall%;%setupbin%
-cd %setupbin%
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
 for /f "tokens=2*" %%a in ('reg query "hklm\software\microsoft\windows nt\currentversion" /v "CurrentVersion"') do set "ntver=%%b"
 echo %cpuname%
 :: checking admin previligies
 net session >nul 2>&1
 if %errorLevel% neq 0 echo Administrative permissions check failure! &echo Please restart as admin. &color 0e &pause &exit
-:: detecting os architechture
+:: checking os version
 if "%ntver%"=="4.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.1" echo OS Windows NT %ntver% is not supported &color 0e &pause
-echo CPU architecture is detected as: %PROCESSOR_ARCHITECTURE% &echo OS version: %ntver% &color 0b
-echo.
+echo CPU architecture is detected as: %PROCESSOR_ARCHITECTURE% &echo OS version: %ntver% &echo.
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -26,14 +19,50 @@ echo     ÛÛ    ÛÛ  ßßßßßßÛ Ûßßßßß      ÛÛ    Û      Û Û      Û ÛÛ        ßßßßßßÛ
 echo     ÛÛ    ÛÛ ÛÛ     Û Û      Û    ÛÛ    Û      Û Û      Û ÛÛ    ÛÛ ÛÛ     Û 
 echo      ßßßßßßß ßßßßßßßß ßßßßßßßß    ßß    ßßßßßßßß ßßßßßßßß ßßßßßßßß ßßßßßßßß  
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
-echo.
+echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+echo     ³   usetools sysinstall - software and settings installation script   ³
+echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+::
+:menu
+echo. &color 0a
+echo [1] Install software and system settings
+echo [2] Install software
+echo [0] Exit &echo.
+set userinput=0
+set /p userinput=  Input your choice and press enter [1/2/0]:
+if %userinput%==0 exit
+if %userinput%==2 goto prepair
+if %userinput%==1 goto prepair
+echo Input seems to be incorrect. Please try one more time.
+goto menu
+::
+:prepair
+cd /d "%~dp0"
+set sysinstall=%cd%
+set setupbin=%cd%\setupbin
+set setupcfg=%cd%\setupcfg
+if not exist %setupbin% md %setupbin%
+if not exist %setupcfg% md %setupcfg%
+set path=%path%;%sysinstall%;%setupbin%
+if not exist "%sysinstall%\wget.exe" (
+	echo We have a problem: wget.exe is not found! &echo Now we will start IE for downloading wget.exe, please save it in the same dir with sysinstall.cmd &color 0e &pause
+	"%programfiles%\internet explorer\iexplore.exe" "http://eternallybored.org/misc/wget/1.20.3/32/wget.exe"
+	goto prepair
+	)
+color 0b
+if %userinput%==1 goto config
+goto install
+::	
+:config
+echo Applying system settings...
+if not exist "%sysinstall%\sysconfig.reg" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/sysconfig.reg
+regedit /s "%sysinstall%\sysconfig.reg"
+::
+:install
+cd %setupbin%
 wmic OS get OSArchitecture|find.exe "64" >nul 
-if not errorlevel 1 (
-	echo OS architecture is detected as: 64-bit
-	set osarch=x64
-	goto osx64
-)
-:: running setup
+if not errorlevel 1 goto osx64
+::
 :osx86
 echo Running installation in 32-bit mode...
 :: 7-zip
@@ -62,10 +91,17 @@ if not exist "ConEmuSetup.190714.exe" wget.exe --no-check-certificate --tries=3 
 if not exist "nircmd.zip" wget.exe --no-check-certificate --tries=3 -c http://www.nirsoft.net/utils/nircmd.zip
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
-:: Classic Shell
-if not exist "ClassicShellSetup_4_3_1-ru.exe" wget.exe --no-check-certificate --tries=3 -c http://classicshell.mediafire.com/file/ckuf8e75ar0oixy/ClassicShellSetup_4_3_1-ru.exe
-if "%ntver%" neq "6.1" ClassicShellSetup_4_3_1-ru.exe /quiet
+:: Anvir
+if not exist "anvirrus.zip" wget.exe --no-check-certificate --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
+7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
+if not exist "%programfiles%\anvir" md "%programfiles%\anvir"
+7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
+cd "%setupcfg%"
+if not exist "%setupcfg%\anvir.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z
+7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
+reg add "hkcu\software\microsoft\windows\currentversion\run" /v "anvir task manager" /t reg_sz /d "%programfiles%\anvir\anvir.exe minimized" /f
 :: ClamWin
+cd "%setupbin%"
 if not exist "clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
 :: Firefox
@@ -108,9 +144,15 @@ if not exist "ConEmuSetup.190714.exe" wget.exe --no-check-certificate --tries=3 
 if not exist "nircmd-x64.zip" wget.exe --no-check-certificate --tries=3 -c http://www.nirsoft.net/utils/nircmd-x64.zip
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd-x64.zip"
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
-:: Classic Shell
-if not exist "ClassicShellSetup_4_3_1-ru.exe" wget.exe --no-check-certificate --tries=3 -c http://classicshell.mediafire.com/file/ckuf8e75ar0oixy/ClassicShellSetup_4_3_1-ru.exe
-if "%ntver%" neq "6.1" "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
+:: Anvir
+if not exist "anvirrus.zip" wget.exe --no-check-certificate --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
+7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
+if not exist "%programfiles%\anvir" md "%programfiles%\anvir"
+7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
+cd "%setupcfg%"
+if not exist "%setupcfg%\anvir.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z
+7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
+reg add "hkcu\software\microsoft\windows\currentversion\run" /v "anvir task manager" /t reg_sz /d "%programfiles%\anvir\anvir.exe minimized" /f
 :: ClamWin
 if not exist "clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
@@ -158,11 +200,13 @@ del /f /q "%public%\desktop\Keyboard LEDs.lnk"
 ::dism /online /enable-feature /featurename:NetFx3 /All /Source:X:\sources\sxs /LimitAccess
 if not exist "dotnetfx35.exe" wget.exe --no-check-certificate --tries=3 -c "http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
 "%setupbin%\dotnetfx35.exe" /s
+:: Classic Shell
+if not exist "ClassicShellSetup_4_3_1-ru.exe" wget.exe --no-check-certificate --tries=3 -c http://classicshell.mediafire.com/file/ckuf8e75ar0oixy/ClassicShellSetup_4_3_1-ru.exe
+if "%ntver%" neq "6.1" ClassicShellSetup_4_3_1-ru.exe /quiet
 :: Tango Patcher
 if not exist "WinTango-Patcher-16.12.24-offline.exe" wget.exe --no-check-certificate --tries=3 -c "http://github.com/heebijeebi/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
 ::
 :eof
-color 02
-pause
+color 02 &echo Installation completed. &pause
 ::
