@@ -12,7 +12,7 @@ for /f "tokens=2*" %%a in ('reg query "hklm\software\microsoft\windows nt\curren
 echo %cpuname%
 :: checking admin previligies
 net session >nul 2>&1
-if %errorLevel% neq 0 echo Administrative permissions check failure &color 0e &pause
+if %errorLevel% neq 0 echo Administrative permissions check failure! &echo Please restart as admin. &color 0e &pause &exit
 :: detecting os architechture
 if "%ntver%"=="4.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
