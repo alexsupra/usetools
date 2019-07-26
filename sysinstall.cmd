@@ -22,6 +22,11 @@ echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 echo     ³   usetools sysinstall - software and settings installation script   ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+if "%1"=="-u" (
+	echo. &echo Running in unattended mode... 
+	set userinput=1
+	goto prepair
+	)
 ::
 :menu
 echo. &color 0a
@@ -41,8 +46,10 @@ cd /d "%~dp0"
 set sysinstall=%cd%
 set setupbin=%cd%\setupbin
 set setupcfg=%cd%\setupcfg
+set resource=%cd%\resource
 if not exist %setupbin% md %setupbin%
 if not exist %setupcfg% md %setupcfg%
+if not exist %resource% md %resource%
 set path=%path%;%sysinstall%;%setupbin%
 if not exist "%sysinstall%\wget.exe" (
 	echo We have a problem: wget.exe is not found! &echo Now we will start IE for downloading wget.exe, please save it in the same dir with sysinstall.cmd &color 0e &pause
@@ -61,7 +68,11 @@ regedit /s "%sysinstall%\sysconfig.reg"
 :install
 cd %setupbin%
 wmic OS get OSArchitecture|find.exe "64" >nul 
-if not errorlevel 1 goto osx64
+if not errorlevel 1 (
+	set osarch=x64
+	goto osx64
+	)
+set osarch=x86
 ::
 :osx86
 echo Running installation in 32-bit mode...
@@ -97,18 +108,23 @@ if not exist "anvirrus.zip" wget.exe --no-check-certificate --tries=3 -c http://
 if not exist "%programfiles%\anvir" md "%programfiles%\anvir"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
 cd "%setupcfg%"
-if not exist "%setupcfg%\anvir.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z
+if not exist "%setupcfg%\anvir.7z" wget.exe --no-check-certificate --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
 reg add "hkcu\software\microsoft\windows\currentversion\run" /v "anvir task manager" /t reg_sz /d "%programfiles%\anvir\anvir.exe minimized" /f
-:: ClamWin
 cd "%setupbin%"
-if not exist "clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
+:: ClamWin
+if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
+:: Notepad2
+if not exist "%setupbin%\notepad2_4.2.25_x86.zip" wget.exe --no-check-certificate --tries=3 -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x86.zip"
+cd "%setupcfg%"
+if not exist "%setupcfg%\notepad2.7z" wget.exe --no-check-certificate --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
+cd "%setupbin%"
 :: Firefox
-if not exist "Firefox Setup 67.0.4.exe" wget.exe --no-check-certificate --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win32/ru/Firefox Setup 67.0.4.exe"
+if not exist "%setupbin%\Firefox Setup 67.0.4.exe" wget.exe --no-check-certificate --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win32/ru/Firefox Setup 67.0.4.exe"
 "%setupbin%\Firefox Setup 67.0.4.exe" /S
 :: Thunderbird
-if not exist "Thunderbird Setup 60.7.2.exe" wget.exe --no-check-certificate --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.7.2/win32/ru/Thunderbird Setup 60.7.2.exe"
+if not exist "%setupbin%\Thunderbird Setup 60.7.2.exe" wget.exe --no-check-certificate --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.7.2/win32/ru/Thunderbird Setup 60.7.2.exe"
 "%setupbin%\Thunderbird Setup 60.7.2.exe" /S
 if not exist "addon-362387-latest.xpi" wget.exe --no-check-certificate --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
@@ -154,8 +170,13 @@ if not exist "%setupcfg%\anvir.7z" wget.exe --no-check-certificate --tries=3 -c 
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
 reg add "hkcu\software\microsoft\windows\currentversion\run" /v "anvir task manager" /t reg_sz /d "%programfiles%\anvir\anvir.exe minimized" /f
 :: ClamWin
-if not exist "clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
+if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
+:: Notepad2
+if not exist "%setupbin%\notepad2_4.2.25_x64.zip" wget.exe --no-check-certificate --tries=3 -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x64.zip"
+cd "%setupcfg%"
+if not exist "%setupcfg%\notepad2.7z" wget.exe --no-check-certificate --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
+cd "%setupbin%"
 :: Firefox
 if not exist "Firefox Setup 67.0.4.msi" wget.exe --no-check-certificate --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win64/ru/Firefox Setup 67.0.4.msi"
 msiexec /package "%setupbin%\Firefox Setup 67.0.4.msi" /quiet /norestart
@@ -171,8 +192,26 @@ if not exist "vlc-3.0.7.1-win64.exe" wget.exe --no-check-certificate --tries=3 -
 "%setupbin%\vlc-3.0.7.1-win64.exe" /S
 ::
 :osx8664
+:: Unreal Commander
+if not exist "uncomsetup.exe" wget.exe --no-check-certificate --tries=3 -c "http://x-diesel.com/download/uncomsetup.exe"
+"%setupbin%\uncomsetup.exe" /VERYSILENT
+if %osarch%==x86 (
+	nircmd.exe killprocess UnrealCommander32.exe
+	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2_4.2.25_x86.zip"	
+	)
+if %osarch%==x64 (
+	nircmd.exe killprocess UnrealCommander64.exe
+	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2_4.2.25_x64.zip"
+	)
+cd "%setupcfg%"
+if not exist "%setupcfg%\unreal.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/unreal.7z
+7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\unreal.7z"
+copy /y "%systemdrive%\unreal commander\uncom.ini" "%appdata%\unreal commander"
+copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander"
+7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\notepad2.7z"
+cd "%setupbin%"
 :: OpenOffice
-if not exist "%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" wget.exe --no-check-certificate --tries=3 -c http://sourceforge.net/projects/openofficeorg.mirror/files/4.1.6/binaries/ru/Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe
+if not exist "%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" wget.exe --no-check-certificate --tries=3 -c "http://sourceforge.net/projects/openofficeorg.mirror/files/4.1.6/binaries/ru/Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe"
 "%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" /S
 rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.6 (ru) Installation Files"
 :: XnView
