@@ -1,5 +1,11 @@
 Windows Registry Editor Version 5.00
 ; usetools sysconfig
+; SYSTEM
+[HKEY_CURRENT_USER\control panel\desktop]
+"autoendtasks"="1"
+[HKEY_USERS\.DEFAULT\control panel\desktop]
+"autoendtasks"="1"
+
 ; GUI/SHELL
 ; keyboard layot settings: (en)-default; (ctrl+shift) -change language
 [HKEY_CURRENT_USER\keyboard layout\preload]
@@ -32,7 +38,7 @@ Windows Registry Editor Version 5.00
 "link"=hex:00,00,00,00
 
 ; CMD
-; run cmd.exe as administrator
+; run cmd.exe as administrator from rclick menu
 [-HKEY_CLASSES_ROOT\Directory\shell\runas]
 [HKEY_CLASSES_ROOT\Directory\shell\runas]
 @="CMD"

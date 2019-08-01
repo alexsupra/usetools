@@ -49,7 +49,7 @@ set setupcfg=%cd%\setupcfg
 set resource=%cd%\resource
 if not exist %setupbin% md %setupbin%
 if not exist %setupcfg% md %setupcfg%
-if not exist %resource% md %resource%
+::if not exist %resource% md %resource%
 set path=%path%;%sysinstall%;%setupbin%
 if not exist "%sysinstall%\wget.exe" (
 	echo We have a problem: wget.exe is not found! &echo Now we will start IE for downloading wget.exe, please save it in the same dir with sysinstall.cmd &color 0e &pause
@@ -95,9 +95,17 @@ if exist "%ProgramFiles%\Far Manager" set far_dir=%ProgramFiles%\Far Manager
 if not exist "%far_dir%\plugins\7-zip" md "%far_dir%\plugins\7-zip"
 copy /y "%sevenzip_dir%\far\*.*" "%far_dir%\plugins\7-zip"
 regedit /s "%far_dir%\plugins\7-zip\far7z.reg"
+cd "%setupcfg%"
+if not exist "%setupcfg%\far.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z
+7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
+cd "%setupbin%"
 :: ConEmu
 if not exist "ConEmuSetup.190714.exe" wget.exe --no-check-certificate --tries=3 -c http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe
 "%setupbin%\ConEmuSetup.190714.exe" /p:x86,adm /qr
+cd "%setupcfg%"
+if not exist "%setupcfg%\conemu.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z
+7za.exe x -r -y -o"%appdata%" "%setupcfg%\conemu.7z"
+cd "%setupbin%"
 :: NirCMD
 if not exist "nircmd.zip" wget.exe --no-check-certificate --tries=3 -c http://www.nirsoft.net/utils/nircmd.zip
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
@@ -153,9 +161,17 @@ if exist "%ProgramFiles%\Far Manager" set far_dir=%ProgramFiles%\Far Manager
 if not exist "%far_dir%\plugins\7-zip" md "%far_dir%\plugins\7-zip"
 copy /y "%sevenzip_dir%\far\*.*" "%far_dir%\plugins\7-zip"
 regedit /s "%far_dir%\plugins\7-zip\far7z.reg"
+cd "%setupcfg%"
+if not exist "%setupcfg%\far.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z
+7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
+cd "%setupbin%"
 :: ConEmu
 if not exist "ConEmuSetup.190714.exe" wget.exe --no-check-certificate --tries=3 -c http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe
 "%setupbin%\ConEmuSetup.190714.exe" /p:x64,adm /qr
+cd "%setupcfg%"
+if not exist "%setupcfg%\conemu.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z
+7za.exe x -r -y -o"%appdata%" "%setupcfg%\conemu.7z"
+cd "%setupbin%"
 :: NirCMD
 if not exist "nircmd-x64.zip" wget.exe --no-check-certificate --tries=3 -c http://www.nirsoft.net/utils/nircmd-x64.zip
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd-x64.zip"
