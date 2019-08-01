@@ -169,6 +169,7 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\anvir.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
 reg add "hkcu\software\microsoft\windows\currentversion\run" /v "anvir task manager" /t reg_sz /d "%programfiles%\anvir\anvir.exe minimized" /f
+cd "%setupbin%"
 :: ClamWin
 if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT

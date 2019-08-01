@@ -31,22 +31,6 @@ Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer]
 "link"=hex:00,00,00,00
 
-; disable charms bar for Windows 8
-[HKEY_CURRENT_USER\software\microsoft\windows\currentversion\immersiveshell\edgeui]
-"disablecharmshint"=dword:00000001
-"disabletrcorner"=dword:00000001
-[HKEY_USERS\.DEFAULT\software\microsoft\windows\currentversion\immersiveshell\edgeui]
-"disablecharmshint"=dword:00000001
-"disabletrcorner"=dword:00000001
-
-; remove OneDrive icon for Windows 10
-[HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
-"System.IsPinnedToNameSpaceTree"=dword:00000000
-[HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
-"System.IsPinnedToNameSpaceTree"=dword:00000000
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OneDrive]
-"DisableFileSyncNGSC"=dword:00000001
-
 ; CMD
 ; run cmd.exe as administrator
 [-HKEY_CLASSES_ROOT\Directory\shell\runas]
@@ -119,4 +103,23 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main]
 "HomeButtonEnabled"=dword:00000001
 "HomeButtonPage"="http://www.google.com/"
+
+; DISABLED COMPONENTS
+; disable charms bar for Windows 8
+[HKEY_CURRENT_USER\software\microsoft\windows\currentversion\immersiveshell\edgeui]
+"disablecharmshint"=dword:00000001
+"disabletrcorner"=dword:00000001
+[HKEY_USERS\.DEFAULT\software\microsoft\windows\currentversion\immersiveshell\edgeui]
+"disablecharmshint"=dword:00000001
+"disabletrcorner"=dword:00000001
+
+; disable OneDrive for Windows 10
+[HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
+"System.IsPinnedToNameSpaceTree"=dword:00000000
+[HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
+"System.IsPinnedToNameSpaceTree"=dword:00000000
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OneDrive]
+"DisableFileSyncNGSC"=dword:00000001
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
+"OneDrive"=-
 ;
