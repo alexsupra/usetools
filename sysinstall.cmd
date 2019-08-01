@@ -34,7 +34,7 @@ echo [1] Install software and system settings
 echo [2] Install software
 echo [0] Exit &echo.
 set userinput=0
-set /p userinput=  Input your choice and press enter [1/2/0]:
+set /p userinput=Input your choice and press enter [1/2/0]:
 if %userinput%==0 exit
 if %userinput%==2 goto prepair
 if %userinput%==1 goto prepair
@@ -104,7 +104,8 @@ if not exist "ConEmuSetup.190714.exe" wget.exe --no-check-certificate --tries=3 
 "%setupbin%\ConEmuSetup.190714.exe" /p:x86,adm /qr
 cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z
-7za.exe x -r -y -o"%appdata%" "%setupcfg%\conemu.7z"
+7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
+copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
 :: NirCMD
 if not exist "nircmd.zip" wget.exe --no-check-certificate --tries=3 -c http://www.nirsoft.net/utils/nircmd.zip
@@ -148,8 +149,8 @@ if not exist "7z1900-x64.msi" wget.exe --no-check-certificate --tries=1 -c http:
 msiexec /package "%setupbin%\7z1900-x64.msi" /quiet /norestart
 if exist "%ProgramFiles(x86)%\7-Zip" set sevenzip_dir=%ProgramFiles(x86)%\7-Zip
 if exist "%ProgramFiles%\7-Zip" set sevenzip_dir=%ProgramFiles%\7-Zip
-if not exist "7z1900-extra.7z" wget.exe --no-check-certificate --tries=3 -c http://www.7-zip.org/a/7z1900-extra.7z
-if not exist "7z1900-extra.7z" wget.exe --no-check-certificate --tries=3 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z
+if not exist "7z1900-extra.7z" wget.exe --no-check-certificate --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z
+if not exist "7z1900-extra.7z" wget.exe --no-check-certificate --tries=1 -c http://www.7-zip.org/a/7z1900-extra.7z
 "%sevenzip_dir%\7zg.exe" x -r -y -o"%sevenzip_dir%" "%setupbin%\7z1900-extra.7z"
 copy /y "%sevenzip_dir%\x64\7za.exe" "%sysinstall%"
 copy /y "%sevenzip_dir%\x64\7za.exe" "%systemroot%\system32"
@@ -170,7 +171,8 @@ if not exist "ConEmuSetup.190714.exe" wget.exe --no-check-certificate --tries=3 
 "%setupbin%\ConEmuSetup.190714.exe" /p:x64,adm /qr
 cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z
-7za.exe x -r -y -o"%appdata%" "%setupcfg%\conemu.7z"
+7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
+copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
 :: NirCMD
 if not exist "nircmd-x64.zip" wget.exe --no-check-certificate --tries=3 -c http://www.nirsoft.net/utils/nircmd-x64.zip
