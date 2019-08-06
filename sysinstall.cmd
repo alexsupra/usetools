@@ -47,13 +47,16 @@ set sysinstall=%cd%
 set setupbin=%cd%\setupbin
 set setupcfg=%cd%\setupcfg
 set resource=%cd%\resource
-if not exist %setupbin% md %setupbin%
-if not exist %setupcfg% md %setupcfg%
-::if not exist %resource% md %resource%
+if not exist "%setupbin%" md "%setupbin%"
+if not exist "%setupcfg%" md "%setupcfg%"
+::if not exist "%resource%" md "%resource%"
 set path=%path%;%sysinstall%;%setupbin%
 if not exist "%sysinstall%\wget.exe" (
-	echo We have a problem: wget.exe is not found! &echo Now we will start IE for downloading wget.exe, please save it in the same dir with sysinstall.cmd &color 0e &pause
-	"%programfiles%\internet explorer\iexplore.exe" "http://eternallybored.org/misc/wget/1.20.3/32/wget.exe"
+	powershell -command "& { Invoke-WebRequest 'http://eternallybored.org/misc/wget/1.20.3/32/wget.exe' -OutFile 'wget.exe' }"
+	if not exist "%sysinstall%\wget.exe" (
+		echo We have a problem: wget.exe is not found! &echo Now we will start IE for downloading wget.exe, please save it in the same dir with sysinstall.cmd &color 0e &pause
+		"%programfiles%\internet explorer\iexplore.exe" "http://eternallybored.org/misc/wget/1.20.3/32/wget.exe"
+		)
 	goto prepair
 	)
 color 0b
@@ -62,7 +65,7 @@ goto install
 ::	
 :config
 echo Applying system settings...
-if not exist "%sysinstall%\sysconfig.reg" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/sysconfig.reg
+if not exist "%sysinstall%\sysconfig.reg" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/sysconfig.reg
 regedit /s "%sysinstall%\sysconfig.reg"
 ::
 :install
@@ -77,18 +80,18 @@ set osarch=x86
 :osx86
 echo Running installation in 32-bit mode...
 :: 7-zip
-if not exist "7z1900.msi" wget.exe --no-check-certificate --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900.msi
-if not exist "7z1900.msi" wget.exe --no-check-certificate --tries=1 -c http://www.7-zip.org/a/7z1900.msi
+if not exist "7z1900.msi" wget.exe --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900.msi
+if not exist "7z1900.msi" wget.exe --tries=1 -c http://www.7-zip.org/a/7z1900.msi
 msiexec /package "%setupbin%\7z1900.msi" /quiet /norestart
 if exist "%ProgramFiles(x86)%\7-Zip" set "sevenzip_dir"="%ProgramFiles(x86)%\7-Zip"
 if exist "%ProgramFiles%\7-Zip" set "sevenzip_dir"="%ProgramFiles%\7-Zip"
-if not exist "7z1900-extra.7z" wget.exe --no-check-certificate --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z
-if not exist "7z1900-extra.7z" wget.exe --no-check-certificate --tries=1 -c http://www.7-zip.org/a/7z1900-extra.7z
+if not exist "7z1900-extra.7z" wget.exe --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z
+if not exist "7z1900-extra.7z" wget.exe --tries=1 -c http://www.7-zip.org/a/7z1900-extra.7z
 "%sevenzip_dir%\7zg.exe" x -r -y -o"%sevenzip_dir%" "%setupbin%\7z1900-extra.7z"
 copy /y "%sevenzip_dir%\7za.exe" "%sysinstall%"
 copy /y "%sevenzip_dir%\7za.exe" "%systemroot%\system32"
 :: FAR
-if not exist "Far30b5400.x86.20190523.msi" wget.exe --no-check-certificate --tries=3 -c http://www.farmanager.com/files/Far30b5400.x86.20190523.msi
+if not exist "Far30b5400.x86.20190523.msi" wget.exe --tries=3 -c http://www.farmanager.com/files/Far30b5400.x86.20190523.msi
 msiexec /package "%setupbin%\Far30b5400.x86.20190523.msi" /quiet /norestart
 if exist "%ProgramFiles(x86)%\Far Manager" set far_dir=%ProgramFiles(x86)%\Far Manager
 if exist "%ProgramFiles%\Far Manager" set far_dir=%ProgramFiles%\Far Manager
@@ -96,46 +99,47 @@ if not exist "%far_dir%\plugins\7-zip" md "%far_dir%\plugins\7-zip"
 copy /y "%sevenzip_dir%\far\*.*" "%far_dir%\plugins\7-zip"
 regedit /s "%far_dir%\plugins\7-zip\far7z.reg"
 cd "%setupcfg%"
-if not exist "%setupcfg%\far.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z
+if not exist "%setupcfg%\far.7z" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z
 7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
 cd "%setupbin%"
 :: ConEmu
-if not exist "ConEmuSetup.190714.exe" wget.exe --no-check-certificate --tries=3 -c http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe
+if not exist "ConEmuSetup.190714.exe" wget.exe --tries=3 -c http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe
 "%setupbin%\ConEmuSetup.190714.exe" /p:x86,adm /qr
 cd "%setupcfg%"
-if not exist "%setupcfg%\conemu.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z
+if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
 :: NirCMD
-if not exist "nircmd.zip" wget.exe --no-check-certificate --tries=3 -c http://www.nirsoft.net/utils/nircmd.zip
+if not exist "nircmd.zip" wget.exe --tries=3 -c http://www.nirsoft.net/utils/nircmd.zip
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
 :: Anvir
-if not exist "anvirrus.zip" wget.exe --no-check-certificate --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
+if not exist "anvirrus.zip" wget.exe --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
+nircmd.exe killprocess anvir.exe
 7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
 if not exist "%programfiles%\anvir" md "%programfiles%\anvir"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
 cd "%setupcfg%"
-if not exist "%setupcfg%\anvir.7z" wget.exe --no-check-certificate --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z"
+if not exist "%setupcfg%\anvir.7z" wget.exe --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
 reg add "hkcu\software\microsoft\windows\currentversion\run" /v "anvir task manager" /t reg_sz /d "%programfiles%\anvir\anvir.exe minimized" /f
 cd "%setupbin%"
 :: ClamWin
-if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
+if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
 :: Notepad2
-if not exist "%setupbin%\notepad2_4.2.25_x86.zip" wget.exe --no-check-certificate --tries=3 -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x86.zip"
+if not exist "%setupbin%\notepad2_4.2.25_x86.zip" wget.exe --tries=3 -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x86.zip"
 cd "%setupcfg%"
-if not exist "%setupcfg%\notepad2.7z" wget.exe --no-check-certificate --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
+if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
 cd "%setupbin%"
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 67.0.4.exe" wget.exe --no-check-certificate --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win32/ru/Firefox Setup 67.0.4.exe"
+if not exist "%setupbin%\Firefox Setup 67.0.4.exe" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win32/ru/Firefox Setup 67.0.4.exe"
 "%setupbin%\Firefox Setup 67.0.4.exe" /S
 :: Thunderbird
-if not exist "%setupbin%\Thunderbird Setup 60.7.2.exe" wget.exe --no-check-certificate --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.7.2/win32/ru/Thunderbird Setup 60.7.2.exe"
+if not exist "%setupbin%\Thunderbird Setup 60.7.2.exe" wget.exe --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.7.2/win32/ru/Thunderbird Setup 60.7.2.exe"
 "%setupbin%\Thunderbird Setup 60.7.2.exe" /S
-if not exist "addon-362387-latest.xpi" wget.exe --no-check-certificate --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
+if not exist "addon-362387-latest.xpi" wget.exe --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 ::
 goto osx8664
@@ -144,18 +148,18 @@ goto osx8664
 echo Running installation in 64-bit mode...
 if "%PROCESSOR_ARCHITECTURE%"=="x86" color 0e &echo CMD process seems to be 32-bit, its recommended to restart in 64-bit &pause
 :: 7-zip
-if not exist "7z1900-x64.msi" wget.exe --no-check-certificate --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-x64.msi
-if not exist "7z1900-x64.msi" wget.exe --no-check-certificate --tries=1 -c http://www.7-zip.org/a/7z1900-x64.msi
+if not exist "7z1900-x64.msi" wget.exe --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-x64.msi
+if not exist "7z1900-x64.msi" wget.exe --tries=1 -c http://www.7-zip.org/a/7z1900-x64.msi
 msiexec /package "%setupbin%\7z1900-x64.msi" /quiet /norestart
 if exist "%ProgramFiles(x86)%\7-Zip" set sevenzip_dir=%ProgramFiles(x86)%\7-Zip
 if exist "%ProgramFiles%\7-Zip" set sevenzip_dir=%ProgramFiles%\7-Zip
-if not exist "7z1900-extra.7z" wget.exe --no-check-certificate --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z
-if not exist "7z1900-extra.7z" wget.exe --no-check-certificate --tries=1 -c http://www.7-zip.org/a/7z1900-extra.7z
+if not exist "7z1900-extra.7z" wget.exe --tries=2 -c http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z
+if not exist "7z1900-extra.7z" wget.exe --tries=1 -c http://www.7-zip.org/a/7z1900-extra.7z
 "%sevenzip_dir%\7zg.exe" x -r -y -o"%sevenzip_dir%" "%setupbin%\7z1900-extra.7z"
 copy /y "%sevenzip_dir%\x64\7za.exe" "%sysinstall%"
 copy /y "%sevenzip_dir%\x64\7za.exe" "%systemroot%\system32"
 :: FAR
-if not exist "Far30b5400.x64.20190523.msi" wget.exe --no-check-certificate --tries=3 -c http://www.farmanager.com/files/Far30b5400.x64.20190523.msi
+if not exist "Far30b5400.x64.20190523.msi" wget.exe --tries=3 -c http://www.farmanager.com/files/Far30b5400.x64.20190523.msi
 msiexec /package "%setupbin%\Far30b5400.x64.20190523.msi" /quiet /norestart
 if exist "%ProgramFiles(x86)%\Far Manager" set far_dir=%ProgramFiles(x86)%\Far Manager
 if exist "%ProgramFiles%\Far Manager" set far_dir=%ProgramFiles%\Far Manager
@@ -163,106 +167,108 @@ if not exist "%far_dir%\plugins\7-zip" md "%far_dir%\plugins\7-zip"
 copy /y "%sevenzip_dir%\far\*.*" "%far_dir%\plugins\7-zip"
 regedit /s "%far_dir%\plugins\7-zip\far7z.reg"
 cd "%setupcfg%"
-if not exist "%setupcfg%\far.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z
+if not exist "%setupcfg%\far.7z" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z
 7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
 cd "%setupbin%"
 :: ConEmu
-if not exist "ConEmuSetup.190714.exe" wget.exe --no-check-certificate --tries=3 -c http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe
+if not exist "ConEmuSetup.190714.exe" wget.exe --tries=3 -c http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe
 "%setupbin%\ConEmuSetup.190714.exe" /p:x64,adm /qr
 cd "%setupcfg%"
-if not exist "%setupcfg%\conemu.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z
+if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
 :: NirCMD
-if not exist "nircmd-x64.zip" wget.exe --no-check-certificate --tries=3 -c http://www.nirsoft.net/utils/nircmd-x64.zip
+if not exist "nircmd-x64.zip" wget.exe --tries=3 -c http://www.nirsoft.net/utils/nircmd-x64.zip
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd-x64.zip"
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
 :: Anvir
-if not exist "anvirrus.zip" wget.exe --no-check-certificate --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
+if not exist "anvirrus.zip" wget.exe --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
+nircmd.exe killprocess anvir.exe
 7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
 if not exist "%programfiles%\anvir" md "%programfiles%\anvir"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
 cd "%setupcfg%"
-if not exist "%setupcfg%\anvir.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z
+if not exist "%setupcfg%\anvir.7z" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
 reg add "hkcu\software\microsoft\windows\currentversion\run" /v "anvir task manager" /t reg_sz /d "%programfiles%\anvir\anvir.exe minimized" /f
 cd "%setupbin%"
 :: ClamWin
-if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
+if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --tries=3 -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
 :: Notepad2
-if not exist "%setupbin%\notepad2_4.2.25_x64.zip" wget.exe --no-check-certificate --tries=3 -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x64.zip"
+if not exist "%setupbin%\notepad2_4.2.25_x64.zip" wget.exe --tries=3 -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x64.zip"
 cd "%setupcfg%"
-if not exist "%setupcfg%\notepad2.7z" wget.exe --no-check-certificate --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
+if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
 cd "%setupbin%"
 :: Firefox
-if not exist "Firefox Setup 67.0.4.msi" wget.exe --no-check-certificate --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win64/ru/Firefox Setup 67.0.4.msi"
+if not exist "Firefox Setup 67.0.4.msi" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win64/ru/Firefox Setup 67.0.4.msi"
 msiexec /package "%setupbin%\Firefox Setup 67.0.4.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird
-if not exist "Thunderbird Setup 60.7.2.exe" wget.exe --no-check-certificate --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.7.2/win64/ru/Thunderbird Setup 60.7.2.exe"
+if not exist "Thunderbird Setup 60.7.2.exe" wget.exe --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.7.2/win64/ru/Thunderbird Setup 60.7.2.exe"
 "%setupbin%\Thunderbird Setup 60.7.2.exe" /S
-if not exist "addon-362387-latest.xpi" wget.exe --no-check-certificate --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
+if not exist "addon-362387-latest.xpi" wget.exe --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
-if not exist "vlc-3.0.7.1-win64.exe" wget.exe --no-check-certificate --tries=3 -c "http://ftp.acc.umu.se/mirror/videolan.org/vlc/3.0.7.1/win64/vlc-3.0.7.1-win64.exe"
+if not exist "vlc-3.0.7.1-win64.exe" wget.exe --tries=3 -c "http://ftp.acc.umu.se/mirror/videolan.org/vlc/3.0.7.1/win64/vlc-3.0.7.1-win64.exe"
 "%setupbin%\vlc-3.0.7.1-win64.exe" /S
 ::
 :osx8664
 :: Unreal Commander
-if not exist "uncomsetup.exe" wget.exe --no-check-certificate --tries=3 -c "http://x-diesel.com/download/uncomsetup.exe"
+if not exist "uncomsetup.exe" wget.exe --tries=3 -c "http://x-diesel.com/download/uncomsetup.exe"
 "%setupbin%\uncomsetup.exe" /VERYSILENT
+nircmd.exe killprocess UnrealCommander32.exe
+nircmd.exe killprocess UnrealCommander64.exe
 if %osarch%==x86 (
 	nircmd.exe killprocess UnrealCommander32.exe
 	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2_4.2.25_x86.zip"	
 	)
 if %osarch%==x64 (
-	nircmd.exe killprocess UnrealCommander64.exe
 	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2_4.2.25_x64.zip"
 	)
 cd "%setupcfg%"
-if not exist "%setupcfg%\unreal.7z" wget.exe --no-check-certificate --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/unreal.7z
+if not exist "%setupcfg%\unreal.7z" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/unreal.7z
 7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\unreal.7z"
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%appdata%\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander"
 7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\notepad2.7z"
 cd "%setupbin%"
 :: OpenOffice
-if not exist "%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" wget.exe --no-check-certificate --tries=3 -c "http://sourceforge.net/projects/openofficeorg.mirror/files/4.1.6/binaries/ru/Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe"
+if not exist "%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" wget.exe --tries=3 -c "http://sourceforge.net/projects/openofficeorg.mirror/files/4.1.6/binaries/ru/Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe"
 "%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" /S
 rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.6 (ru) Installation Files"
 :: XnView
-if not exist "XnView-win-full.exe" wget.exe --no-check-certificate --tries=3 -c "http://download.xnview.com/XnView-win-full.exe"
+if not exist "XnView-win-full.exe" wget.exe --tries=3 -c "http://download.xnview.com/XnView-win-full.exe"
 "%setupbin%\XnView-win-full.exe" /VERYSILENT
 :: Foxit Reader
-if not exist "FoxitReader95_L10N_Setup_Prom.exe" wget.exe --no-check-certificate --tries=3 -c "http://cdn09.foxitsoftware.com/product/reader/desktop/win/9.5/FoxitReader95_L10N_Setup_Prom.exe"
+if not exist "FoxitReader95_L10N_Setup_Prom.exe" wget.exe --tries=3 -c "http://cdn09.foxitsoftware.com/product/reader/desktop/win/9.5/FoxitReader95_L10N_Setup_Prom.exe"
 "%setupbin%\FoxitReader95_L10N_Setup_Prom.exe" /silent
 :: Foobar2000
-if not exist "foobar2000_v1.4.5.exe" wget.exe --no-check-certificate --tries=3 -c "http://foobar2000.org/files/b9762912dd1331e7f240976016385176/foobar2000_v1.4.5.exe"
+if not exist "foobar2000_v1.4.5.exe" wget.exe --tries=3 -c "http://www.foobar2000.org/getfile/494c8867fc6c4719b3fe13b6a69a2f55/foobar2000_v1.4.6.exe"
 "%setupbin%\foobar2000_v1.4.5.exe" /S
 :: WinDirStat
-if not exist "wds_current_setup.exe" wget.exe --no-check-certificate --tries=3 -c "http://windirstat.net/wds_current_setup.exe"
+if not exist "wds_current_setup.exe" wget.exe --tries=3 -c "http://windirstat.net/wds_current_setup.exe"
 "%setupbin%\wds_current_setup.exe" /S
 del /f /q "%userprofile%\desktop\WinDirStat.lnk"
 :: HWMonitor
-if not exist "hwmonitor_1.40.exe" wget.exe --no-check-certificate --tries=3 -c "http://download.cpuid.com/hwmonitor/hwmonitor_1.40.exe"
+if not exist "hwmonitor_1.40.exe" wget.exe --tries=3 -c "http://download.cpuid.com/hwmonitor/hwmonitor_1.40.exe"
 "%setupbin%\hwmonitor_1.40.exe" /VERYSILENT
 del /f /q "%public%\desktop\CPUID HWMonitor.lnk"
 :: Keyboard LEDs
-if not exist "keyboard-leds.exe" wget.exe --no-check-certificate --tries=3 -c "http://keyboard-leds.com/files/keyboard-leds.exe"
+if not exist "keyboard-leds.exe" wget.exe --tries=3 -c "http://keyboard-leds.com/files/keyboard-leds.exe"
 "%setupbin%\keyboard-leds.exe" /S
 del /f /q "%public%\desktop\Keyboard LEDs.lnk"
 :: DotnetFX 3.5
 ::dism /online /enable-feature /featurename:NetFx3 /All /Source:X:\sources\sxs /LimitAccess
-if not exist "dotnetfx35.exe" wget.exe --no-check-certificate --tries=3 -c "http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
+if not exist "dotnetfx35.exe" wget.exe --tries=3 -c "http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
 "%setupbin%\dotnetfx35.exe" /s
 :: Classic Shell
-if not exist "ClassicShellSetup_4_3_1-ru.exe" wget.exe --no-check-certificate --tries=3 -c http://classicshell.mediafire.com/file/ckuf8e75ar0oixy/ClassicShellSetup_4_3_1-ru.exe
+if not exist "ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 -c "http://netcologne.dl.sourceforge.net/project/classicshell/Version 4.3.1 general release/ClassicShellSetup_4_3_1-ru.exe"
 if "%ntver%" neq "6.1" ClassicShellSetup_4_3_1-ru.exe /quiet
 :: Tango Patcher
-if not exist "WinTango-Patcher-16.12.24-offline.exe" wget.exe --no-check-certificate --tries=3 -c "http://github.com/heebijeebi/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
+if not exist "WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries=3 -c "http://github.com/heebijeebi/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
 ::
 :eof
