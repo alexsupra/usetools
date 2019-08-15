@@ -1,4 +1,4 @@
-:: usetools sysinstall
+:: sysinstall.cmd
 @echo off &cls
 chcp 866 >nul
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
@@ -46,7 +46,7 @@ cd /d "%~dp0"
 set sysinstall=%cd%
 set setupbin=%cd%\setupbin
 set setupcfg=%cd%\setupcfg
-set resource=%cd%\resource
+::set resource=%cd%\resource
 if not exist "%setupbin%" md "%setupbin%"
 if not exist "%setupcfg%" md "%setupcfg%"
 ::if not exist "%resource%" md "%resource%"
@@ -62,10 +62,10 @@ if not exist "%sysinstall%\wget.exe" (
 color 0b
 if %userinput%==1 goto config
 goto install
-::	
+::
 :config
-echo Applying system settings...
 if not exist "%sysinstall%\sysconfig.reg" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/sysconfig.reg
+echo Applying system settings...
 regedit /s "%sysinstall%\sysconfig.reg"
 ::
 :install
@@ -101,6 +101,7 @@ regedit /s "%far_dir%\plugins\7-zip\far7z.reg"
 cd "%setupcfg%"
 if not exist "%setupcfg%\far.7z" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z
 7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
+echo "%far_dir%\far.exe" > %systemroot%\system32\far.cmd
 cd "%setupbin%"
 :: ConEmu
 if not exist "ConEmuSetup.190714.exe" wget.exe --tries=3 -c http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe
@@ -114,9 +115,10 @@ cd "%setupbin%"
 if not exist "nircmd.zip" wget.exe --tries=3 -c http://www.nirsoft.net/utils/nircmd.zip
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
+copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: Anvir
 if not exist "anvirrus.zip" wget.exe --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
-nircmd.exe killprocess anvir.exe
+nircmdc.exe killprocess anvir.exe
 7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
 if not exist "%programfiles%\anvir" md "%programfiles%\anvir"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
@@ -134,14 +136,16 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
 cd "%setupbin%"
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 67.0.4.exe" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win32/ru/Firefox Setup 67.0.4.exe"
-"%setupbin%\Firefox Setup 67.0.4.exe" /S
+if not exist "%setupbin%\Firefox Setup 68.0.1.exe" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/68.0.1/win32/ru/Firefox Setup 68.0.1.exe"
+"%setupbin%\Firefox Setup 68.0.1.exe" /S
 :: Thunderbird
-if not exist "%setupbin%\Thunderbird Setup 60.7.2.exe" wget.exe --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.7.2/win32/ru/Thunderbird Setup 60.7.2.exe"
-"%setupbin%\Thunderbird Setup 60.7.2.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 60.8.0.exe" wget.exe --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.8.0/win32/ru/Thunderbird Setup 60.8.0.exe"
+"%setupbin%\Thunderbird Setup 60.8.0.exe" /S
 if not exist "addon-362387-latest.xpi" wget.exe --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
-::
+:: VLCVideoPlayer
+if not exist "vlc-3.0.7.1-win32.exe" wget.exe --tries=3 -c "http://ftp.lysator.liu.se/pub/videolan/vlc/3.0.7.1/win32/vlc-3.0.7.1-win32.exe"
+"%setupbin%\vlc-3.0.7.1-win32.exe" /S
 goto osx8664
 ::
 :osx64
@@ -169,6 +173,7 @@ regedit /s "%far_dir%\plugins\7-zip\far7z.reg"
 cd "%setupcfg%"
 if not exist "%setupcfg%\far.7z" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z
 7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
+echo "%far_dir%\far.exe" > %systemroot%\system32\far.cmd
 cd "%setupbin%"
 :: ConEmu
 if not exist "ConEmuSetup.190714.exe" wget.exe --tries=3 -c http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe
@@ -182,9 +187,10 @@ cd "%setupbin%"
 if not exist "nircmd-x64.zip" wget.exe --tries=3 -c http://www.nirsoft.net/utils/nircmd-x64.zip
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd-x64.zip"
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
+copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: Anvir
+nircmdc.exe killprocess anvir.exe
 if not exist "anvirrus.zip" wget.exe --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
-nircmd.exe killprocess anvir.exe
 7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
 if not exist "%programfiles%\anvir" md "%programfiles%\anvir"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
@@ -202,13 +208,13 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
 cd "%setupbin%"
 :: Firefox
-if not exist "Firefox Setup 67.0.4.msi" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/67.0.4/win64/ru/Firefox Setup 67.0.4.msi"
-msiexec /package "%setupbin%\Firefox Setup 67.0.4.msi" /quiet /norestart
+if not exist "Firefox Setup 68.0.1.msi" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/68.0.1/win64/ru/Firefox Setup 68.0.1.msi"
+msiexec /package "%setupbin%\Firefox Setup 68.0.1.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird
-if not exist "Thunderbird Setup 60.7.2.exe" wget.exe --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.7.2/win64/ru/Thunderbird Setup 60.7.2.exe"
-"%setupbin%\Thunderbird Setup 60.7.2.exe" /S
+if not exist "Thunderbird Setup 60.8.0.exe" wget.exe --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.8.0/win64/ru/Thunderbird Setup 60.8.0.exe"
+"%setupbin%\Thunderbird Setup 60.8.0.exe" /S
 if not exist "addon-362387-latest.xpi" wget.exe --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
@@ -216,16 +222,19 @@ if not exist "vlc-3.0.7.1-win64.exe" wget.exe --tries=3 -c "http://ftp.acc.umu.s
 "%setupbin%\vlc-3.0.7.1-win64.exe" /S
 ::
 :osx8664
+reg delete "HKEY_CLASSES_ROOT\Directory\shell\AddToPlaylistVLC" /f
+reg delete "HKEY_CLASSES_ROOT\Directory\shell\PlayWithVLC" /f
 :: Unreal Commander
 if not exist "uncomsetup.exe" wget.exe --tries=3 -c "http://x-diesel.com/download/uncomsetup.exe"
 "%setupbin%\uncomsetup.exe" /VERYSILENT
-nircmd.exe killprocess UnrealCommander32.exe
-nircmd.exe killprocess UnrealCommander64.exe
+nircmdc.exe killprocess UnrealCommander32.exe
+nircmdc.exe killprocess UnrealCommander64.exe
 if %osarch%==x86 (
-	nircmd.exe killprocess UnrealCommander32.exe
+	nircmdc.exe killprocess UnrealCommander32.exe
 	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2_4.2.25_x86.zip"	
 	)
 if %osarch%==x64 (
+	nircmdc.exe killprocess UnrealCommander64.exe
 	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2_4.2.25_x64.zip"
 	)
 cd "%setupcfg%"
@@ -234,6 +243,7 @@ if not exist "%setupcfg%\unreal.7z" wget.exe --tries=3 -c http://github.com/alex
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%appdata%\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander"
 7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\notepad2.7z"
+reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f
 cd "%setupbin%"
 :: OpenOffice
 if not exist "%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" wget.exe --tries=3 -c "http://sourceforge.net/projects/openofficeorg.mirror/files/4.1.6/binaries/ru/Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe"
@@ -243,10 +253,10 @@ rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.6
 if not exist "XnView-win-full.exe" wget.exe --tries=3 -c "http://download.xnview.com/XnView-win-full.exe"
 "%setupbin%\XnView-win-full.exe" /VERYSILENT
 :: Foxit Reader
-if not exist "FoxitReader95_L10N_Setup_Prom.exe" wget.exe --tries=3 -c "http://cdn09.foxitsoftware.com/product/reader/desktop/win/9.5/FoxitReader95_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitReader95_L10N_Setup_Prom.exe" /silent
+if not exist "FoxitReader96_L10N_Setup_Prom.exe" wget.exe --tries=3 -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.6/BC2D8DD2AB1CB3B2C7B2D35257634CF4/FoxitReader96_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitReader96_L10N_Setup_Prom.exe" /silent
 :: Foobar2000
-if not exist "foobar2000_v1.4.5.exe" wget.exe --tries=3 -c "http://www.foobar2000.org/getfile/494c8867fc6c4719b3fe13b6a69a2f55/foobar2000_v1.4.6.exe"
+if not exist "foobar2000_v1.4.5.exe" wget.exe --tries=3 -c "http://files1.majorgeeks.com/67393e57a9684f784c3977816be3ae2f0015e379/multimedia/foobar2000_v1.4.6.exe"
 "%setupbin%\foobar2000_v1.4.5.exe" /S
 :: WinDirStat
 if not exist "wds_current_setup.exe" wget.exe --tries=3 -c "http://windirstat.net/wds_current_setup.exe"
