@@ -11,7 +11,7 @@ if %errorLevel% neq 0 echo Administrative permissions check failure! &echo Pleas
 if "%ntver%"=="4.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.1" echo OS Windows NT %ntver% is not supported &color 0e &pause
-echo CPU architecture is detected as: %PROCESSOR_ARCHITECTURE% &echo OS version: %ntver% &echo.
+echo CPU architecture is detected as: %PROCESSOR_ARCHITECTURE% &echo OS version: NT %ntver%
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -22,6 +22,11 @@ echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 echo     ³   usetools sysinstall - software and settings installation script   ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+cd /d "%~dp0"
+set sysinstall=%cd%
+set setupbin=%cd%\setupbin
+set setupcfg=%cd%\setupcfg
+set backup=%cd%\backup
 if "%1"=="-u" (
 	echo. &echo Running in unattended mode... 
 	set userinput=1
@@ -30,26 +35,33 @@ if "%1"=="-u" (
 ::
 :menu
 echo. &color 0a
-echo [1] Install software and system settings
-echo [2] Install software
+echo [1] Install system settings and software
+echo [2] Install system settings
+echo [3] Install software
+echo [4] Make system registry backup
 echo [0] Exit &echo.
 set userinput=0
-set /p userinput=Input your choice and press enter [1/2/0]:
+set /p userinput=Input your choice and press enter [1/2/3/4/0]:
 if %userinput%==0 exit
-if %userinput%==2 goto prepair
 if %userinput%==1 goto prepair
+if %userinput%==2 goto prepair
+if %userinput%==3 goto prepair
+if %userinput%==4 goto backup
 echo Input seems to be incorrect. Please try one more time.
 goto menu
 ::
+:backup
+echo Making system registry backup...
+if not exist "%backup%" md "%backup%"
+reg export "hkey_local_machine" "%backup%\hklm_%computername%_%date%.reg"
+reg export "hkey_classes_root" "%backup%\hkcr_%computername%_%date%.reg"
+reg export "hkey_current_user" "%backup%\hkcu_%computername%_%date%.reg"
+reg export "hkey_users\.default" "%backup%\hkud_%computername%_%date%.reg"
+if %userinput%==4 goto menu
+::
 :prepair
-cd /d "%~dp0"
-set sysinstall=%cd%
-set setupbin=%cd%\setupbin
-set setupcfg=%cd%\setupcfg
-::set resource=%cd%\resource
 if not exist "%setupbin%" md "%setupbin%"
 if not exist "%setupcfg%" md "%setupcfg%"
-::if not exist "%resource%" md "%resource%"
 set path=%path%;%sysinstall%;%setupbin%
 if not exist "%sysinstall%\wget.exe" (
 	powershell -command "& { Invoke-WebRequest 'http://eternallybored.org/misc/wget/1.20.3/32/wget.exe' -OutFile 'wget.exe' }"
@@ -59,16 +71,16 @@ if not exist "%sysinstall%\wget.exe" (
 		)
 	goto prepair
 	)
-color 0b
-if %userinput%==1 goto config
-goto install
+if %userinput%==3 goto install
 ::
 :config
 if not exist "%sysinstall%\sysconfig.reg" wget.exe --tries=3 -c http://github.com/alexsupra/usetools/raw/master/sysconfig.reg
 echo Applying system settings...
 regedit /s "%sysinstall%\sysconfig.reg"
+if %userinput%==2 goto menu
 ::
 :install
+color 0b
 cd %setupbin%
 wmic OS get OSArchitecture|find.exe "64" >nul 
 if not errorlevel 1 (
@@ -256,8 +268,8 @@ if not exist "XnView-win-full.exe" wget.exe --tries=3 -c "http://download.xnview
 if not exist "FoxitReader96_L10N_Setup_Prom.exe" wget.exe --tries=3 -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.6/BC2D8DD2AB1CB3B2C7B2D35257634CF4/FoxitReader96_L10N_Setup_Prom.exe"
 "%setupbin%\FoxitReader96_L10N_Setup_Prom.exe" /silent
 :: Foobar2000
-if not exist "foobar2000_v1.4.5.exe" wget.exe --tries=3 -c "http://files1.majorgeeks.com/67393e57a9684f784c3977816be3ae2f0015e379/multimedia/foobar2000_v1.4.6.exe"
-"%setupbin%\foobar2000_v1.4.5.exe" /S
+if not exist "foobar2000_v1.4.6.exe" wget.exe --tries=3 -c "http://foobar2000.org/files/b99c2c67718e815851c1ca37fd425457/foobar2000_v1.4.6.exe"
+"%setupbin%\foobar2000_v1.4.6.exe" /S
 :: WinDirStat
 if not exist "wds_current_setup.exe" wget.exe --tries=3 -c "http://windirstat.net/wds_current_setup.exe"
 "%setupbin%\wds_current_setup.exe" /S
@@ -282,5 +294,5 @@ if not exist "WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries=3 -c "http
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
 ::
 :eof
-color 02 &echo Installation completed. &pause
+color 2f &echo Installation completed. &pause
 ::
