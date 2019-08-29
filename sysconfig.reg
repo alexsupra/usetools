@@ -77,6 +77,18 @@ Windows Registry Editor Version 5.00
 [HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "Start_ShowRun"=dword:00000001
 
+; show folder merge conflicts
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"HideMergeConflicts"=dword:00000001
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"HideMergeConflicts"=dword:00000001
+
+; hide task view button on taskbar
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"ShowTaskViewButton"=dword:00000000
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"ShowTaskViewButton"=dword:00000000
+
 ; hide action center tray icon
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
 "HideSCAHealth"=dword:00000001
@@ -108,6 +120,12 @@ Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "Hidden"=dword:00000001
 ;"ShowSuperHidden"=dword:00000001
+
+; set transparent taskbar
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize]
+"EnableTransparency"=dword:00000001
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"UseOLEDTaskbarTransparency"=dword:00000001
 
 ; thin windows borders width
 [HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics] 
@@ -234,10 +252,6 @@ Windows Registry Editor Version 5.00
 "DoNotSendAdditionalData"=dword:00000001
 "LoggingDisabled"=dword:00000001
 
-; disable online diagnostics
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy]
-"EnableQueryRemoteServer"=dword:00000000
-
 ; Windows 8
 ; disable Windows Store feature
 [HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore]
@@ -306,9 +320,16 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
 "System.IsPinnedToNameSpaceTree"=dword:00000000
 [HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive]
+"DisableFileSync"=dword:00000001
 "DisableFileSyncNGSC"=dword:00000001
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run]
 "OneDrive"=-
+
+; dont show people on taskbar
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People]
+"PeopleBand"=dword:00000000
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People]
+"PeopleBand"=dword:00000000
 
 ; dont show advices
 [HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CloudContent]
@@ -327,6 +348,7 @@ Windows Registry Editor Version 5.00
 ; disable telemetry
 [HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DataCollection]
 "AllowTelemetry"=dword:00000000
+"AllowDeviceNameInTelemetry"=dword:00000000
 [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\DataCollection]
 "AllowTelemetry"=dword:00000000
 [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack\TestHooks]
