@@ -103,8 +103,8 @@ if not exist "7z1900-extra.7z" wget.exe --tries=1 -c http://www.7-zip.org/a/7z19
 copy /y "%sevenzip_dir%\7za.exe" "%sysinstall%"
 copy /y "%sevenzip_dir%\7za.exe" "%systemroot%\system32"
 :: FAR
-if not exist "Far30b5400.x86.20190523.msi" wget.exe --tries=3 -c http://www.farmanager.com/files/Far30b5400.x86.20190523.msi
-msiexec /package "%setupbin%\Far30b5400.x86.20190523.msi" /quiet /norestart
+if not exist "Far30b5454.x86.20190823.msi" wget.exe --tries=3 -c "http://www.farmanager.com/files/Far30b5454.x86.20190823.msi"
+msiexec /package "%setupbin%\Far30b5454.x86.20190823.msi" /quiet /norestart
 if exist "%ProgramFiles(x86)%\Far Manager" set far_dir=%ProgramFiles(x86)%\Far Manager
 if exist "%ProgramFiles%\Far Manager" set far_dir=%ProgramFiles%\Far Manager
 if not exist "%far_dir%\plugins\7-zip" md "%far_dir%\plugins\7-zip"
@@ -129,8 +129,8 @@ if not exist "nircmd.zip" wget.exe --tries=3 -c http://www.nirsoft.net/utils/nir
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
 copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: Anvir
-if not exist "anvirrus.zip" wget.exe --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
 nircmdc.exe killprocess anvir.exe
+if not exist "anvirrus.zip" wget.exe --tries=3 -c http://www.anvir.net/downloads/anvirrus.zip
 7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
 if not exist "%programfiles%\anvir" md "%programfiles%\anvir"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
@@ -148,11 +148,11 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
 cd "%setupbin%"
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 68.0.1.exe" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/68.0.1/win32/ru/Firefox Setup 68.0.1.exe"
-"%setupbin%\Firefox Setup 68.0.1.exe" /S
+if not exist "%setupbin%\Firefox Setup 68.0.2.exe" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/68.0.2/win32/ru/Firefox Setup 68.0.2.exe"
+"%setupbin%\Firefox Setup 68.0.2.exe" /S
 :: Thunderbird
-if not exist "%setupbin%\Thunderbird Setup 60.8.0.exe" wget.exe --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.8.0/win32/ru/Thunderbird Setup 60.8.0.exe"
-"%setupbin%\Thunderbird Setup 60.8.0.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 68.0.exe" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/thunderbird/releases/68.0/win32/ru/Thunderbird Setup 68.0.exe"
+"%setupbin%\Thunderbird Setup 68.0.exe" /S
 if not exist "addon-362387-latest.xpi" wget.exe --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
@@ -175,8 +175,8 @@ if not exist "7z1900-extra.7z" wget.exe --tries=1 -c http://www.7-zip.org/a/7z19
 copy /y "%sevenzip_dir%\x64\7za.exe" "%sysinstall%"
 copy /y "%sevenzip_dir%\x64\7za.exe" "%systemroot%\system32"
 :: FAR
-if not exist "Far30b5400.x64.20190523.msi" wget.exe --tries=3 -c http://www.farmanager.com/files/Far30b5400.x64.20190523.msi
-msiexec /package "%setupbin%\Far30b5400.x64.20190523.msi" /quiet /norestart
+if not exist "Far30b5454.x64.20190823.msi" wget.exe --tries=3 -c "http://www.farmanager.com/files/Far30b5454.x64.20190823.msi"
+msiexec /package "%setupbin%\Far30b5454.x64.20190823.msi" /quiet /norestart
 if exist "%ProgramFiles(x86)%\Far Manager" set far_dir=%ProgramFiles(x86)%\Far Manager
 if exist "%ProgramFiles%\Far Manager" set far_dir=%ProgramFiles%\Far Manager
 if not exist "%far_dir%\plugins\7-zip" md "%far_dir%\plugins\7-zip"
@@ -220,13 +220,13 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
 cd "%setupbin%"
 :: Firefox
-if not exist "Firefox Setup 68.0.1.msi" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/68.0.1/win64/ru/Firefox Setup 68.0.1.msi"
-msiexec /package "%setupbin%\Firefox Setup 68.0.1.msi" /quiet /norestart
+if not exist "Firefox Setup 68.0.2.msi" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/firefox/releases/68.0.2/win64/ru/Firefox Setup 68.0.2.msi"
+msiexec /package "%setupbin%\Firefox Setup 68.0.2.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird
-if not exist "Thunderbird Setup 60.8.0.exe" wget.exe --tries=3 -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/60.8.0/win64/ru/Thunderbird Setup 60.8.0.exe"
-"%setupbin%\Thunderbird Setup 60.8.0.exe" /S
+if not exist "Thunderbird Setup 68.0.msi" wget.exe --tries=3 -c "http://ftp.mozilla.org/pub/thunderbird/releases/68.0/win64/ru/Thunderbird Setup 68.0.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 68.0.msi" /quiet /norestart
 if not exist "addon-362387-latest.xpi" wget.exe --tries=3 -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
@@ -236,6 +236,7 @@ if not exist "vlc-3.0.7.1-win64.exe" wget.exe --tries=3 -c "http://ftp.acc.umu.s
 :osx8664
 reg delete "HKEY_CLASSES_ROOT\Directory\shell\AddToPlaylistVLC" /f
 reg delete "HKEY_CLASSES_ROOT\Directory\shell\PlayWithVLC" /f
+nircmdc.exe shortcut "%programfiles%\videolan\vlc\vlc.exe" "~$folder.appdata$\microsoft\windows\sendto" "VLC"
 :: Unreal Commander
 if not exist "uncomsetup.exe" wget.exe --tries=3 -c "http://x-diesel.com/download/uncomsetup.exe"
 "%setupbin%\uncomsetup.exe" /VERYSILENT
@@ -267,9 +268,11 @@ if not exist "XnView-win-full.exe" wget.exe --tries=3 -c "http://download.xnview
 :: Foxit Reader
 if not exist "FoxitReader96_L10N_Setup_Prom.exe" wget.exe --tries=3 -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.6/BC2D8DD2AB1CB3B2C7B2D35257634CF4/FoxitReader96_L10N_Setup_Prom.exe"
 "%setupbin%\FoxitReader96_L10N_Setup_Prom.exe" /silent
-:: Foobar2000
-if not exist "foobar2000_v1.4.6.exe" wget.exe --tries=3 -c "http://foobar2000.org/files/b99c2c67718e815851c1ca37fd425457/foobar2000_v1.4.6.exe"
-"%setupbin%\foobar2000_v1.4.6.exe" /S
+:: XMPlay
+if not exist "xmplay38.zip" wget.exe --tries=3 -c "http://www.un4seen.com/files/xmplay38.zip"
+if not exist "%programfiles%\xmplay" md "%programfiles%\xmplay"
+7za.exe x -r -y -o"%programfiles%\xmplay" "%setupbin%\xmplay38.zip"
+nircmdc.exe shortcut "%programfiles%\xmplay\xmplay.exe" "~$folder.appdata$\microsoft\windows\sendto" "XMPlay"
 :: WinDirStat
 if not exist "wds_current_setup.exe" wget.exe --tries=3 -c "http://windirstat.net/wds_current_setup.exe"
 "%setupbin%\wds_current_setup.exe" /S
