@@ -1,0 +1,85 @@
+Windows Registry Editor Version 5.00
+; sysconfig_win8x.reg
+
+; GUI/SHELL
+
+; disable first logon animations
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon]
+"EnableFirstLogonAnimation"=dword:00000000
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"EnableFirstLogonAnimation"=dword:00000000
+
+; disable charms bar
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi]
+"DisableCharmsHint"=dword:00000001
+"DisableTLCorner"=dword:00000001
+"DisableTRCorner"=dword:00000001
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi]
+"DisableCharmsHint"=dword:00000001
+"DisableTLCorner"=dword:00000001
+"DisableTRCorner"=dword:00000001
+
+; disable Metro tips
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\EdgeUI]
+"DisableHelpSticker"=dword:00000001
+[HKEY_USERS\.DEFAULT\Software\Policies\Microsoft\Windows\EdgeUI]
+"DisableHelpSticker"=dword:00000001
+
+; go to the desktop instead of start
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
+"OpenAtLogon"=dword:00000000
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
+"OpenAtLogon"=dword:00000000
+
+; show my desktop background on start
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent]
+"MotionAccentId_v1.00"=dword:000000db
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent]
+"MotionAccentId_v1.00"=dword:000000db
+
+; DISABLED COMPONENTS AND FIXES
+
+; disable Windows Store feature
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore]
+"RemoveWindowsStore"=dword:00000001
+
+; disable auto download and update of Store apps
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore]
+"AutoDownload"=dword:00000004
+
+; remove look for an app in Store
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer]
+"NoUseStoreOpenWith"=-
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer]
+"NoUseStoreOpenWith"=-
+
+; no Store apps on taskbar
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"StoreAppsOnTaskbar"=dword:00000000
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"StoreAppsOnTaskbar"=dword:00000000
+
+; no pinning Store to taskbar
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer]
+"NoPinningStoreToTaskbar"=dword:00000001
+[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer]
+"NoPinningStoreToTaskbar"=dword:00000001
+
+; list desktop apps first
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
+"DesktopFirst"=dword:00000001
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
+"DesktopFirst"=dword:00000001
+
+; show apps view automatically
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage] 
+"MakeAllAppsDefault"=dword:00000001
+[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage] 
+"MakeAllAppsDefault"=dword:00000001
+
+; disable live tiles notifications
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications]
+"NoTileApplicationNotification"=dword:00000001
+[HKEY_USERS\.DEFAULT\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications]
+"NoTileApplicationNotification"=dword:00000001
+;
