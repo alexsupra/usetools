@@ -157,17 +157,17 @@ Windows Registry Editor Version 5.00
 "DefaultValue"=dword:00000000
 "DefaultByAlphaTest"=dword:00000000
 
-; disable first logon animations
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon]
-"EnableFirstLogonAnimation"=dword:00000000
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
-"EnableFirstLogonAnimation"=dword:00000000
-
 ; taskbar small icons
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "TaskbarSmallIcons"=dword:00000001
 [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "TaskbarSmallIcons"=dword:00000001
+
+; show status bar in explorer
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"ShowStatusBar"=dword:00000001
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"ShowStatusBar"=dword:00000001
 
 ; classic control panel
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
@@ -249,23 +249,9 @@ Windows Registry Editor Version 5.00
 "BorderWidth"="1" 
 "PaddedBorderWidth"="1"
 
-; dont show people on taskbar
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People]
-"PeopleBand"=dword:00000000
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People]
-"PeopleBand"=dword:00000000
-
-; hide 3d objects folder
-;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag]
-;"ThisPCPolicy"="Hide"
-;[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag]
-;"ThisPCPolicy"="Hide"
-
-; make the "open", "print", "edit" context menu items available when more than 15 files selected
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer]
-"MultipleInvokePromptMinimum"=dword:00000001
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer]
-"MultipleInvokePromptMinimum"=dword:00000001
+; grey out not fully installed apps
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+«GreyMSIAds»=dword:00000001
 
 ; register / unregister dll from shell menu
 [HKEY_CLASSES_ROOT\dllfile\shell\Register\command]
@@ -391,132 +377,4 @@ Windows Registry Editor Version 5.00
 ; disable offline files service
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CscService]
 "Start"=dword:00000004
-
-; Windows 8
-; disable Windows Store feature
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore]
-"RemoveWindowsStore"=dword:00000001
-
-; disable auto download and update of Store apps
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore]
-"AutoDownload"=dword:00000004
-
-; remove look for an app in Store
-[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer]
-"NoUseStoreOpenWith"=-
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer]
-"NoUseStoreOpenWith"=-
-
-; no Store apps on taskbar
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
-"StoreAppsOnTaskbar"=dword:00000000
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
-"StoreAppsOnTaskbar"=dword:00000000
-
-; no pinning Store to taskbar
-[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer]
-"NoPinningStoreToTaskbar"=dword:00000001
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer]
-"NoPinningStoreToTaskbar"=dword:00000001
-
-; disable live tiles notifications
-[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications]
-"NoTileApplicationNotification"=dword:00000001
-[HKEY_USERS\.DEFAULT\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications]
-"NoTileApplicationNotification"=dword:00000001
-
-; disable charms bar
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi]
-"DisableCharmsHint"=dword:00000001
-"DisableTLCorner"=dword:00000001
-"DisableTRCorner"=dword:00000001
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi]
-"DisableCharmsHint"=dword:00000001
-"DisableTLCorner"=dword:00000001
-"DisableTRCorner"=dword:00000001
-
-; disable metro tips
-[HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\EdgeUI]
-"DisableHelpSticker"=dword:00000001
-[HKEY_USERS\.DEFAULT\Software\Policies\Microsoft\Windows\EdgeUI]
-"DisableHelpSticker"=dword:00000001
-
-; go to the desktop instead of start
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
-"OpenAtLogon"=dword:00000000
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
-"OpenAtLogon"=dword:00000000
-
-; list desktop apps first
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
-"DesktopFirst"=dword:00000001
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage]
-"DesktopFirst"=dword:00000001
-
-; show my desktop background on start
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent]
-"MotionAccentId_v1.00"=dword:000000db
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent]
-"MotionAccentId_v1.00"=dword:000000db
-
-; Windows 10
-; disable OneDrive
-[HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
-"System.IsPinnedToNameSpaceTree"=dword:00000000
-[HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}]
-"System.IsPinnedToNameSpaceTree"=dword:00000000
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive]
-"DisableFileSync"=dword:00000001
-"DisableFileSyncNGSC"=dword:00000001
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run]
-"OneDrive"=-
-
-; disable search box on taskbar
-[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
-"SearchboxTaskbarMode"=dword:00000000
-[HKEY_USERS\.DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Search]
-"SearchboxTaskbarMode"=dword:00000000
-
-; turn off automatic installing suggested apps
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
-"SilentInstalledAppsEnabled"=dword:00000000
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager]
-"SilentInstalledAppsEnabled"=dword:00000000
-
-; dont offer tailored experiences based on the diagnostic data setting
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy]
-"TailoredExperiencesWithDiagnosticDataEnabled"=dword:00000000
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Privacy]
-"TailoredExperiencesWithDiagnosticDataEnabled"=dword:00000000
-
-; dont allow apps to use advertising id
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo]
-"Enabled"=dword:00000000
-[HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo]
-"Enabled"=dword:00000000
-
-; dont show advices
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CloudContent]
-"DisableSoftLanding"=dword:00000001
-
-; dont show recommendations
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CloudContent] 
-"DisableWindowsConsumerFeatures"=dword:00000001 
-
-; dont show feedback notifications
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DataCollection]
-"DoNotShowFeedbackNotifications"=dword:00000001
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\DataCollection]
-"DoNotShowFeedbackNotifications"=dword:00000001
-
-; disable telemetry
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack]
-"Start"=dword:00000004
-[HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DataCollection]
-"AllowTelemetry"=dword:00000000
-"AllowDeviceNameInTelemetry"=dword:00000000
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\DataCollection]
-"AllowTelemetry"=dword:00000000
-[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack\TestHooks]
-"Disabled"=dword:00000001
 ;
