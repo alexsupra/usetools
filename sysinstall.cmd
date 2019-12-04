@@ -1,14 +1,16 @@
 :: sysinstall.cmd - software and settings installation script providing better defaults
+:: for 32/64-bits OS Windows 7, Windows 8, Windows 10 and corresponding server versions
 :: https://github.com/alexsupra/usetools
 @echo off &cls
 chcp 866 >nul
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
-for /f "tokens=2*" %%a in ('reg query "hklm\software\microsoft\windows nt\currentversion" /v "CurrentVersion"') do set "ntver=%%b"
 echo %cpuname%
 :: checking admin previligies
 net session >nul 2>&1
 if %errorLevel% neq 0 echo Administrative permissions check failure! &echo Please restart as admin. &color 0e &pause &exit
 :: checking os version
+::for /f "tokens=2*" %%a in ('reg query "hklm\software\microsoft\windows nt\currentversion" /v "CurrentVersion"') do set "ntver=%%b"
+for /f "tokens=4-5 delims=. " %%i in ('ver') do set ntver=%%i.%%j
 if "%ntver%"=="4.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.1" echo OS Windows NT %ntver% is not supported &color 0e &pause
@@ -77,8 +79,23 @@ if %userinput%==3 goto install
 ::
 :config
 if not exist "%sysinstall%\sysconfig.reg" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/sysconfig.reg"
-echo Applying system settings...
+echo Applying general system settings...
 regedit /s "%sysinstall%\sysconfig.reg"
+if "%ntver%"=="6.2" (
+	if not exist "%sysinstall%\sysconfig_win8x.reg" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/sysconfig_win8x.reg"
+	echo Applying additional system settings...
+	regedit /s "%sysinstall%\sysconfig_win8x.reg"
+	)
+if "%ntver%"=="6.3" (
+	if not exist "%sysinstall%\sysconfig_win8x.reg" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/sysconfig_win8x.reg"
+	echo Applying additional system settings...
+	regedit /s "%sysinstall%\sysconfig_win8x.reg"
+	)
+if "%ntver%"=="10.0" (
+	if not exist "%sysinstall%\sysconfig_win10.reg" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/sysconfig_win10.reg"
+	echo Applying additional system settings...
+	regedit /s "%sysinstall%\sysconfig_win10.reg"
+	)
 if %userinput%==2 goto menu
 ::
 :install
@@ -152,8 +169,8 @@ cd "%setupbin%"
 if not exist "%setupbin%\npp.7.7.1.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.exe"
 "%setupbin%\npp.7.7.1.Installer.exe" /S
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 69.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/69.0/win32/ru/Firefox Setup 69.0.exe"
-"%setupbin%\Firefox Setup 69.0.exe" /S
+if not exist "%setupbin%\Firefox Setup 70.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/70.0.1/win32/ru/Firefox Setup 70.0.1exe"
+"%setupbin%\Firefox Setup 70.0.1.exe" /S
 :: Thunderbird
 if not exist "%setupbin%\Thunderbird Setup 68.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/thunderbird/releases/68.0/win32/ru/Thunderbird Setup 68.0.exe"
 "%setupbin%\Thunderbird Setup 68.0.exe" /S
@@ -231,8 +248,8 @@ cd "%setupbin%"
 if not exist "%setupbin%\npp.7.7.1.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe"
 "%setupbin%\npp.7.7.1.Installer.x64.exe" /S
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 69.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/69.0/win64/ru/Firefox Setup 69.0.msi"
-msiexec /package "%setupbin%\Firefox Setup 69.0.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 70.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/70.0.1/win64/ru/Firefox Setup 70.0.1.msi"
+msiexec /package "%setupbin%\Firefox Setup 70.0.1.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird
@@ -282,8 +299,8 @@ rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.6
 if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.xnview.com/XnView-win-full.exe"
 "%setupbin%\XnView-win-full.exe" /VERYSILENT
 :: Foxit Reader
-if not exist "%setupbin%\FoxitReader96_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.6/BC2D8DD2AB1CB3B2C7B2D35257634CF4/FoxitReader96_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitReader96_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitReader97_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.7/69395749260CE469E2B086013282B5ED/FoxitReader97_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitReader97_L10N_Setup_Prom.exe" /silent
 :: XMPlay
 if not exist "%setupbin%\xmplay38.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.un4seen.com/files/xmplay38.zip"
 if not exist "%programfiles%\xmplay" md "%programfiles%\xmplay"
