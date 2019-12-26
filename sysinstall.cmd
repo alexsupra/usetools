@@ -43,25 +43,38 @@ echo [1] Install system settings and software
 echo [2] Install system settings
 echo [3] Install software
 echo [4] Make system registry backup
+echo [5] Restore system from registry backup
+echo [9] Reboot
 echo [0] Exit &echo.
 set userinput=0
-set /p userinput=Input your choice and press enter [1/2/3/4/0]:
+set /p userinput=Input your choice and press enter [1/2/3/4/5/9/0]:
 if %userinput%==0 exit
 if %userinput%==1 goto prepair
 if %userinput%==2 goto prepair
 if %userinput%==3 goto prepair
 if %userinput%==4 goto backup
+if %userinput%==5 goto restore
+if %userinput%==9 goto reboot
 echo Input seems to be incorrect. Please try one more time.
 goto menu
 ::
 :backup
 echo Making system registry backup...
 if not exist "%backup%" md "%backup%"
-reg export "hkey_local_machine" "%backup%\hklm_%computername%_%date%.reg"
-reg export "hkey_classes_root" "%backup%\hkcr_%computername%_%date%.reg"
-reg export "hkey_current_user" "%backup%\hkcu_%computername%_%date%.reg"
-reg export "hkey_users\.default" "%backup%\hkud_%computername%_%date%.reg"
+reg export "hkey_local_machine" "%backup%\hklm.reg"
+reg export "hkey_classes_root" "%backup%\hkcr.reg"
+reg export "hkey_current_user" "%backup%\hkcu.reg"
+reg export "hkey_users\.default" "%backup%\hkud.reg"
 if %userinput%==4 goto menu
+::
+:restore
+echo Restoring system from registry backup...
+if not exist "%backup%" echo Backup not found &goto menu
+if exist "%backup%\hklm.reg" regedit /s "%backup%\hklm.reg"
+if exist "%backup%\hkcr.reg" regedit /s "%backup%\hkcr.reg"
+if exist "%backup%\hkcu.reg" regedit /s "%backup%\hkcu.reg"
+if exist "%backup%\hkud.reg" regedit /s "%backup%\hkud.reg"
+if %userinput%==5 goto menu
 ::
 :prepair
 if not exist "%setupbin%" md "%setupbin%"
@@ -119,9 +132,14 @@ if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=1 --no-check-certific
 "%ProgramFiles%\7-Zip\7zg.exe" x -r -y -o"%ProgramFiles%\7-Zip" "%setupbin%\7z1900-extra.7z"
 copy /y "%ProgramFiles%\7-Zip\7za.exe" "%sysinstall%"
 copy /y "%ProgramFiles%\7-Zip\7za.exe" "%systemroot%\system32"
+:: NirCMD
+if not exist "%setupbin%\nircmd.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/nircmd.zip"
+7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
+copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
+copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: FAR
-if not exist "%setupbin%\Far30b5454.x86.20190823.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5454.x86.20190823.msi"
-msiexec /package "%setupbin%\Far30b5454.x86.20190823.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b5511.x86.20191120.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5511.x86.20191120.msi"
+msiexec /package "%setupbin%\Far30b5511.x86.20191120.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -137,12 +155,8 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z"
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
+del /f /q "%userprofile%\desktop\ConEmu.lnk"
 cd "%setupbin%"
-:: NirCMD
-if not exist "%setupbin%\nircmd.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/nircmd.zip"
-7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
-copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
-copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: Anvir
 nircmdc.exe killprocess anvir.exe
 if not exist "%setupbin%\anvirrus.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.anvir.net/downloads/anvirrus.zip"
@@ -157,6 +171,11 @@ nircmdc.exe shortcut "%programfiles%\anvir\anvir.exe" "~$folder.common_programs$
 echo cd /d "%programfiles%\anvir" >%systemroot%\system32\anvir.cmd
 echo start /high anvir.exe >>%systemroot%\system32\anvir.cmd
 cd "%setupbin%"
+:: UninstallView
+if not exist "%setupbin%\uninstallview.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/uninstallview.zip"
+if not exist "%programfiles%\uninstallview" md "%programfiles%\uninstallview"
+7za.exe x -r -y -o"%programfiles%\uninstallview" "%setupbin%\uninstallview.zip"
+nircmdc.exe shortcut "%programfiles%\uninstallview\uninstallview.exe" "~$folder.common_programs$" "UninstallView"
 :: ClamWin
 if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --tries=3 --no-check-certificate -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
@@ -166,19 +185,19 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
 cd "%setupbin%"
 :: Notepad++
-if not exist "%setupbin%\npp.7.7.1.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.exe"
-"%setupbin%\npp.7.7.1.Installer.exe" /S
+if not exist "%setupbin%\npp.7.8.1.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.1/npp.7.8.1.Installer.exe"
+"%setupbin%\npp.7.8.1.Installer.exe" /S
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 70.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/70.0.1/win32/ru/Firefox Setup 70.0.1exe"
-"%setupbin%\Firefox Setup 70.0.1.exe" /S
+if not exist "%setupbin%\Firefox Setup 71.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/71.0/win32/ru/Firefox Setup 71.0.exe"
+"%setupbin%\Firefox Setup 71.0.exe" /S
 :: Thunderbird
 if not exist "%setupbin%\Thunderbird Setup 68.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/thunderbird/releases/68.0/win32/ru/Thunderbird Setup 68.0.exe"
 "%setupbin%\Thunderbird Setup 68.0.exe" /S
 if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
-if not exist "%setupbin%\vlc-3.0.7.1-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.lysator.liu.se/pub/videolan/vlc/3.0.7.1/win32/vlc-3.0.7.1-win32.exe"
-"%setupbin%\vlc-3.0.7.1-win32.exe" /S
+if not exist "%setupbin%\vlc-3.0.8-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.lysator.liu.se/pub/videolan/vlc/3.0.8/win32/vlc-3.0.8-win32.exe"
+"%setupbin%\vlc-3.0.8-win32.exe" /S
 :: PureText
 if not exist "%setupbin%\puretext_6.2_32-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_32-bit.zip"
 if not exist "%programfiles%\puretext" md "%programfiles%\puretext"
@@ -198,9 +217,14 @@ if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=1 --no-check-certific
 "%ProgramFiles%\7-Zip\7zg.exe" x -r -y -o"%ProgramFiles%\7-Zip" "%setupbin%\7z1900-extra.7z"
 copy /y "%ProgramFiles%\7-Zip\x64\7za.exe" "%sysinstall%"
 copy /y "%ProgramFiles%\7-Zip\x64\7za.exe" "%systemroot%\system32"
+:: NirCMD
+if not exist "%setupbin%\nircmd-x64.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/nircmd-x64.zip"
+7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd-x64.zip"
+copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
+copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: FAR
-if not exist "%setupbin%\Far30b5454.x64.20190823.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5454.x64.20190823.msi"
-msiexec /package "%setupbin%\Far30b5454.x64.20190823.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b5511.x64.20191120.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5511.x64.20191120.msi"
+msiexec /package "%setupbin%\Far30b5511.x64.20191120.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -216,12 +240,8 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z"
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
+del /f /q "%userprofile%\desktop\ConEmu (x64).lnk"
 cd "%setupbin%"
-:: NirCMD
-if not exist "%setupbin%\nircmd-x64.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/nircmd-x64.zip"
-7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd-x64.zip"
-copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
-copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: Anvir
 nircmdc.exe killprocess anvir.exe
 if not exist "%setupbin%\anvirrus.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.anvir.net/downloads/anvirrus.zip"
@@ -236,6 +256,11 @@ nircmdc.exe shortcut "%programfiles%\anvir\anvir.exe" "~$folder.common_programs$
 echo cd /d "%programfiles%\anvir" >%systemroot%\system32\anvir.cmd
 echo start /high anvir.exe >>%systemroot%\system32\anvir.cmd
 cd "%setupbin%"
+:: UninstallView
+if not exist "%setupbin%\uninstallview-x64.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/uninstallview-x64.zip"
+if not exist "%programfiles%\uninstallview" md "%programfiles%\uninstallview"
+7za.exe x -r -y -o"%programfiles%\uninstallview" "%setupbin%\uninstallview-x64.zip"
+nircmdc.exe shortcut "%programfiles%\uninstallview\uninstallview.exe" "~$folder.common_programs$" "UninstallView"
 :: ClamWin
 if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --tries=3 --no-check-certificate -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
@@ -245,11 +270,11 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
 cd "%setupbin%"
 :: Notepad++
-if not exist "%setupbin%\npp.7.7.1.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.notepad-plus-plus.org/repository/7.x/7.7.1/npp.7.7.1.Installer.x64.exe"
-"%setupbin%\npp.7.7.1.Installer.x64.exe" /S
+if not exist "%setupbin%\npp.7.8.1.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.1/npp.7.8.1.Installer.x64.exe"
+"%setupbin%\npp.7.8.1.Installer.x64.exe" /S
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 70.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/70.0.1/win64/ru/Firefox Setup 70.0.1.msi"
-msiexec /package "%setupbin%\Firefox Setup 70.0.1.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 71.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/71.0/win64/ru/Firefox Setup 71.0.msi"
+msiexec /package "%setupbin%\Firefox Setup 71.0.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird
@@ -258,8 +283,8 @@ msiexec /package "%setupbin%\Thunderbird Setup 68.0.msi" /quiet /norestart
 if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
-if not exist "%setupbin%\vlc-3.0.7.1-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.acc.umu.se/mirror/videolan.org/vlc/3.0.7.1/win64/vlc-3.0.7.1-win64.exe"
-"%setupbin%\vlc-3.0.7.1-win64.exe" /S
+if not exist "%setupbin%\vlc-3.0.8-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.acc.umu.se/mirror/videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe"
+"%setupbin%\vlc-3.0.8-win64.exe" /S
 :: PureText
 if not exist "%setupbin%\puretext_6.2_64-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_64-bit.zip"
 if not exist "%programfiles%\puretext" md "%programfiles%\puretext"
@@ -289,12 +314,12 @@ if not exist "%setupcfg%\unreal.7z" wget.exe --tries=3 --no-check-certificate -c
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%appdata%\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander"
 7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\notepad2.7z"
-reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f
+reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f >nul
 cd "%setupbin%"
 :: OpenOffice
-if not exist "%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://sourceforge.net/projects/openofficeorg.mirror/files/4.1.6/binaries/ru/Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe"
-"%setupbin%\Apache_OpenOffice_4.1.6_Win_x86_install_ru.exe" /S
-rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.6 (ru) Installation Files"
+if not exist "%setupbin%\Apache_OpenOffice_4.1.7_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/openofficeorg.mirror/4.1.7/binaries/ru/Apache_OpenOffice_4.1.7_Win_x86_install_ru.exe"
+"%setupbin%\Apache_OpenOffice_4.1.7_Win_x86_install_ru.exe" /S
+rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.7 (ru) Installation Files"
 :: XnView
 if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.xnview.com/XnView-win-full.exe"
 "%setupbin%\XnView-win-full.exe" /VERYSILENT
@@ -331,6 +356,9 @@ if not exist "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries
 nircmdc.exe initshutdown "sysinstall: system will be restarted automatically in 10 min" 600 force reboot
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
 ::
-:eof
-color 2f &echo Installation completed. &pause
+color 2f &echo Installation completed
+if "%1"=="-u" goto reboot
+pause
+:reboot
+echo Restarting system... &shutdown /r /f
 ::
