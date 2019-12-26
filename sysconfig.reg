@@ -1,5 +1,5 @@
 Windows Registry Editor Version 5.00
-; sysconfig.reg
+; sysconfig.reg - system configuration settings for Windows NT 6.1, 6.2, 6.3, 10.0
 
 ; SYSTEM
 
@@ -237,6 +237,8 @@ Windows Registry Editor Version 5.00
 
 ; set transparent taskbar
 [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize]
+"EnableTransparency"=dword:00000001
+[HKEY_USERS\.DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize]
 "EnableTransparency"=dword:00000001
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
 "UseOLEDTaskbarTransparency"=dword:00000001
