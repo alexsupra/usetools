@@ -1,5 +1,5 @@
 :: sysinstall.cmd - software and settings installation script providing better defaults
-:: for 32/64-bits OS Windows 7, Windows 8, Windows 10 and corresponding server versions
+:: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
 chcp 866 >nul
@@ -188,13 +188,13 @@ cd "%setupbin%"
 if not exist "%setupbin%\npp.7.8.1.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.1/npp.7.8.1.Installer.exe"
 "%setupbin%\npp.7.8.1.Installer.exe" /S
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 71.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/71.0/win32/ru/Firefox Setup 71.0.exe"
-"%setupbin%\Firefox Setup 71.0.exe" /S
+if not exist "%setupbin%\Firefox Setup 73.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/73.0.1/win32/ru/Firefox Setup 73.0.1.exe"
+"%setupbin%\Firefox Setup 73.0.1.exe" /S
 :: Thunderbird
-if not exist "%setupbin%\Thunderbird Setup 68.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/thunderbird/releases/68.0/win32/ru/Thunderbird Setup 68.0.exe"
-"%setupbin%\Thunderbird Setup 68.0.exe" /S
-if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
-copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
+if not exist "%setupbin%\Thunderbird Setup 68.4.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.4.2/win32/ru/Thunderbird Setup 68.4.2.exe"
+"%setupbin%\Thunderbird Setup 68.4.2.exe" /S
+::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
+::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
 if not exist "%setupbin%\vlc-3.0.8-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.lysator.liu.se/pub/videolan/vlc/3.0.8/win32/vlc-3.0.8-win32.exe"
 "%setupbin%\vlc-3.0.8-win32.exe" /S
@@ -214,9 +214,11 @@ if not exist "%setupbin%\7z1900-x64.msi" wget.exe --tries=1 --no-check-certifica
 msiexec /package "%setupbin%\7z1900-x64.msi" /quiet /norestart
 if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=2 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z"
 if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=1 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-extra.7z"
-"%ProgramFiles%\7-Zip\7zg.exe" x -r -y -o"%ProgramFiles%\7-Zip" "%setupbin%\7z1900-extra.7z"
-copy /y "%ProgramFiles%\7-Zip\x64\7za.exe" "%sysinstall%"
-copy /y "%ProgramFiles%\7-Zip\x64\7za.exe" "%systemroot%\system32"
+if exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles%\7-Zip
+if not exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles(x86)%\7-Zip
+"%sevenzip%\7zg.exe" x -r -y -o"%sevenzip%" "%setupbin%\7z1900-extra.7z"
+copy /y "%sevenzip%\x64\7za.exe" "%sysinstall%"
+copy /y "%sevenzip%\x64\7za.exe" "%systemroot%\system32"
 :: NirCMD
 if not exist "%setupbin%\nircmd-x64.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/nircmd-x64.zip"
 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd-x64.zip"
@@ -231,7 +233,7 @@ regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
 cd "%setupcfg%"
 if not exist "%setupcfg%\far.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/far.7z"
 7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
-echo "%ProgramFiles%\Far Manager\far.exe" > %systemroot%\system32\far.cmd
+echo "%ProgramFiles%\Far Manager\far.exe" >%systemroot%\system32\far.cmd
 cd "%setupbin%"
 :: ConEmu
 if not exist "%setupbin%\ConEmuSetup.190714.exe" wget.exe --tries=3 --no-check-certificate -c "http://excellmedia.dl.sourceforge.net/project/conemu/Alpha/ConEmuSetup.190714.exe"
@@ -273,15 +275,15 @@ cd "%setupbin%"
 if not exist "%setupbin%\npp.7.8.1.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.1/npp.7.8.1.Installer.x64.exe"
 "%setupbin%\npp.7.8.1.Installer.x64.exe" /S
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 71.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/71.0/win64/ru/Firefox Setup 71.0.msi"
-msiexec /package "%setupbin%\Firefox Setup 71.0.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 73.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/73.0.1/win64/ru/Firefox Setup 73.0.1.msi"
+msiexec /package "%setupbin%\Firefox Setup 73.0.1.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird
-if not exist "%setupbin%\Thunderbird Setup 68.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/thunderbird/releases/68.0/win64/ru/Thunderbird Setup 68.0.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 68.0.msi" /quiet /norestart
-if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
-copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
+if not exist "%setupbin%\Thunderbird Setup 68.4.2.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.4.2/win64/ru/Thunderbird Setup 68.4.2.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 68.4.2.msi" /quiet /norestart
+::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
+::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
 if not exist "%setupbin%\vlc-3.0.8-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.acc.umu.se/mirror/videolan.org/vlc/3.0.8/win64/vlc-3.0.8-win64.exe"
 "%setupbin%\vlc-3.0.8-win64.exe" /S
@@ -324,13 +326,15 @@ rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.7
 if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.xnview.com/XnView-win-full.exe"
 "%setupbin%\XnView-win-full.exe" /VERYSILENT
 :: Foxit Reader
-if not exist "%setupbin%\FoxitReader97_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.7/69395749260CE469E2B086013282B5ED/FoxitReader97_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitReader97_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitReader971_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.7.1/C3DE0FFDF926B5E670543028BF47B076/FoxitReader971_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitReader971_L10N_Setup_Prom.exe" /silent
+:: foobar2000
+::if not exist "%setupbin%\foobar2000_v1.5.1.exe" wget.exe --tries=3 --no-check-certificate -c "https://www.videohelp.com/download-HSqJsNkrXFM/foobar2000_v1.5.1.exe"
+::"%setupbin%\foobar2000_v1.5.1.exe" /S
 :: XMPlay
 if not exist "%setupbin%\xmplay38.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.un4seen.com/files/xmplay38.zip"
 if not exist "%programfiles%\xmplay" md "%programfiles%\xmplay"
 7za.exe x -r -y -o"%programfiles%\xmplay" "%setupbin%\xmplay38.zip"
-nircmdc.exe shortcut "%programfiles%\xmplay\xmplay.exe" "~$folder.common_programs$" "XMPlay"
 nircmdc.exe shortcut "%programfiles%\xmplay\xmplay.exe" "~$folder.appdata$\microsoft\windows\sendto" "XMPlay"
 :: WinDirStat
 if not exist "%setupbin%\wds_current_setup.exe" wget.exe --tries=3 --no-check-certificate -c "http://windirstat.net/wds_current_setup.exe"
@@ -353,12 +357,13 @@ if not exist "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 --no
 if "%ntver%" neq "6.1" "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
 :: Tango Patcher
 if not exist "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/heebijeebi/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
-nircmdc.exe initshutdown "sysinstall: system will be restarted automatically in 10 min" 600 force reboot
+nircmdc.exe initshutdown "sysinstall: system will be restarted automatically in a 7 min" 420 force reboot
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
 ::
 color 2f &echo Installation completed
 if "%1"=="-u" goto reboot
 pause
 :reboot
-echo Restarting system... &shutdown /r /f
+echo Restarting system...
+shutdown /r /f
 ::
