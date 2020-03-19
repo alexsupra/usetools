@@ -138,8 +138,8 @@ if not exist "%setupbin%\nircmd.zip" wget.exe --tries=3 --no-check-certificate -
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
 copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: FAR
-if not exist "%setupbin%\Far30b5511.x86.20191120.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5511.x86.20191120.msi"
-msiexec /package "%setupbin%\Far30b5511.x86.20191120.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b5555.x86.20200208.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5555.x86.20200208.msi"
+msiexec /package "%setupbin%\Far30b5555.x86.20200208.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -188,11 +188,11 @@ cd "%setupbin%"
 if not exist "%setupbin%\npp.7.8.1.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.1/npp.7.8.1.Installer.exe"
 "%setupbin%\npp.7.8.1.Installer.exe" /S
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 73.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/73.0.1/win32/ru/Firefox Setup 73.0.1.exe"
-"%setupbin%\Firefox Setup 73.0.1.exe" /S
+if not exist "%setupbin%\Firefox Setup 74.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/74.0/win32/ru/Firefox Setup 74.0.exe"
+"%setupbin%\Firefox Setup 74.0.exe" /S
 :: Thunderbird
-if not exist "%setupbin%\Thunderbird Setup 68.4.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.4.2/win32/ru/Thunderbird Setup 68.4.2.exe"
-"%setupbin%\Thunderbird Setup 68.4.2.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 68.5.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.5.0/win32/ru/Thunderbird Setup 68.5.0.exe"
+"%setupbin%\Thunderbird Setup 68.5.0.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
@@ -225,8 +225,8 @@ if not exist "%setupbin%\nircmd-x64.zip" wget.exe --tries=3 --no-check-certifica
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
 copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: FAR
-if not exist "%setupbin%\Far30b5511.x64.20191120.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5511.x64.20191120.msi"
-msiexec /package "%setupbin%\Far30b5511.x64.20191120.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b5555.x64.20200208.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5555.x64.20200208.msi"
+msiexec /package "%setupbin%\Far30b5555.x64.20200208.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -275,13 +275,13 @@ cd "%setupbin%"
 if not exist "%setupbin%\npp.7.8.1.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.1/npp.7.8.1.Installer.x64.exe"
 "%setupbin%\npp.7.8.1.Installer.x64.exe" /S
 :: Firefox
-if not exist "%setupbin%\Firefox Setup 73.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/73.0.1/win64/ru/Firefox Setup 73.0.1.msi"
-msiexec /package "%setupbin%\Firefox Setup 73.0.1.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 74.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/74.0/win64/ru/Firefox Setup 74.0.msi"
+msiexec /package "%setupbin%\Firefox Setup 74.0.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird
-if not exist "%setupbin%\Thunderbird Setup 68.4.2.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.4.2/win64/ru/Thunderbird Setup 68.4.2.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 68.4.2.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 68.5.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.5.0/win64/ru/Thunderbird Setup 68.5.0.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 68.5.0.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLCVideoPlayer
@@ -354,10 +354,14 @@ DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
 ::"%setupbin%\dotnetfx35.exe" /s
 :: Classic Shell
 if not exist "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/classicshell/Version 4.3.1 general release/ClassicShellSetup_4_3_1-ru.exe"
-if "%ntver%" neq "6.1" "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
+if "%ntver%" neq "6.1" (
+	"%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
+	regsvr32 /u /s "%programfiles%\classic shell\classicexplorer32.dll"
+	regsvr32 /u /s "%programfiles%\classic shell\classicexplorer64.dll"
+	)
 :: Tango Patcher
 if not exist "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/heebijeebi/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
-nircmdc.exe initshutdown "sysinstall: system will be restarted automatically in a 7 min" 420 force reboot
+nircmdc.exe initshutdown "sysinstall: system will be restarted automatically in a 5 min." 300 force reboot
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
 ::
 color 2f &echo Installation completed
