@@ -295,6 +295,10 @@ Windows Registry Editor Version 5.00
 
 ; cmd settings
 [HKEY_CURRENT_USER\Console]
+"FaceName"="Consolas"
+"FontSize"=dword:0010000B
+"FontFamily"=dword:00000036
+"FontWeight"=dword:000002bc
 "ColorTable00"=dword:00000000
 "ColorTable01"=dword:0064321e
 "ColorTable02"=dword:00009b65
@@ -312,6 +316,10 @@ Windows Registry Editor Version 5.00
 "ColorTable14"=dword:004fe9fc
 "ColorTable15"=dword:00fdfaf7
 [HKEY_USERS\.DEFAULT\Console]
+"FaceName"="Consolas"
+"FontSize"=dword:0010000B
+"FontFamily"=dword:00000036
+"FontWeight"=dword:000002bc
 "ColorTable00"=dword:00000000
 "ColorTable01"=dword:0064321e
 "ColorTable02"=dword:00009b65
