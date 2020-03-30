@@ -155,7 +155,7 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z"
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
-del /f /q "%userprofile%\desktop\ConEmu.lnk"
+del /f /q "%public%\desktop\ConEmu.lnk"
 cd "%setupbin%"
 :: Anvir
 nircmdc.exe killprocess anvir.exe
@@ -242,7 +242,7 @@ cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z"
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
-del /f /q "%userprofile%\desktop\ConEmu (x64).lnk"
+del /f /q "%public%\desktop\ConEmu (x64).lnk"
 cd "%setupbin%"
 :: Anvir
 nircmdc.exe killprocess anvir.exe
@@ -294,8 +294,8 @@ if not exist "%programfiles%\puretext" md "%programfiles%\puretext"
 nircmdc.exe shortcut "%programfiles%\puretext\puretext.exe" "~$folder.common_programs$" "PureText"
 ::
 :osx8664
-reg delete "HKEY_CLASSES_ROOT\Directory\shell\AddToPlaylistVLC" /f
-reg delete "HKEY_CLASSES_ROOT\Directory\shell\PlayWithVLC" /f
+reg delete "HKEY_CLASSES_ROOT\Directory\shell\AddToPlaylistVLC" /f >nul
+reg delete "HKEY_CLASSES_ROOT\Directory\shell\PlayWithVLC" /f >nul
 nircmdc.exe shortcut "%programfiles%\videolan\vlc\vlc.exe" "~$folder.appdata$\microsoft\windows\sendto" "VLC"
 :: Unreal Commander
 if not exist "%setupbin%\uncomsetup.exe" wget.exe --tries=3 --no-check-certificate -c "http://x-diesel.com/download/uncomsetup.exe"
@@ -329,13 +329,13 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-cert
 if not exist "%setupbin%\FoxitReader971_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.7.1/C3DE0FFDF926B5E670543028BF47B076/FoxitReader971_L10N_Setup_Prom.exe"
 "%setupbin%\FoxitReader971_L10N_Setup_Prom.exe" /silent
 :: foobar2000
-::if not exist "%setupbin%\foobar2000_v1.5.1.exe" wget.exe --tries=3 --no-check-certificate -c "https://www.videohelp.com/download-HSqJsNkrXFM/foobar2000_v1.5.1.exe"
-::"%setupbin%\foobar2000_v1.5.1.exe" /S
+if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
+"%setupbin%\foobar2000_v1.5.2.exe" /S
 :: XMPlay
-if not exist "%setupbin%\xmplay38.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.un4seen.com/files/xmplay38.zip"
-if not exist "%programfiles%\xmplay" md "%programfiles%\xmplay"
-7za.exe x -r -y -o"%programfiles%\xmplay" "%setupbin%\xmplay38.zip"
-nircmdc.exe shortcut "%programfiles%\xmplay\xmplay.exe" "~$folder.appdata$\microsoft\windows\sendto" "XMPlay"
+::if not exist "%setupbin%\xmplay38.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.un4seen.com/files/xmplay38.zip"
+::if not exist "%programfiles%\xmplay" md "%programfiles%\xmplay"
+::7za.exe x -r -y -o"%programfiles%\xmplay" "%setupbin%\xmplay38.zip"
+::nircmdc.exe shortcut "%programfiles%\xmplay\xmplay.exe" "~$folder.appdata$\microsoft\windows\sendto" "XMPlay"
 :: WinDirStat
 if not exist "%setupbin%\wds_current_setup.exe" wget.exe --tries=3 --no-check-certificate -c "http://windirstat.net/wds_current_setup.exe"
 "%setupbin%\wds_current_setup.exe" /S
