@@ -361,14 +361,10 @@ Windows Registry Editor Version 5.00
 ; disable automatic updates
 [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update]
 "AUOptions"=dword:00000001
-"AUState"=dword:00000007
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows]
-"AUOptions"=dword:00000001
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU]
-"AUOptions"=dword:00000001
-"NoAutoUpdate"=dword:00000001
+;"AUOptions"=dword:00000001
+;"NoAutoUpdate"=dword:00000001
 
 ; disable error reporting
 [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\Windows Error Reporting]
