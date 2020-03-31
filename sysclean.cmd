@@ -1,3 +1,6 @@
+:: sysclean.cmd - universal system clean up script
+:: for 32/64 bits OS Windows NT 6.1, 6.2, 6.3, 10.0
+:: https://github.com/alexsupra/usetools
 @echo off
 color 20
 chcp 866 >nul
@@ -19,20 +22,24 @@ echo     ÛÛ    ÛÛ ÛÛ     Û Û      Û    ÛÛ    Û      Û Û      Û ÛÛ    ÛÛ ÛÛ     Û
 echo      ßßßßßßß ßßßßßßßß ßßßßßßßß    ßß    ßßßßßßßß ßßßßßßßß ßßßßßßßß ßßßßßßßß  
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-echo     ³                sysclean.cmd - system clean-up script                ³
+echo     ³                sysclean.cmd - system clean up script                ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 echo.
-echo Cleaning Windows temp and cache directories...
+echo Cleaning system temporary and cache directories...
 dir /b %systemroot%\temp >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%systemroot%\temp\%%a"
 dir /b %temp% >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%temp%\%%a"
 dir /b %tmp% >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%tmp%\%%a"
+dir /b %systemroot%\prefetch >temp.list
+for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%systemroot%\prefetch\%%a"
 dir /b "%localappdata%\Microsoft\Windows\Explorer" >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Microsoft\Windows\Explorer\%%a"
+dir /b "%localappdata%\Microsoft\Windows\Caches" >temp.list
+for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Microsoft\Windows\Caches\%%a"
 ::
-echo Cleaning software applications temp and cache directories...
+echo Cleaning applications temporary and cache directories...
 if exist "%localappdata%\Microsoft\Windows\INetCache" (
 	attrib -a -r -s -h "%localappdata%\Microsoft\Windows\INetCache\*.*" /s /d
 	dir /b "%localappdata%\Microsoft\Windows\INetCache" >temp.list
@@ -49,6 +56,36 @@ if exist "%localappdata%\Google\Chrome\User Data\Default" (
 	dir /b "%localappdata%\Google\Chrome\User Data\Default\Code Cache" >temp.list
 	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Google\Chrome\User Data\Default\Code Cache\%%a"
 	)
+if exist "%localappdata%\Google\Chrome SxS\User Data\Default" (
+	dir /b "%localappdata%\Google\Chrome SxS\User Data\Default\Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Google\Chrome SxS\User Data\Default\Cache\%%a"
+	dir /b "%localappdata%\Google\Chrome SxS\User Data\Default\Code Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Google\Chrome SxS\User Data\Default\Code Cache\%%a"
+	)
+if exist "%localappdata%\Chromium\User Data\Default" (
+	dir /b "%localappdata%\Chromium\User Data\Default\Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Chromium\User Data\Default\Cache\%%a"
+	dir /b "%localappdata%\Chromium\User Data\Default\Code Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Chromium\User Data\Default\Code Cache\%%a"
+	)
+if exist "%localappdata%\Vivaldi\User Data\Default" (
+	dir /b "%localappdata%\Vivaldi\User Data\Default\Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Vivaldi\User Data\Default\Cache\%%a"
+	dir /b "%localappdata%\Vivaldi\User Data\Default\Code Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Vivaldi\User Data\Default\Code Cache\%%a"
+	)
+if exist "%localappdata%\Yandex\YandexBrowser\User Data\Default" (
+	dir /b "%localappdata%\Yandex\YandexBrowser\User Data\Default\Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Yandex\YandexBrowser\User Data\Default\Cache\%%a"
+	dir /b "%localappdata%\Yandex\YandexBrowser\User Data\Default\Code Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Yandex\YandexBrowser\User Data\Default\Code Cache\%%a"
+	)
+if exist "%localappdata%\Opera Software\Opera Stable" (
+	dir /b "%localappdata%\Opera Software\Opera Stable\Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Opera Software\Opera Stable\Cache\%%a"
+	dir /b "%appdata%\Opera Software\Opera Stable\Code Cache" >temp.list
+	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%appdata%\Opera Software\Opera Stable\Code Cache\%%a"
+	)
 if exist "%localappdata%\Mozilla\Firefox\Profiles" (
 	dir /b "%localappdata%\Mozilla\Firefox\Profiles" >temp.list
 	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Mozilla\Firefox\Profiles\%%a"
@@ -62,5 +99,5 @@ echo Cleaning WinSxS directory...
 dism.exe /online /Cleanup-Image /StartComponentCleanup
 echo Cleaning Recycle.Bin...
 for %%p in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do if exist "%%p:\$Recycle.Bin" rundll32.exe advpack.dll,DelNodeRunDLL32 "%%p:\$Recycle.Bin"
-echo Ready. &color 2f &pause &exit
+echo Ready. &echo. &color 0a &pause &exit
 ::
