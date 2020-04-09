@@ -1,5 +1,5 @@
 :: sysclean.cmd - universal system clean up script
-:: for 32/64 bits OS Windows NT 6.1, 6.2, 6.3, 10.0
+:: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off
 color 20
@@ -34,10 +34,8 @@ dir /b %tmp% >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%tmp%\%%a"
 dir /b %systemroot%\prefetch >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%systemroot%\prefetch\%%a"
-dir /b "%localappdata%\Microsoft\Windows\Explorer" >temp.list
+dir /b "%localappdata%\Microsoft\Windows\Explorer\thumbcache_*.db" >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Microsoft\Windows\Explorer\%%a"
-dir /b "%localappdata%\Microsoft\Windows\Caches" >temp.list
-for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Microsoft\Windows\Caches\%%a"
 ::
 echo Cleaning applications temporary and cache directories...
 if exist "%localappdata%\Microsoft\Windows\INetCache" (
