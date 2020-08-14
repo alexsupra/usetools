@@ -19,7 +19,7 @@ set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
 echo %os% %ntver% %osarch%
-set sysinstall_version=2006.01
+set sysinstall_version=2008.01
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -113,6 +113,10 @@ reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop" /v "AutoEndTasks" /t reg_sz 
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t reg_dword /d "1" /f
 :: optimize system perfomance
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePagingExecutive" /t reg_dword /d "1" /f
+:: keyboard layout settings
+reg add "HKEY_USERS\.DEFAULT\keyboard layout\preload" /v "1" /t reg_sz /d "00000409" /f
+reg add "HKEY_USERS\.DEFAULT\keyboard layout\preload" /v "2" /t reg_sz /d "00000419" /f
+reg add "HKEY_USERS\.DEFAULT\keyboard layout\toggle" /v "hotkey" /t reg_sz /d "2" /f
 :: GUI/SHELL
 :: remove "is shortcut" text
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "link" /t reg_binary /d "000000000000" /f
@@ -235,7 +239,7 @@ reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "AutoEndTasks" /t reg_sz /d
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t reg_dword /d "1" /f
 :: optimize system perfomance
 reg add "HKEY_CURRENT_USER\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePagingExecutive" /t reg_dword /d "1" /f
-:: keyboard layot settings
+:: keyboard layout settings
 reg add "HKEY_CURRENT_USER\keyboard layout\preload" /v "1" /t reg_sz /d "00000409" /f
 reg add "HKEY_CURRENT_USER\keyboard layout\preload" /v "2" /t reg_sz /d "00000419" /f
 reg add "HKEY_CURRENT_USER\keyboard layout\toggle" /v "hotkey" /t reg_sz /d "2" /f
@@ -337,7 +341,7 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" /v "Start 
 ::
 if "%ntver%"=="6.2" goto config_system_win8x
 if "%ntver%"=="6.3" goto config_system_win8x
-if "%ntver%"=="10.0" goto config_system_win10x
+if "%ntver%"=="10.0" goto config_system_win10
 if "%1"=="-s" goto setup
 if %userinput%==2 goto menu
 goto install
@@ -571,12 +575,14 @@ if not exist "%setupbin%\npp.7.8.1.Installer.exe" wget.exe --tries=3 --no-check-
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 76.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/76.0/win32/ru/Firefox Setup 76.0.exe"
-"%setupbin%\Firefox Setup 76.0.exe" /S
+if not exist "%setupbin%\Firefox Setup 78.0.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/78.0.2/win32/ru/Firefox Setup 78.0.2.exe"
+"%setupbin%\Firefox Setup 78.0.2.exe" /S
 :: Thunderbird32
 echo Installing Mozilla Thunderbird ...
-if not exist "%setupbin%\Thunderbird Setup 68.8.0.exe" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.8.0/win32/ru/Thunderbird Setup 68.8.0.exe"
-"%setupbin%\Thunderbird Setup 68.8.0.exe" /S
+tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
+if errorlevel 1 taskkill /f /im "thunderbird.exe"
+if not exist "%setupbin%\Thunderbird Setup 68.9.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.9.0/win32/ru/Thunderbird Setup 68.9.0.exe"
+"%setupbin%\Thunderbird Setup 68.9.0.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC32
@@ -657,16 +663,16 @@ if not exist "%setupbin%\npp.7.8.1.Installer.x64.exe" wget.exe --tries=3 --no-ch
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 76.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/76.0/win64/ru/Firefox Setup 76.0.msi"
-msiexec /package "%setupbin%\Firefox Setup 76.0.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 78.0.2.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/78.0.2/win64/ru/Firefox Setup 78.0.2.msi"
+msiexec /package "%setupbin%\Firefox Setup 78.0.2.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird64
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 68.8.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.8.0/win64/ru/Thunderbird Setup 68.8.0.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 68.8.0.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 68.9.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.9.0/win64/ru/Thunderbird Setup 68.9.0.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 68.9.0.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC64
@@ -757,8 +763,8 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-cert
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitReader972_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/9.7.2/24DB8FA75E6103FD92B4B896DEE804A6/FoxitReader972_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitReader972_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitReader972_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/10.0/69D66F718FC6D8FFA2EC82CC109AE3BB/FoxitReader100_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitReader100_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
 if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
@@ -776,8 +782,8 @@ if %osarch%==x86 nircmdc.exe shortcut "%programfiles%\siv\siv32x.exe" "~$folder.
 if %osarch%==x64 nircmdc.exe shortcut "%programfiles%\siv\siv64x.exe" "~$folder.common_programs$" "SIV"
 :: HWMonitor
 echo Installing HWMonitor ...
-if not exist "%setupbin%\hwmonitor_1.40.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.cpuid.com/hwmonitor/hwmonitor_1.40.exe"
-"%setupbin%\hwmonitor_1.40.exe" /VERYSILENT
+if not exist "%setupbin%\hwmonitor_1.41.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.cpuid.com/downloads/hwmonitor/hwmonitor_1.41.exe"
+"%setupbin%\hwmonitor_1.41.exe" /VERYSILENT
 del /f /q "%public%\desktop\CPUID HWMonitor.lnk"
 :: Keyboard LEDs
 echo Installing Keyboard LEDs ...
