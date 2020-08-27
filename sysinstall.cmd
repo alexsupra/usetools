@@ -19,7 +19,7 @@ set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
 echo %os% %ntver% %osarch%
-set sysinstall_version=2008.01
+set sysinstall_version=2008.02
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -763,7 +763,7 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-cert
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitReader972_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/10.0/69D66F718FC6D8FFA2EC82CC109AE3BB/FoxitReader100_L10N_Setup_Prom.exe"
+if not exist "%setupbin%\FoxitReader100_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/10.0/69D66F718FC6D8FFA2EC82CC109AE3BB/FoxitReader100_L10N_Setup_Prom.exe"
 "%setupbin%\FoxitReader100_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
@@ -782,7 +782,7 @@ if %osarch%==x86 nircmdc.exe shortcut "%programfiles%\siv\siv32x.exe" "~$folder.
 if %osarch%==x64 nircmdc.exe shortcut "%programfiles%\siv\siv64x.exe" "~$folder.common_programs$" "SIV"
 :: HWMonitor
 echo Installing HWMonitor ...
-if not exist "%setupbin%\hwmonitor_1.41.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.cpuid.com/downloads/hwmonitor/hwmonitor_1.41.exe"
+if not exist "%setupbin%\hwmonitor_1.41.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.cpuid.com/hwmonitor/hwmonitor_1.41.exe"
 "%setupbin%\hwmonitor_1.41.exe" /VERYSILENT
 del /f /q "%public%\desktop\CPUID HWMonitor.lnk"
 :: Keyboard LEDs
