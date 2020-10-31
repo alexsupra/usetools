@@ -19,7 +19,7 @@ set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
 echo %os% %ntver% %osarch%
-set sysinstall_version=2008.02
+set sysinstall_version=2010.01
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -541,8 +541,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b5577.x86.20200327.msi" wget.exe --tries=3 --no-check-certificate -c "http://farmanager.com/files/Far30b5577.x86.20200327.msi"
-msiexec /package "%setupbin%\Far30b5577.x86.20200327.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b5665.x86.20200912.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5665.x86.20200912.msi"
+msiexec /package "%setupbin%\Far30b5665.x86.20200912.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -575,20 +575,20 @@ if not exist "%setupbin%\npp.7.8.1.Installer.exe" wget.exe --tries=3 --no-check-
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 78.0.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/78.0.2/win32/ru/Firefox Setup 78.0.2.exe"
-"%setupbin%\Firefox Setup 78.0.2.exe" /S
+if not exist "%setupbin%\Firefox Setup 82.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/82.0/win32/ru/Firefox Setup 82.0.exe"
+"%setupbin%\Firefox Setup 82.0.exe" /S
 :: Thunderbird32
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 68.9.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.9.0/win32/ru/Thunderbird Setup 68.9.0.exe"
-"%setupbin%\Thunderbird Setup 68.9.0.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 78.4.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/78.4.0/win32/ru/Thunderbird Setup 78.4.0.exe"
+"%setupbin%\Thunderbird Setup 78.4.0.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC32
 echo Installing VLC media player ...
-if not exist "%setupbin%\vlc-3.0.10-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://mirror.yandex.ru/mirrors/ftp.videolan.org/vlc/3.0.10/win32/vlc-3.0.10-win32.exe"
-"%setupbin%\vlc-3.0.10-win32.exe" /S
+if not exist "%setupbin%\vlc-3.0.11-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.lysator.liu.se/pub/videolan/vlc/3.0.11/win32/vlc-3.0.11-win32.exe"
+"%setupbin%\vlc-3.0.11-win32.exe" /S
 :: PureText32
 echo Installing PureText ...
 if not exist "%setupbin%\puretext_6.2_32-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_32-bit.zip"
@@ -628,8 +628,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b5577.x64.20200327.msi" wget.exe --tries=3 --no-check-certificate -c "http://farmanager.com/files/Far30b5577.x64.20200327.msi"
-msiexec /package "%setupbin%\Far30b5577.x64.20200327.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b5665.x64.20200912.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5665.x64.20200912.msi"
+msiexec /package "%setupbin%\Far30b5665.x64.20200912.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -663,22 +663,22 @@ if not exist "%setupbin%\npp.7.8.1.Installer.x64.exe" wget.exe --tries=3 --no-ch
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 78.0.2.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/78.0.2/win64/ru/Firefox Setup 78.0.2.msi"
-msiexec /package "%setupbin%\Firefox Setup 78.0.2.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 82.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/82.0/win64/ru/Firefox Setup 82.0.msi"
+msiexec /package "%setupbin%\Firefox Setup 82.0.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird64
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 68.9.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/68.9.0/win64/ru/Thunderbird Setup 68.9.0.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 68.9.0.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 78.4.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/78.4.0/win64/ru/Thunderbird Setup 78.4.0.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 78.4.0.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC64
 echo Installing VLC media player ...
-if not exist "%setupbin%\vlc-3.0.10-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://mirror.yandex.ru/mirrors/ftp.videolan.org/vlc/3.0.10/win64/vlc-3.0.10-win64.exe"
-"%setupbin%\vlc-3.0.10-win64.exe" /S
+if not exist "%setupbin%\vlc-3.0.11-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.acc.umu.se/mirror/videolan.org/vlc/3.0.11/win64/vlc-3.0.11-win64.exe"
+"%setupbin%\vlc-3.0.11-win64.exe" /S
 :: PureText64
 echo Installing PureText ...
 if not exist "%setupbin%\puretext_6.2_64-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_64-bit.zip"
@@ -763,8 +763,8 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-cert
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitReader100_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/10.0/69D66F718FC6D8FFA2EC82CC109AE3BB/FoxitReader100_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitReader100_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitReader101_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/10.1.0/FoxitReader101_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitReader101_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
 if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
