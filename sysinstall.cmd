@@ -19,7 +19,7 @@ set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
 echo %os% %ntver% %osarch%
-set sysinstall_version=2010.01
+set sysinstall_version=2102.01
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -482,8 +482,8 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Se
 :: GUI/SHELL
 :: dont show people on taskbar
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" /v "PeopleBand" /t reg_dword /d "0" /f
-:: disable search box on taskbar
-reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t reg_dword /d "0" /f
+:: disable search box on taskbar, but enable icon
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t reg_dword /d "1" /f
 :: make the "open", "print", "edit" context menu items available when more than 15 files selected
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "MultipleInvokePromptMinimum" /t reg_dword /d "1" /f
 :: DISABLED COMPONENTS AND FIXES
@@ -534,15 +534,15 @@ copy /y "%ProgramFiles%\7-Zip\7za.exe" "%systemroot%\system32"
 :: NirCMD32
 echo Installing NirCMD ...
 if not exist "%setupbin%\nircmd.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/nircmd.zip" -O "%setupbin%\nircmd.zip"
-if not exist "%sysinstall%\nircmdc.exe" 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
+7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
 copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
 copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 :: FAR32
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b5665.x86.20200912.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5665.x86.20200912.msi"
-msiexec /package "%setupbin%\Far30b5665.x86.20200912.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b5700.x86.20201112.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5700.x86.20201112.msi"
+msiexec /package "%setupbin%\Far30b5700.x86.20201112.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -569,26 +569,26 @@ if not exist "%programfiles%\uninstallview" md "%programfiles%\uninstallview"
 nircmdc.exe shortcut "%programfiles%\uninstallview\uninstallview.exe" "~$folder.common_programs$" "UninstallView"
 :: Notepad++32
 echo Installing Notepad++ ...
-if not exist "%setupbin%\npp.7.8.1.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.1/npp.7.8.1.Installer.exe"
-"%setupbin%\npp.7.8.1.Installer.exe" /S
+if not exist "%setupbin%\npp.7.9.2.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.9.2/npp.7.9.2.Installer.exe"
+"%setupbin%\npp.7.9.2.Installer.exe" /S
 :: Firefox32
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 82.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/82.0/win32/ru/Firefox Setup 82.0.exe"
-"%setupbin%\Firefox Setup 82.0.exe" /S
+if not exist "%setupbin%\Firefox Setup 85.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/85.0.1/win32/ru/Firefox Setup 85.0.1.exe"
+"%setupbin%\Firefox Setup 85.0.1.exe" /S
 :: Thunderbird32
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 78.4.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/78.4.0/win32/ru/Thunderbird Setup 78.4.0.exe"
-"%setupbin%\Thunderbird Setup 78.4.0.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 78.7.1.exe" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/thunderbird/releases/78.7.1/win32/ru/Thunderbird Setup 78.7.1.exe"
+"%setupbin%\Thunderbird Setup 78.7.1.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC32
 echo Installing VLC media player ...
-if not exist "%setupbin%\vlc-3.0.11-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.lysator.liu.se/pub/videolan/vlc/3.0.11/win32/vlc-3.0.11-win32.exe"
-"%setupbin%\vlc-3.0.11-win32.exe" /S
+if not exist "%setupbin%\vlc-3.0.12-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.acc.umu.se/mirror/videolan.org/vlc/3.0.12/win32/vlc-3.0.12-win32.exe"
+"%setupbin%\vlc-3.0.12-win32.exe" /S
 :: PureText32
 echo Installing PureText ...
 if not exist "%setupbin%\puretext_6.2_32-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_32-bit.zip"
@@ -596,6 +596,7 @@ if not exist "%programfiles%\puretext" md "%programfiles%\puretext"
 7za.exe x -r -y -o"%programfiles%\puretext" "%setupbin%\puretext_6.2_32-bit.zip"
 nircmdc.exe shortcut "%programfiles%\puretext\puretext.exe" "~$folder.common_programs$" "PureText"
 :: wufuc32
+if "%ntver%"=="10.0" goto osx8664
 echo Installing wufuc ...
 if not exist "%setupbin%\wufuc_v1.0.1.201-x86.msi" wget.exe --tries=3 --no-check-certificate -c "http://github.com/zeffy/wufuc/releases/download/v1.0.1.201/wufuc_v1.0.1.201-x86.msi"
 msiexec /package "%setupbin%\wufuc_v1.0.1.201-x86.msi" /quiet /norestart
@@ -628,8 +629,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b5665.x64.20200912.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5665.x64.20200912.msi"
-msiexec /package "%setupbin%\Far30b5665.x64.20200912.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b5700.x64.20201112.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5700.x64.20201112.msi"
+msiexec /package "%setupbin%\Far30b5700.x64.20201112.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -657,34 +658,35 @@ if not exist "%programfiles%\uninstallview" md "%programfiles%\uninstallview"
 nircmdc.exe shortcut "%programfiles%\uninstallview\uninstallview.exe" "~$folder.common_programs$" "UninstallView"
 :: Notepad++64
 echo Installing Notepad++ ...
-if not exist "%setupbin%\npp.7.8.1.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.1/npp.7.8.1.Installer.x64.exe"
-"%setupbin%\npp.7.8.1.Installer.x64.exe" /S
+if not exist "%setupbin%\npp.7.9.2.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.9.2/npp.7.9.2.Installer.x64.exe"
+"%setupbin%\npp.7.9.2.Installer.x64.exe" /S
 :: Firefox64
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 82.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/82.0/win64/ru/Firefox Setup 82.0.msi"
-msiexec /package "%setupbin%\Firefox Setup 82.0.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 85.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/85.0.1/win64/ru/Firefox Setup 85.0.1.msi"
+msiexec /package "%setupbin%\Firefox Setup 85.0.1.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird64
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 78.4.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/78.4.0/win64/ru/Thunderbird Setup 78.4.0.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 78.4.0.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 78.7.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/thunderbird/releases/78.7.1/win64/ru/Thunderbird Setup 78.7.1.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 78.7.1.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC64
 echo Installing VLC media player ...
-if not exist "%setupbin%\vlc-3.0.11-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.acc.umu.se/mirror/videolan.org/vlc/3.0.11/win64/vlc-3.0.11-win64.exe"
-"%setupbin%\vlc-3.0.11-win64.exe" /S
+if not exist "%setupbin%\vlc-3.0.12-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://mirror.yandex.ru/mirrors/ftp.videolan.org/vlc/3.0.12/win64/vlc-3.0.12-win64.exe"
+"%setupbin%\vlc-3.0.12-win64.exe" /S
 :: PureText64
 echo Installing PureText ...
 if not exist "%setupbin%\puretext_6.2_64-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_64-bit.zip"
 if not exist "%programfiles%\puretext" md "%programfiles%\puretext"
 7za.exe x -r -y -o"%programfiles%\puretext" "%setupbin%\puretext_6.2_64-bit.zip"
 nircmdc.exe shortcut "%programfiles%\puretext\puretext.exe" "~$folder.common_programs$" "PureText"
+if "%ntver%"=="10.0" goto osx8664
 :: wufuc64
 echo Installing wufuc ...
 if not exist "%setupbin%\wufuc_v1.0.1.201-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://github.com/zeffy/wufuc/releases/download/v1.0.1.201/wufuc_v1.0.1.201-x64.msi"
@@ -698,8 +700,10 @@ nircmdc.exe shortcut "%programfiles%\videolan\vlc\vlc.exe" "~$folder.appdata$\mi
 echo Installing Anvir ...
 tasklist /fi "imagename eq anvir.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "anvir.exe"
-if not exist "%setupbin%\anvirrus.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.anvir.net/downloads/anvirrus.zip"
-7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
+if not exist "%setupbin%\anvirrus-portable.zip" (
+	wget.exe --tries=3 --no-check-certificate -c "http://www.anvir.net/downloads/anvirrus.zip"
+	7za.exe x -r -y -o"%setupbin%" "%setupbin%\anvirrus.zip"
+	)
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupbin%\anvirrus-portable.zip"
 cd "%setupcfg%"
 if not exist "%setupcfg%\anvir.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z"
@@ -717,6 +721,7 @@ tasklist /fi "imagename eq clamtray.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "clamtray.exe"
 if not exist "%setupbin%\clamwin-0.99.4-setup.exe" wget.exe --tries=3 --no-check-certificate -c "http://downloads.sourceforge.net/clamwin/clamwin-0.99.4-setup.exe"
 "%setupbin%\clamwin-0.99.4-setup.exe" /VERYSILENT
+start clamwin-0.99.4-setup.exe /VERYSILENT
 :: Unreal Commander
 echo Installing Unreal Commander ...
 tasklist /fi "imagename eq UnrealCommander32.exe" |find ":" >nul
@@ -740,6 +745,7 @@ if %osarch%==x64 (
 cd "%setupcfg%"
 if not exist "%setupcfg%\unreal.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/unreal.7z"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
+taskkill /IM "UnrealCommander*" /F
 7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\unreal.7z"
 if not exist "%defaultuserprofile%\appdata\roaming\unreal commander" md "%defaultuserprofile%\appdata\roaming\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%defaultuserprofile%\appdata\roaming\unreal commander"
@@ -752,9 +758,9 @@ reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f >nul
 cd "%setupbin%"
 :: OpenOffice
 echo Installing OpenOffice.org ...
-if not exist "%setupbin%\Apache_OpenOffice_4.1.7_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/openofficeorg.mirror/4.1.7/binaries/ru/Apache_OpenOffice_4.1.7_Win_x86_install_ru.exe"
-"%setupbin%\Apache_OpenOffice_4.1.7_Win_x86_install_ru.exe" /S
-rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.7 (ru) Installation Files"
+if not exist "%setupbin%\Apache_OpenOffice_4.1.8_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c http://nav.dl.sourceforge.net/project/openofficeorg.mirror/4.1.8/binaries/ru/Apache_OpenOffice_4.1.8_Win_x86_install_ru.exe"
+"%setupbin%\Apache_OpenOffice_4.1.8_Win_x86_install_ru.exe" /S
+rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.8 (ru) Installation Files"
 :: XnView
 echo Installing XnView ...
 if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.xnview.com/XnView-win-full.exe"
@@ -763,8 +769,8 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-cert
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitReader101_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/10.1.0/FoxitReader101_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitReader101_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitReader1011_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/10.1.1/FoxitReader1011_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitReader1011_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
 if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
@@ -796,13 +802,25 @@ DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
 ::if not exist "%setupbin%\dotnetfx35.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
 ::"%setupbin%\dotnetfx35.exe" /s
 :: Classic Shell
-echo Installing Classic Shell ...
-if not exist "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/classicshell/Version 4.3.1 general release/ClassicShellSetup_4_3_1-ru.exe"
+::echo Installing Classic Shell ...
+::if not exist "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/classicshell/Version 4.3.1 general release/ClassicShellSetup_4_3_1-ru.exe"
+::if "%ntver%" neq "6.1" (
+::	"%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
+::	regsvr32 /u /s "%programfiles%\classic shell\classicexplorer32.dll"
+::	regsvr32 /u /s "%programfiles%\classic shell\classicexplorer64.dll"
+::	)
+:: Open-Shell
+if "%ntver%"=="6.1" goto apply_setup
+echo Installing Open-Shell ...
+if not exist "%setupbin%\OpenShellSetup_4_4_160.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/Open-Shell/Open-Shell-Menu/releases/download/v4.4.160/OpenShellSetup_4_4_160.exe"
+::if not exist "%setupcfg%\open-shell.reg" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/open-shell.reg" -O "%setupcfg%\open-shell.reg"
 if "%ntver%" neq "6.1" (
-	"%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
-	regsvr32 /u /s "%programfiles%\classic shell\classicexplorer32.dll"
-	regsvr32 /u /s "%programfiles%\classic shell\classicexplorer64.dll"
+	"%setupbin%\OpenShellSetup_4_4_160.exe" /quiet
+::	regedit /s "%setupcfg%\open-shell.reg"
+	regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
+	regsvr32 /u /s "%programfiles%\open-shell\classicexplorer64.dll"
 	)
+:apply_setup
 :: Active Setup
 echo Applying sysinstall.cmd to Active Setup ...
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "" /t reg_sz /d "sysinstall" /f
