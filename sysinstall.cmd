@@ -19,7 +19,7 @@ set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
 echo %os% %ntver% %osarch%
-set sysinstall_version=2110.01
+set sysinstall_version=2111.01
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -508,6 +508,8 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeli
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy" /v "TailoredExperiencesWithDiagnosticDataEnabled" /t reg_dword /d "0" /f
 :: dont allow apps to use advertising id
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t reg_dword /d "0" /f
+:: remove weather and news from taskbar
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t reg_dword /d "2" /f
 ::
 if "%1"=="-s" goto setup
 if %userinput%==2 goto menu
@@ -515,6 +517,7 @@ if %userinput%==2 goto menu
 :install
 color 0b
 cd "%setupbin%"
+
 if "%osarch%"=="x86" goto osx86
 if "%osarch%"=="x64" goto osx64
 ::
@@ -562,12 +565,6 @@ if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c
 ::copy /y "%programfiles%\conemu\conemu.xml" "%defaultuserprofile%\appdata\roaming"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
-:: UninstallView32
-echo Installing UninstallView ...
-if not exist "%setupbin%\uninstallview.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/uninstallview.zip"
-if not exist "%programfiles%\uninstallview" md "%programfiles%\uninstallview"
-7za.exe x -r -y -o"%programfiles%\uninstallview" "%setupbin%\uninstallview.zip"
-nircmdc.exe shortcut "%programfiles%\uninstallview\uninstallview.exe" "~$folder.common_programs$" "UninstallView"
 :: Notepad++32
 echo Installing Notepad++ ...
 if not exist "%setupbin%\npp.8.1.4.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.1.4/npp.8.1.4.Installer.exe"
@@ -576,14 +573,14 @@ if not exist "%setupbin%\npp.8.1.4.Installer.exe" wget.exe --tries=3 --no-check-
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 92.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/92.0/win32/ru/Firefox Setup 92.0.exe"
-"%setupbin%\Firefox Setup 92.0.exe" /S
+if not exist "%setupbin%\Firefox Setup 94.0.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/94.0.2/win32/ru/Firefox Setup 94.0.2.exe"
+"%setupbin%\Firefox Setup 94.0.2.exe" /S
 :: Thunderbird32
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 91.1.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/thunderbird/releases/91.1.0/win32/ru/Thunderbird Setup 91.1.0.exe"
-"%setupbin%\Thunderbird Setup 91.1.0.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 91.3.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/thunderbird/releases/91.3.2/win32/ru/Thunderbird Setup 91.3.2.exe"
+"%setupbin%\Thunderbird Setup 91.3.2.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC32
@@ -651,12 +648,6 @@ copy /y "%programfiles%\conemu\conemu.xml" "%defaultuserprofile%\appdata\roaming
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 del /f /q "%public%\desktop\ConEmu (x64).lnk"
 cd "%setupbin%"
-:: UninstallView64
-echo Installing UninstallView ...
-if not exist "%setupbin%\uninstallview-x64.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/uninstallview-x64.zip"
-if not exist "%programfiles%\uninstallview" md "%programfiles%\uninstallview"
-7za.exe x -r -y -o"%programfiles%\uninstallview" "%setupbin%\uninstallview-x64.zip"
-nircmdc.exe shortcut "%programfiles%\uninstallview\uninstallview.exe" "~$folder.common_programs$" "UninstallView"
 :: Notepad++64
 echo Installing Notepad++ ...
 if not exist "%setupbin%\npp.8.1.4.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.1.4/npp.8.1.4.Installer.x64.exe"
@@ -665,16 +656,16 @@ if not exist "%setupbin%\npp.8.1.4.Installer.x64.exe" wget.exe --tries=3 --no-ch
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 92.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/92.0/win64/ru/Firefox Setup 92.0.msi"
-msiexec /package "%setupbin%\Firefox Setup 92.0.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 94.0.2.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/94.0.2/win64/ru/Firefox Setup 94.0.2.msi"
+msiexec /package "Firefox Setup 94.0.2.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird64
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 91.1.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/thunderbird/releases/91.1.0/win64/ru/Thunderbird Setup 91.1.0.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 91.1.0.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 91.3.2.msi" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/thunderbird/releases/91.3.2/win64/ru/Thunderbird Setup 91.3.2.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 91.3.2.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC64
@@ -819,11 +810,11 @@ if not exist "%setupbin%\keyboard-leds.exe" wget.exe --tries=2 --no-check-certif
 del /f /q "%public%\desktop\Keyboard LEDs.lnk"
 :: DotnetFX
 echo Installing DotnetFX ...
-if "%ntver%" neq "6.1" goto dotnetfx_not61
+if "%ntver%" neq "6.1" goto dotnetfx_win81
 if not exist "%setupbin%\dotnetfx35.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
 "%setupbin%\dotnetfx35.exe" /s
 goto apply_setup
-:dotnetfx_not61
+:dotnetfx_win81
 DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
 :: Classic Shell
 echo Installing Classic Shell ...
@@ -844,7 +835,7 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components
 :: Tango Patcher
 echo Installing Windows Tango Gnome Patcher ...
 if not exist "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/heebijeebi/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
-nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 5 min." 300 force reboot
+nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 3 min." 180 force reboot
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
 color 2f
 echo Installation is completed.
@@ -853,6 +844,7 @@ pause
 :reboot
 echo Restarting system ...
 shutdown /r /f
+nircmdc.exe "Restarting system ..." 1 force reboot
 exit
 :setup
 nircmdc.exe shortcut "%systemroot%\system32\cmd.exe" "~$folder.programs$" "CMD"
