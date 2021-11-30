@@ -1,5 +1,5 @@
 :: sysinstall.cmd - software and settings installation script providing better defaults
-:: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
+:: for (russian) 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
 chcp 866 >nul
@@ -19,7 +19,8 @@ set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
 echo %os% %ntver% %osarch%
-set sysinstall_version=2111.01
+::
+set sysinstall_version=2111.02
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -64,7 +65,7 @@ echo Input seems to be incorrect. Please try one more time.
 goto menu
 ::
 :backup
-echo Making system registry backup ...
+echo. &echo Making system registry backup ...&echo.
 if not exist "%backup%" md "%backup%"
 reg export "hkey_local_machine" "%backup%\hklm.reg"
 reg export "hkey_classes_root" "%backup%\hkcr.reg"
@@ -73,7 +74,7 @@ reg export "hkey_users\.default" "%backup%\hkud.reg"
 if %userinput%==4 goto menu
 ::
 :restore
-echo Restoring system from registry backup ...
+echo. &echo Restoring system from registry backup ...&echo.
 if not exist "%backup%" echo Backup not found &goto menu
 if exist "%backup%\hklm.reg" regedit /s "%backup%\hklm.reg"
 if exist "%backup%\hkcr.reg" regedit /s "%backup%\hkcr.reg"
@@ -88,7 +89,7 @@ if not exist "%sysinstall%\wget.exe" (
 	echo Invoke-WebRequest 'http://eternallybored.org/misc/wget/1.20.3/32/wget.exe' -OutFile 'wget.exe' >>getwget.ps1
 	powershell -ExecutionPolicy Bypass -File getwget.ps1
 	if not exist "%sysinstall%\wget.exe" (
-		echo Now we will start IE for downloading wget.exe, save it in the same dir with sysinstall.cmd and close browser window.&color 0e &pause
+		echo. &echo Now we will start IE for downloading wget.exe, save it in the same dir with sysinstall.cmd and close browser window.&color 0e &pause
 		"%programfiles%\internet explorer\iexplore.exe" "http://eternallybored.org/misc/wget/1.20.3/32/wget.exe"
 		)
 	del /f /q getwget.ps1 >nul
@@ -105,7 +106,7 @@ if %userinput%==3 goto install
 if "%1"=="-s" goto config_user
 :: System and user configuration settings for Windows NT 6.1, 6.2, 6.3, 10.0
 :config_system
-echo Applying system settings ...
+echo. &echo Applying general system settings ...&echo.
 :: SYSTEM
 :: end hung tasks automatically
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop" /v "AutoEndTasks" /t reg_sz /d "1" /f
@@ -232,7 +233,7 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry" /v
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CscService" /v "Start" /t reg_dword /d "0x00000004" /f
 ::
 :config_user
-echo Applying user settings ...
+echo. &echo Applying general user settings ...&echo.
 :: USER
 :: end hung tasks automatically
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "AutoEndTasks" /t reg_sz /d "1" /f
@@ -350,7 +351,7 @@ goto install
 :: System and user configuration settings for Windows NT 6.2, 6.3
 :config_system_win8x
 if "%1"=="-s" goto config_user_win8x
-echo Applying additional system settings ...
+echo. &echo Applying Windows 8.x system settings ...&echo.
 :: SYSTEM
 :: disable startup delay
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
@@ -378,7 +379,7 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\S
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
 ::
 :config_user_win8x
-echo Applying additional user settings ...
+echo. &echo Applying Windows 8.x user settings ...&echo.
 :: USER
 :: disable startup delay
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
@@ -413,7 +414,7 @@ goto install
 :: System and user configuration settings for Windows NT 10.0
 :config_system_win10
 if "%1"=="-s" goto config_user_win10
-echo Applying additional system settings ...
+echo. &echo Applying Windows 10 system settings ...&echo.
 :: SYSTEM
 :: disable startup delay
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
@@ -476,7 +477,7 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\D
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack\TestHooks" /v "Disabled" /t reg_dword /d "1" /f
 ::
 :config_user_win10
-echo Applying additional user settings ...
+echo. &echo Applying Windows 10 user settings ...&echo.
 :: USER
 :: disable startup delay
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
@@ -485,6 +486,8 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Se
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" /v "PeopleBand" /t reg_dword /d "0" /f
 :: disable search box on taskbar, but enable icon
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t reg_dword /d "1" /f
+:: remove weather and news from taskbar
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t reg_dword /d "2" /f
 :: make the "open", "print", "edit" context menu items available when more than 15 files selected
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "MultipleInvokePromptMinimum" /t reg_dword /d "1" /f
 :: DISABLED COMPONENTS AND FIXES
@@ -508,8 +511,8 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeli
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy" /v "TailoredExperiencesWithDiagnosticDataEnabled" /t reg_dword /d "0" /f
 :: dont allow apps to use advertising id
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t reg_dword /d "0" /f
-:: remove weather and news from taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t reg_dword /d "2" /f
+:: remove "finish setting up your device" advertisment
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t reg_dword /d "0" /f
 ::
 if "%1"=="-s" goto setup
 if %userinput%==2 goto menu
@@ -517,12 +520,11 @@ if %userinput%==2 goto menu
 :install
 color 0b
 cd "%setupbin%"
-
 if "%osarch%"=="x86" goto osx86
 if "%osarch%"=="x64" goto osx64
 ::
 :osx86
-echo Running software installation in 32-bit mode ...
+echo. &echo Running software installation in 32-bit mode ...&echo.
 :: 7-zip32
 echo Installing 7-zip ...
 tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
@@ -567,8 +569,8 @@ copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
 :: Notepad++32
 echo Installing Notepad++ ...
-if not exist "%setupbin%\npp.8.1.4.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.1.4/npp.8.1.4.Installer.exe"
-"%setupbin%\npp.8.1.4.Installer.exe" /S
+if not exist "%setupbin%\npp.8.1.9.2.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.1.9.2/npp.8.1.9.2.Installer.exe"
+"%setupbin%\npp.8.1.9.2.Installer.exe" /S
 :: Firefox32
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
@@ -601,7 +603,7 @@ msiexec /package "%setupbin%\wufuc_v1.0.1.201-x86.msi" /quiet /norestart
 goto osx8664
 ::
 :osx64
-echo Running software installation in 64-bit mode ...
+echo. &echo Running software installation in 64-bit mode ...&echo.
 if "%PROCESSOR_ARCHITECTURE%"=="x86" color 0e &echo CMD process seems to be 32-bit, its recommended to restart in 64-bit &pause
 :: 7-zip64
 echo Installing 7-zip ...
@@ -646,12 +648,12 @@ if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
 copy /y "%programfiles%\conemu\conemu.xml" "%defaultuserprofile%\appdata\roaming"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
-del /f /q "%public%\desktop\ConEmu (x64).lnk"
+::del /f /q "%public%\desktop\ConEmu (x64).lnk"
 cd "%setupbin%"
 :: Notepad++64
 echo Installing Notepad++ ...
-if not exist "%setupbin%\npp.8.1.4.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.1.4/npp.8.1.4.Installer.x64.exe"
-"%setupbin%\npp.8.1.4.Installer.x64.exe" /S
+if not exist "%setupbin%\npp.8.1.9.2.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.1.9.2/npp.8.1.9.2.Installer.x64.exe"
+"%setupbin%\npp.8.1.9.2.Installer.x64.exe" /S
 :: Firefox64
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
@@ -688,6 +690,13 @@ msiexec /package "%setupbin%\wufuc_v1.0.1.201-x64.msi" /quiet /norestart
 reg delete "HKEY_CLASSES_ROOT\Directory\shell\AddToPlaylistVLC" /f >nul
 reg delete "HKEY_CLASSES_ROOT\Directory\shell\PlayWithVLC" /f >nul
 nircmdc.exe shortcut "%programfiles%\videolan\vlc\vlc.exe" "~$folder.appdata$\microsoft\windows\sendto" "VLC"
+:: sysclean
+echo Installing system clean up script ...
+cd "%sysinstall%"
+if not exist "%sysinstall%\sysclean.cmd" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/sysclean.cmd"
+copy /y "%sysinstall%\sysclean.cmd" %systemroot%\system32
+echo nircmdc.exe elevate %systemroot%\system32\sysclean.cmd >%systemroot%\system32\sysc.cmd
+cd "%setupbin%"
 :: Anvir
 echo Installing Anvir ...
 tasklist /fi "imagename eq anvir.exe" |find ":" >nul
@@ -704,6 +713,7 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "an
 nircmdc.exe regsetval sz "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\anvir.exe" "" "%programfiles%\anvir\anvir.exe"
 nircmdc.exe regsetval sz "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\anvir.exe" "Path" "%programfiles%\anvir\"
 nircmdc.exe shortcut "%programfiles%\anvir\anvir.exe" "~$folder.common_programs$" "Anvir"
+echo nircmdc.exe elevate "%programfiles%\anvir\anvir.exe" >%systemroot%\system32\anvir.cmd
 cd "%setupbin%"
 :: ClamWin
 echo Installing ClamWin ...
@@ -712,7 +722,6 @@ if errorlevel 1 taskkill /f /im "clamwin.exe"
 tasklist /fi "imagename eq clamtray.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "clamtray.exe"
 if not exist "%setupbin%\clamwin-0.103.2.1-setup.exe" wget.exe --tries=3 --no-check-certificate -c "http://deac-ams.dl.sourceforge.net/project/clamwin/clamwin/0.103.2.1/clamwin-0.103.2.1-setup.exe"
-"%setupbin%\clamwin-0.103.2.1-setup.exe" /VERYSILENT
 start clamwin-0.103.2.1-setup.exe /VERYSILENT
 :: Unreal Commander
 echo Installing Unreal Commander ...
@@ -770,9 +779,9 @@ reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f >nul
 cd "%setupbin%"
 :: OpenOffice
 echo Installing OpenOffice.org ...
-if not exist "%setupbin%\Apache_OpenOffice_4.1.10_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://nav.dl.sourceforge.net/project/openofficeorg.mirror/4.1.10/binaries/ru/Apache_OpenOffice_4.1.10_Win_x86_install_ru.exe"
-"%setupbin%\Apache_OpenOffice_4.1.10_Win_x86_install_ru.exe" /S
-rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.10 (ru) Installation Files"
+if not exist "%setupbin%\Apache_OpenOffice_4.1.11_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://nav.dl.sourceforge.net/project/openofficeorg.mirror/4.1.11/binaries/ru/Apache_OpenOffice_4.1.11_Win_x86_install_ru.exe"
+"%setupbin%\Apache_OpenOffice_4.1.11_Win_x86_install_ru.exe" /S
+rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.11 (ru) Installation Files"
 :: XnView
 echo Installing XnView ...
 if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.xnview.com/XnView-win-full.exe"
@@ -781,8 +790,8 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-cert
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitPDFReader1101_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/11.0.1/FoxitPDFReader1101_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitPDFReader1101_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitPDFReader111_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "https://cdn01.foxitsoftware.com/product/reader/desktop/win/11.1.0/FoxitPDFReader111_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitPDFReader111_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
 if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
@@ -830,19 +839,25 @@ echo Applying sysinstall.cmd to Active Setup ...
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "" /t reg_sz /d "sysinstall" /f
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "component id" /t reg_sz /d "sysinstall" /f
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "version" /t reg_sz /d "%sysinstall_version%" /f
+reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "date" /t reg_sz /d "%date%" /f
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "isinstalled" /t reg_dword /d "1" /f
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "stubpath" /t reg_expand_sz /d "\"%sysinstall%\sysinstall.cmd\" -s" /f
+if "%ntver%" neq "6.1" (
+	echo Updating Windows boot menu settings ...
+	bcdedit /set "{bootmgr}" displaybootmenu yes
+	bcdedit /timeout 3
+	)
 :: Tango Patcher
 echo Installing Windows Tango Gnome Patcher ...
 if not exist "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/heebijeebi/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
 nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 3 min." 180 force reboot
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
 color 2f
-echo Installation is completed.
+echo. &echo Installation is completed.
 if "%1"=="-u" goto reboot
 pause
 :reboot
-echo Restarting system ...
+echo. &echo Restarting system ...
 shutdown /r /f
 nircmdc.exe "Restarting system ..." 1 force reboot
 exit
