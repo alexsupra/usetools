@@ -20,7 +20,7 @@ wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
 echo %os% %ntver% %osarch%
 ::
-set sysinstall_version=2111.02
+set sysinstall_version=2111.03
 echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -842,10 +842,11 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "date" /t reg_sz /d "%date%" /f
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "isinstalled" /t reg_dword /d "1" /f
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "stubpath" /t reg_expand_sz /d "\"%sysinstall%\sysinstall.cmd\" -s" /f
+:: boot menu
 if "%ntver%" neq "6.1" (
 	echo Updating Windows boot menu settings ...
 	bcdedit /set "{bootmgr}" displaybootmenu yes
-	bcdedit /timeout 3
+	bcdedit /timeout 2
 	)
 :: Tango Patcher
 echo Installing Windows Tango Gnome Patcher ...
