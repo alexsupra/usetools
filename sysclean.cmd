@@ -5,7 +5,7 @@
 color 20
 chcp 866 >nul
 net session >nul 2>&1
-if %errorLevel% neq 0 echo Administrative permissions check failure! &echo Please restart as admin. &color 0e &pause &exit
+if %errorLevel% neq 0 echo [!!] Administrative permissions check failure! &echo Please restart as admin. &color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
 echo %cpuname%
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set ntver=%%i.%%j
@@ -14,6 +14,7 @@ if "%ntver%"=="5.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.1" echo OS Windows NT %ntver% is not supported &color 0e &pause
 if "%ntver%"=="5.2" echo OS Windows NT %ntver% is not supported &color 0e &pause
 echo %OS% %ntver% %PROCESSOR_ARCHITECTURE%
+set sysclean_version=2212.01
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -22,9 +23,9 @@ echo     ÛÛ    ÛÛ ÛÛ     Û Û      Û    ÛÛ    Û      Û Û      Û ÛÛ    ÛÛ ÛÛ     Û
 echo      ßßßßßßß ßßßßßßßß ßßßßßßßß    ßß    ßßßßßßßß ßßßßßßßß ßßßßßßßß ßßßßßßßß  
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-echo     ³                sysclean.cmd - system clean up script                ³
+echo     ³            sysclean.cmd - system clean up script   v%sysclean_version%         ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-echo.
+echo. &pause &echo.
 echo Cleaning system temporary and cache directories...
 dir /b %systemroot%\temp >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%systemroot%\temp\%%a"
@@ -34,6 +35,8 @@ dir /b %tmp% >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%tmp%\%%a"
 dir /b %systemroot%\prefetch >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%systemroot%\prefetch\%%a"
+dir /b %programdata%\Microsoft\Diagnosis\ETLLogs >temp.list
+for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%programdata%\Microsoft\Diagnosis\ETLLogs\%%a"
 dir /b "%localappdata%\Microsoft\Windows\Explorer\thumbcache_*.db" >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Microsoft\Windows\Explorer\%%a"
 ::
