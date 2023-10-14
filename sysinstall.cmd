@@ -56,7 +56,7 @@ if not errorlevel 1 set osarch=x64
 echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
 echo %username%@%computername%
 ::
-set sysinstall_version=2310.01
+set sysinstall_version=2310.02
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -97,7 +97,7 @@ if %userinput%==3 goto prepair
 if %userinput%==4 goto backup
 if %userinput%==5 goto restore
 if %userinput%==9 goto reboot
-echo Input seems to be incorrect. Please try one more time.
+echo Input seems to be incorrect. Please try one more time
 goto menu
 ::
 :backup
@@ -534,7 +534,7 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "MultipleInvokePromptMinimum" /t reg_dword /d "1" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable OneDrive
-reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f
+reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul
 :: remove look for an app in Store
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
 :: no Store apps on taskbar
@@ -738,7 +738,7 @@ if not exist "%setupbin%\vlc-3.0.19-win64.exe" wget.exe --tries=3 --no-check-cer
 "%setupbin%\vlc-3.0.19-win64.exe" /S
 :: PureText64
 echo Installing PureText ...
-if not exist "%setupbin%\puretext_6.2_64-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_64-bit.zip"
+if not exist "%setupbin%\puretext_6.2_64-bit.zip" wget.exe --tries=2 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_64-bit.zip"
 if not exist "%programfiles%\puretext" md "%programfiles%\puretext"
 7za.exe x -r -y -o"%programfiles%\puretext" "%setupbin%\puretext_6.2_64-bit.zip"
 nircmdc.exe shortcut "%programfiles%\puretext\puretext.exe" "~$folder.common_programs$" "PureText"
@@ -851,7 +851,7 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=2 --no-check-cert
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" wget.exe --tries=1 --no-check-certificate -c "http://cdn78.foxitsoftware.com/product/phantomPDF/desktop/win/2023.2.0/FoxitPDFReader20232_L10N_Setup_Prom.exe"
+if not exist "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" wget.exe --tries=2 --no-check-certificate -c "http://cdn78.foxitsoftware.com/product/phantomPDF/desktop/win/2023.2.0/FoxitPDFReader20232_L10N_Setup_Prom.exe"
 "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
@@ -890,7 +890,7 @@ echo Installing Classic Shell ...
 if not exist "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/classicshell/Version 4.3.1 general release/ClassicShellSetup_4_3_1-ru.exe"
 "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
 if osarch==x86 regsvr32 /u /s "%programfiles%\classic shell\classicexplorer32.dll"
-if osarch==x64 regsvr32 /u /s "%programfiles%\classic shell\classicexplorer64.dll"
+%systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\classic shell\classicexplorer64.dll"
 goto dotnetfx_win81
 ::
 :openshell
