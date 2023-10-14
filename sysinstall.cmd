@@ -2,25 +2,61 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
+::setlocal enabledelayedexpansion
 chcp 866 >nul
 if "%1"=="-s" goto os_check
-title %username%@%computername%
 net session >nul 2>&1
-if %errorLevel% neq 0 echo [!!] Administrative permissions check failure. &echo Restart as administrator. &color 0e &pause &exit
+if %errorLevel% neq 0 echo Administrative permissions check failure!!&echo Restart as administrator&color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
 echo %cpuname% - %processor_architecture%
 :os_check
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set ntver=%%i.%%j
-if "%ntver%"=="4.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
-if "%ntver%"=="5.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
-if "%ntver%"=="5.1" echo OS Windows NT %ntver% is not supported &color 0e &pause
-if "%ntver%"=="5.2" echo OS Windows NT %ntver% is not supported &color 0e &pause
+for /f "tokens=4-6 delims=. " %%i in ('ver') do set ntbuild=%%k
+set codename=
+if "%ntver%"=="4.0" set ntname=Windows NT
+if "%ntver%"=="5.0" set ntname=Windows 2000
+if "%ntver%"=="5.1" set ntname=Windows XP
+if "%ntver%"=="5.2" set ntname=Windows Server 2003
+if "%ntver%"=="6.0" set ntname=Windows Vista
+if "%ntver%"=="6.1" set ntname=Windows 7
+if "%ntver%"=="6.2" set ntname=Windows 8
+if "%ntver%"=="6.3" set ntname=Windows 8.1
+if "%ntver%"=="10.0" (
+	set ntname=Windows 10
+	if %ntbuild%==10240 set codename=Threshold
+	if %ntbuild%==10586 set codename=Threshold 2
+	if %ntbuild%==14393 set codename=Redstone
+	if %ntbuild%==15063 set codename=Redstone 2
+	if %ntbuild%==16299 set codename=Redstone 3
+	if %ntbuild%==17134 set codename=Redstone 4
+	if %ntbuild%==17763 set codename=Redstone 5
+	if %ntbuild%==18362 set codename=19H1
+	if %ntbuild%==18363 set codename=19H2
+	if %ntbuild%==19041 set codename=20H1
+	if %ntbuild%==19042 set codename=20H2
+	if %ntbuild%==19043 set codename=21H1
+	if %ntbuild%==19044 set codename=21H2
+	if %ntbuild%==19045 set codename=22H2
+	if %ntbuild%==22000 (
+		set ntname=Windows 11
+		set codename=21H2
+	)
+	if %ntbuild%==22621 (
+		set ntname=Windows 11
+		set codename=22H2
+	)
+	if %ntbuild%==22631 (
+		set ntname=Windows 11
+		set codename=23H2
+	)
+)
 set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
-echo %os% %ntver% %osarch%
+echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
+echo %username%@%computername%
 ::
-set sysinstall_version=2212.01
+set sysinstall_version=2310.01
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -271,9 +307,6 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Ad
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideMergeConflicts" /t reg_dword /d "0" /f
 :: hide task view button on taskbar
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t reg_dword /d "0" /f
-:: set transparent taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "UseOLEDTaskbarTransparency" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t reg_dword /d "1" /f
 :: hide action center tray icon
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAHealth" /t reg_dword /d "1" /f
 :: grey out not fully installed apps
@@ -286,9 +319,6 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Ex
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "MenuShowDelay" /t reg_sz /d "0" /f
 :: font smoothing
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "FontSmoothing" /t reg_sz /d "2" /f
-:: thin windows borders width
-reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "BorderWidth" /t reg_sz /d "1" /f
-reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "PaddedBorderWidth" /t reg_sz /d "1" /f
 :: disable windows animations
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "MinAnimate" /t reg_sz /d "0" /f
 :: visual effects settings
@@ -380,6 +410,12 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\S
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "MakeAllAppsDefault" /t reg_dword /d "1" /f
 :: disable live tiles notifications
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
+:: set transparent taskbar
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "UseOLEDTaskbarTransparency" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t reg_dword /d "1" /f
+:: thin windows borders width
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "BorderWidth" /t reg_sz /d "1" /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "PaddedBorderWidth" /t reg_sz /d "1" /f
 ::
 :config_user_win8x
 echo. &echo Applying Windows 8.X USER settings ...&echo.
@@ -416,6 +452,7 @@ goto install
 ::
 :: System and user configuration settings for Windows NT 10.0
 :config_system_win10
+if "%ntname%"=="Windows 11" goto config_system_win11
 if "%1"=="-s" goto config_user_win10
 echo. &echo Applying Windows 10 SYSTEM settings ...&echo.
 :: SYSTEM
@@ -519,9 +556,29 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Advertising
 :: remove "finish setting up your device" advertisment
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t reg_dword /d "0" /f
 ::
+if "%ntname%"=="Windows 11" goto config_user_win11
+if "%1"=="-s" goto setup
+if %userinput%==2 goto menu
+goto install
+::
+:: System configuration settings for Windows NT 10.0 version 11
+:config_system_win11
+echo. &echo Applying Windows 11 SYSTEM settings ...&echo.
+:: GUI/SHELL
+:: get classic taskbar
+::reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell\Update\Packages" /v "UndockingDisabled" /t reg_dword /d "1" /f
+::
+:: User configuration settings for Windows NT 10.0 version 11
+:config_user_win11
+echo. &echo Applying Windows 11 USER settings ...&echo.
+:: GUI/SHELL
+:: set taskbar size (0,1,2)
+::reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSi" /t reg_dword /d "1" /f
+::
 if "%1"=="-s" goto setup
 if %userinput%==2 goto menu
 ::
+:: Software apps
 :install
 color 0b
 cd "%setupbin%"
@@ -552,8 +609,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b5885.x86.20210901.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5885.x86.20210901.msi"
-msiexec /package "%setupbin%\Far30b5885.x86.20210901.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b6161.x86.20230609.msi" wget.exe --tries=3 --no-check-certificate -c "https://www.farmanager.com/files/Far30b6161.x86.20230609.msi"
+msiexec /package "%setupbin%\Far30b6161.x86.20230609.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -564,8 +621,8 @@ echo nircmdc.exe elevate "%ProgramFiles%\Far Manager\far.exe" >%systemroot%\syst
 cd "%setupbin%"
 :: ConEmu32
 echo Installing ConEmu ...
-if not exist "%setupbin%\ConEmuSetup.221218.exe" wget.exe --tries=3 --no-check-certificate -c "http://altushost-swe.dl.sourceforge.net/project/conemu/Stable/ConEmuSetup.221218.exe"
-"%setupbin%\ConEmuSetup.221218.exe" /p:x86,adm /qr
+if not exist "%setupbin%\ConEmuSetup.230724.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/Maximus5/ConEmu/releases/download/v23.07.24/ConEmuSetup.230724.exe"
+"%setupbin%\ConEmuSetup.230724.exe" /p:x86,adm /qr
 cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z"
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
@@ -574,26 +631,26 @@ copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
 :: Notepad++32
 echo Installing Notepad++ ...
-if not exist "%setupbin%\npp.8.4.8.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.4.8/npp.8.4.8.Installer.exe"
-"%setupbin%\npp.8.4.8.Installer.exe" /S
+if not exist "%setupbin%\npp.8.5.7.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.5.7/npp.8.5.7.Installer.exe"
+"%setupbin%\npp.8.5.7.Installer.exe" /S
 :: Firefox32
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 108.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/108.0.1/win32/ru/Firefox Setup 108.0.1.exe"
-"%setupbin%\Firefox Setup 108.0.1.exe" /S
+if not exist "%setupbin%\Firefox Setup 118.0.2.exe" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/firefox/releases/118.0.2/win32/ru/Firefox Setup 118.0.2.exe"
+"%setupbin%\Firefox Setup 118.0.2.exe" /S
 :: Thunderbird32
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 102.6.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/102.6.1/win32/ru/Thunderbird Setup 102.6.1.exe"
-"%setupbin%\Thunderbird Setup 102.6.1.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 115.3.2.exe" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/115.3.2/win32/ru/Thunderbird Setup 115.3.2.exe"
+"%setupbin%\Thunderbird Setup 115.3.2.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC32
 echo Installing VLC media player ...
-if not exist "%setupbin%\vlc-3.0.18-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://get.videolan.org/vlc/3.0.18/win32/vlc-3.0.18-win32.exe"
-"%setupbin%\vlc-3.0.18-win32.exe" /S
+if not exist "%setupbin%\vlc-3.0.19-win32.exe" wget.exe --tries=3 --no-check-certificate -c "https://get.videolan.org/vlc/3.0.19/win32/vlc-3.0.19-win32.exe"
+"%setupbin%\vlc-3.0.19-win32.exe" /S
 :: PureText32
 echo Installing PureText ...
 if not exist "%setupbin%\puretext_6.2_32-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_32-bit.zip"
@@ -634,8 +691,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b5885.x64.20210901.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b5885.x64.20210901.msi"
-msiexec /package "%setupbin%\Far30b5885.x64.20210901.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b6161.x64.20230609.msi" wget.exe --tries=3 --no-check-certificate -c "https://www.farmanager.com/files/Far30b6161.x64.20230609.msi"
+msiexec /package "%setupbin%\Far30b6161.x64.20230609.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -646,8 +703,8 @@ echo nircmdc.exe elevate "%ProgramFiles%\Far Manager\far.exe" >%systemroot%\syst
 cd "%setupbin%"
 :: ConEmu64
 echo Installing ConEmu ...
-if not exist "%setupbin%\ConEmuSetup.221218.exe" wget.exe --tries=3 --no-check-certificate -c "http://altushost-swe.dl.sourceforge.net/project/conemu/Stable/ConEmuSetup.221218.exe"
-"%setupbin%\ConEmuSetup.221218.exe" /p:x64,adm /qr
+if not exist "%setupbin%\ConEmuSetup.230724.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/Maximus5/ConEmu/releases/download/v23.07.24/ConEmuSetup.230724.exe"
+"%setupbin%\ConEmuSetup.230724.exe" /p:x64,adm /qr
 cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z"
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
@@ -657,28 +714,28 @@ copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
 :: Notepad++64
 echo Installing Notepad++ ...
-if not exist "%setupbin%\npp.8.4.8.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.4.8/npp.8.4.8.Installer.x64.exe"
-"%setupbin%\npp.8.4.8.Installer.x64.exe" /S
+if not exist "%setupbin%\npp.8.5.7.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.5.7/npp.8.5.7.Installer.x64.exe"
+"%setupbin%\npp.8.5.7.Installer.x64.exe" /S
 :: Firefox64
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 108.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/108.0.1/win64/ru/Firefox Setup 108.0.1.msi"
-msiexec /package "Firefox Setup 108.0.1.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 118.0.2.msi" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/firefox/releases/118.0.2/win64/ru/Firefox Setup 118.0.2.msi"
+msiexec /package "Firefox Setup 118.0.2.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird64
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 102.6.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/102.6.1/win64/ru/Thunderbird Setup 102.6.1.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 102.6.1.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 115.3.2.msi" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/115.3.2/win64/ru/Thunderbird Setup 115.3.2.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 115.3.2.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: VLC64
 echo Installing VLC media player ...
-if not exist "%setupbin%\vlc-3.0.18-win64.exe" wget.exe --tries=3 --no-check-certificate -c "https://get.videolan.org/vlc/3.0.18/win64/vlc-3.0.18-win64.exe"
-"%setupbin%\vlc-3.0.18-win64.exe" /S
+if not exist "%setupbin%\vlc-3.0.19-win64.exe" wget.exe --tries=3 --no-check-certificate -c "https://get.videolan.org/vlc/3.0.19/win64/vlc-3.0.19-win64.exe"
+"%setupbin%\vlc-3.0.19-win64.exe" /S
 :: PureText64
 echo Installing PureText ...
 if not exist "%setupbin%\puretext_6.2_64-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_64-bit.zip"
@@ -729,9 +786,9 @@ cd "%setupbin%"
 ::start clamwin-0.103.2.1-setup.exe /VERYSILENT
 :: Unreal Commander
 echo Installing Unreal Commander ...
-tasklist /fi "imagename eq UnrealCommander32.exe" |find ":" >nul
+tasklist /fi "imagename eq UnrealCommander32.exe" |find ":" 2>nul
 if errorlevel 1 taskkill /f /im "UnrealCommander32.exe"
-tasklist /fi "imagename eq UnrealCommander64.exe" |find ":" >nul
+tasklist /fi "imagename eq UnrealCommander64.exe" |find ":" 2>nul
 if errorlevel 1 taskkill /f /im "UnrealCommander64.exe"
 if not exist "%setupbin%\uncomsetup.exe" wget.exe --tries=3 --no-check-certificate -c "http://x-diesel.com/download/uncomsetup.exe"
 "%setupbin%\uncomsetup.exe" /VERYSILENT
@@ -783,44 +840,71 @@ reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f 2>nul
 cd "%setupbin%"
 :: OpenOffice
 echo Installing OpenOffice.org ...
-if not exist "%setupbin%\Apache_OpenOffice_4.1.13_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://deac-ams.dl.sourceforge.net/project/openofficeorg.mirror/4.1.13/binaries/ru/Apache_OpenOffice_4.1.13_Win_x86_install_ru.exe"
-"%setupbin%\Apache_OpenOffice_4.1.13_Win_x86_install_ru.exe" /S
-rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.13 (ru) Installation Files"
+if not exist "%setupbin%\Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://cfhcable.dl.sourceforge.net/project/openofficeorg.mirror/4.1.14/binaries/ru/Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe"
+"%setupbin%\Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe" /S
+rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.14 (ru) Installation Files"
 :: XnView
 echo Installing XnView ...
-if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.xnview.com/XnView-win-full.exe"
+if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=2 --no-check-certificate -c "http://download.xnview.com/XnView-win-full.exe"
 "%setupbin%\XnView-win-full.exe" /VERYSILENT
 :: Foxit Reader
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitPDFReader121_L10N_Setup_Prom.exe" wget.exe --tries=3 --no-check-certificate -c "http://cdn01.foxitsoftware.com/product/reader/desktop/win/12.1.0/FoxitPDFReader121_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitPDFReader121_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" wget.exe --tries=1 --no-check-certificate -c "http://cdn78.foxitsoftware.com/product/phantomPDF/desktop/win/2023.2.0/FoxitPDFReader20232_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
-if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
+if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=2 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
+if not exist "%setupcfg%\foobar2k.7z" (
+	cd "%setupcfg%"
+	wget.exe --tries=2 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
+	cd "%sysinstall%"
+	)
 "%setupbin%\foobar2000_v1.5.2.exe" /S
 :: WinDirStat
 echo Installing WinDirStat ...
-if not exist "%setupbin%\wds_current_setup.exe" wget.exe --tries=3 --no-check-certificate -c "http://windirstat.net/wds_current_setup.exe"
+if not exist "%setupbin%\wds_current_setup.exe" wget.exe --tries=2 --no-check-certificate -c "http://windirstat.net/wds_current_setup.exe"
 "%setupbin%\wds_current_setup.exe" /S
 del /f /q "%userprofile%\desktop\WinDirStat.lnk"
 :: SIV
 echo Installing SIV ...
-if not exist "%setupbin%\siv_v5.67.zip" wget.exe --tries=3 --no-check-certificate -c "http://delivery2.filecroco.com/kits_6/siv_v5.67.zip"
-7za.exe x -r -y -o"%programfiles%\siv" "%setupbin%\siv_v5.67.zip"
+if not exist "%setupbin%\siv_v5.73.zip" wget.exe --tries=2 --no-check-certificate -c "https://delivery2.filecroco.com/kits_6/siv_v5.73.zip"
+7za.exe x -r -y -o"%programfiles%\siv" "%setupbin%\siv_v5.73.zip"
 if %osarch%==x86 nircmdc.exe shortcut "%programfiles%\siv\siv32x.exe" "~$folder.common_programs$" "SIV"
 if %osarch%==x64 nircmdc.exe shortcut "%programfiles%\siv\siv64x.exe" "~$folder.common_programs$" "SIV"
 :: HWMonitor
 echo Installing HWMonitor ...
-if not exist "%setupbin%\hwmonitor_1.48.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.cpuid.com/hwmonitor/hwmonitor_1.48.exe"
-"%setupbin%\hwmonitor_1.48.exe" /VERYSILENT
+if not exist "%setupbin%\hwmonitor_1.52.exe" wget.exe --tries=2 --no-check-certificate -c "https://download.cpuid.com/hwmonitor/hwmonitor_1.52.exe"
+"%setupbin%\hwmonitor_1.52.exe" /VERYSILENT
 del /f /q "%public%\desktop\CPUID HWMonitor.lnk"
 :: Keyboard LEDs
 echo Installing Keyboard LEDs ...
 if not exist "%setupbin%\keyboard-leds.exe" wget.exe --tries=2 --no-check-certificate -c "http://keyboard-leds.com/files/keyboard-leds.exe"
 "%setupbin%\keyboard-leds.exe" /S
 del /f /q "%public%\desktop\Keyboard LEDs.lnk"
+:: Classic Shell
+if "%ntver%"=="6.1" goto dotnetfx
+if "%ntname%"=="Windows 11" goto openshell
+echo Installing Classic Shell ...
+if not exist "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/classicshell/Version 4.3.1 general release/ClassicShellSetup_4_3_1-ru.exe"
+"%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
+if osarch==x86 regsvr32 /u /s "%programfiles%\classic shell\classicexplorer32.dll"
+if osarch==x64 regsvr32 /u /s "%programfiles%\classic shell\classicexplorer64.dll"
+goto dotnetfx_win81
+::
+:openshell
+:: Open-Shell
+echo Installing Open-Shell ...
+if not exist "%setupbin%\OpenShellSetup_4_4_191.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/Open-Shell/Open-Shell-Menu/releases/download/v4.4.191/OpenShellSetup_4_4_191.exe"
+"%setupbin%\OpenShellSetup_4_4_191.exe" /quiet
+if osarch==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
+%systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
+:: ExplorerPatcher
+if not exist "%setupbin%\ep_setup.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/valinet/ExplorerPatcher/releases/download/22621.2361.58.4_b157aba/ep_setup.exe"
+"%setupbin%\ep_setup.exe"
+::
+:dotnetfx
 :: DotnetFX
 echo Installing DotnetFX ...
 if "%ntver%" neq "6.1" goto dotnetfx_win81
@@ -829,14 +913,7 @@ if not exist "%setupbin%\dotnetfx35.exe" wget.exe --tries=3 --no-check-certifica
 goto apply_setup
 :dotnetfx_win81
 DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
-:: Classic Shell
-echo Installing Classic Shell ...
-if not exist "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/classicshell/Version 4.3.1 general release/ClassicShellSetup_4_3_1-ru.exe"
-if "%ntver%" neq "6.1" (
-	"%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
-	regsvr32 /u /s "%programfiles%\classic shell\classicexplorer32.dll"
-	regsvr32 /u /s "%programfiles%\classic shell\classicexplorer64.dll"
-	)
+::
 :apply_setup
 :: Active Setup
 echo Applying sysinstall.cmd to Active Setup ...
@@ -850,7 +927,7 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components
 if "%ntver%" neq "6.1" (
 	echo Updating Windows boot menu settings ...
 	bcdedit /set "{bootmgr}" displaybootmenu yes
-	bcdedit /timeout 2
+	bcdedit /timeout 1
 	)
 :: Tango Patcher
 echo Installing Windows Tango Patcher ...
@@ -860,7 +937,6 @@ nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically
 color 2f
 echo. &echo Already ready. Installation is completed.
 if "%1"=="-u" goto reboot
-pause
 :reboot
 echo. &echo Trying to restart the machine ...
 shutdown /r /f
