@@ -5,16 +5,57 @@
 color 20
 chcp 866 >nul
 net session >nul 2>&1
-if %errorLevel% neq 0 echo [!!] Administrative permissions check failure! &echo Please restart as admin. &color 0e &pause &exit
+if %errorLevel% neq 0 echo Administrative permissions check failure!!&echo Restart as administrator&color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
-echo %cpuname%
+echo %cpuname% - %processor_architecture%
+:os_check
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set ntver=%%i.%%j
-if "%ntver%"=="4.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
-if "%ntver%"=="5.0" echo OS Windows NT %ntver% is not supported &color 0e &pause
-if "%ntver%"=="5.1" echo OS Windows NT %ntver% is not supported &color 0e &pause
-if "%ntver%"=="5.2" echo OS Windows NT %ntver% is not supported &color 0e &pause
-echo %OS% %ntver% %PROCESSOR_ARCHITECTURE%
-set sysclean_version=2212.01
+for /f "tokens=4-6 delims=. " %%i in ('ver') do set ntbuild=%%k
+set codename=
+if "%ntver%"=="4.0" set ntname=Windows NT
+if "%ntver%"=="5.0" set ntname=Windows 2000
+if "%ntver%"=="5.1" set ntname=Windows XP
+if "%ntver%"=="5.2" set ntname=Windows Server 2003
+if "%ntver%"=="6.0" set ntname=Windows Vista
+if "%ntver%"=="6.1" set ntname=Windows 7
+if "%ntver%"=="6.2" set ntname=Windows 8
+if "%ntver%"=="6.3" set ntname=Windows 8.1
+if "%ntver%"=="10.0" (
+	set ntname=Windows 10
+	if %ntbuild%==10240 set codename=Threshold
+	if %ntbuild%==10586 set codename=Threshold 2
+	if %ntbuild%==14393 set codename=Redstone
+	if %ntbuild%==15063 set codename=Redstone 2
+	if %ntbuild%==16299 set codename=Redstone 3
+	if %ntbuild%==17134 set codename=Redstone 4
+	if %ntbuild%==17763 set codename=Redstone 5
+	if %ntbuild%==18362 set codename=19H1
+	if %ntbuild%==18363 set codename=19H2
+	if %ntbuild%==19041 set codename=20H1
+	if %ntbuild%==19042 set codename=20H2
+	if %ntbuild%==19043 set codename=21H1
+	if %ntbuild%==19044 set codename=21H2
+	if %ntbuild%==19045 set codename=22H2
+	if %ntbuild%==22000 (
+		set ntname=Windows 11
+		set codename=21H2
+	)
+	if %ntbuild%==22621 (
+		set ntname=Windows 11
+		set codename=22H2
+	)
+	if %ntbuild%==22631 (
+		set ntname=Windows 11
+		set codename=23H2
+	)
+)
+set osarch=x86
+wmic OS get OSArchitecture|find.exe "64" >nul
+if not errorlevel 1 set osarch=x64
+echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
+echo %username%@%computername%
+::
+set sysclean_version=2310.01
 echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
