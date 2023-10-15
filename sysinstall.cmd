@@ -56,7 +56,7 @@ if not errorlevel 1 set osarch=x64
 echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
 echo %username%@%computername%
 ::
-set sysinstall_version=2310.02
+set sysinstall_version=2310.03
 echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -178,9 +178,6 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\A
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideMergeConflicts" /t reg_dword /d "0" /f
 :: hide task view button on taskbar
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t reg_dword /d "0" /f
-:: set transparent taskbar
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "UseOLEDTaskbarTransparency" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t reg_dword /d "1" /f
 :: hide action center tray icon
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAHealth" /t reg_dword /d "1" /f
 :: grey out not fully installed apps
@@ -193,9 +190,6 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\E
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop" /v "MenuShowDelay" /t reg_sz /d "0" /f
 :: font smoothing
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop" /v "FontSmoothing" /t reg_sz /d "2" /f
-:: thin windows borders width
-reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop\WindowMetrics" /v "BorderWidth" /t reg_sz /d "1" /f
-reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop\WindowMetrics" /v "PaddedBorderWidth" /t reg_sz /d "1" /f
 :: disable windows animations
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop\WindowMetrics" /v "MinAnimate" /t reg_sz /d "0" /f
 :: visual effects settings
@@ -410,12 +404,6 @@ reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\S
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "MakeAllAppsDefault" /t reg_dword /d "1" /f
 :: disable live tiles notifications
 reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
-:: set transparent taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "UseOLEDTaskbarTransparency" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t reg_dword /d "1" /f
-:: thin windows borders width
-reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "BorderWidth" /t reg_sz /d "1" /f
-reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "PaddedBorderWidth" /t reg_sz /d "1" /f
 ::
 :config_user_win8x
 echo. &echo Applying Windows 8.X USER settings ...&echo.
@@ -446,6 +434,12 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\St
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "MakeAllAppsDefault" /t reg_dword /d "1" /f
 :: disable live tiles notifications
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
+:: set transparent taskbar
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "UseOLEDTaskbarTransparency" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t reg_dword /d "1" /f
+:: thin windows borders width
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "BorderWidth" /t reg_sz /d "1" /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "PaddedBorderWidth" /t reg_sz /d "1" /f
 if "%1"=="-s" goto setup
 if %userinput%==2 goto menu
 goto install
