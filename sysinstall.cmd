@@ -860,8 +860,6 @@ if %osarch%==x86 set fooprogdir=%programfiles%\foobar2000
 if %osarch%==x64 set fooprogdir=%programfiles(x86)%\foobar2000
 7za.exe x -r -y -o"%fooprogdir%" "%setupcfg%\foobar2k.7z"
 xcopy "%fooprogdir%\appdata" "%appdata%\foobar2000" /i /y /s /r /c
-pause
-
 :: WinDirStat
 echo Installing WinDirStat ...
 if not exist "%setupbin%\wds_current_setup.exe" wget.exe --tries=2 --no-check-certificate -c "http://windirstat.net/wds_current_setup.exe"
