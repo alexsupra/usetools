@@ -56,7 +56,7 @@ if not errorlevel 1 set osarch=x64
 echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
 echo %username%@%computername%
 ::
-set sysinstall_version=2310.03
+set sysinstall_version=2310.04
 echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -849,13 +849,19 @@ if not exist "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" wget.exe --tri
 "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
-if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=2 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
+if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
 if not exist "%setupcfg%\foobar2k.7z" (
 	cd "%setupcfg%"
-	wget.exe --tries=2 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
+	wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/foobar2k.7z"
 	cd "%sysinstall%"
 	)
 "%setupbin%\foobar2000_v1.5.2.exe" /S
+if %osarch%==x86 set fooprogdir=%programfiles%\foobar2000
+if %osarch%==x64 set fooprogdir=%programfiles(x86)%\foobar2000
+7za.exe x -r -y -o"%fooprogdir%" "%setupcfg%\foobar2k.7z"
+xcopy "%fooprogdir%\appdata" "%appdata%\foobar2000" /i /y /s /r /c
+pause
+
 :: WinDirStat
 echo Installing WinDirStat ...
 if not exist "%setupbin%\wds_current_setup.exe" wget.exe --tries=2 --no-check-certificate -c "http://windirstat.net/wds_current_setup.exe"
@@ -944,6 +950,8 @@ if not exist "%appdata%\unreal commander" md "%appdata%\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%appdata%\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander"
 7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
-7za.exe x -r -y -o"%appdata%" "%setupcfg%\foobar2k.7z"
+if %osarch%==x86 set fooprogdir=%proframfiles%\foobar2000
+if %osarch%==x64 set fooprogdir=%proframfiles(x86)%\foobar2000
+xcopy "%fooprogdir%\appdata" "%appdata%\foobar2000" /i /y /s /r /c
 exit
 ::
