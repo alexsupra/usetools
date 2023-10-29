@@ -1,13 +1,12 @@
 :: sysclean.cmd - universal system clean up script
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
-@echo off
-color 20
+@echo off &cls
 chcp 866 >nul
 net session >nul 2>&1
 if %errorLevel% neq 0 echo Administrative permissions check failure!!&echo Restart as administrator&color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
-echo %cpuname% - %processor_architecture%
+echo %cpuname% ~ %processor_architecture%
 :os_check
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set ntver=%%i.%%j
 for /f "tokens=4-6 delims=. " %%i in ('ver') do set ntbuild=%%k
@@ -52,10 +51,15 @@ if "%ntver%"=="10.0" (
 set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
-echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
+if "%ntver%"=="10.0" (
+	if "%osarch%"=="x86" echo [44;97m%ntname% %codename%[0m [;96m NT %ntver%.%ntbuild% [0m [40;93m%osarch%[0m
+	if "%osarch%"=="x64" echo [44;97m%ntname% %codename%[0m [;96m NT %ntver%.%ntbuild% [0m [40;92m%osarch%[0m
+	) else (
+	echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
+	)
 echo %username%@%computername%
 ::
-set sysclean_version=2310.01
+set sysclean_version=2310.02
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -66,8 +70,16 @@ echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 echo     ³            sysclean.cmd - system clean up script   v%sysclean_version%         ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-echo. &pause &echo.
-echo Cleaning system temporary and cache directories...
+echo.
+if "%1"=="-c" goto clean
+if "%ntver%"=="10.0" ( 
+	echo [40;92mPRESS ANY KEY START CLEANING YOUR SYSTEM[0m
+	) else (
+	echo PRESS ANY KEY START CLEANING YOUR SYSTEM
+	)
+pause >nul
+:clean
+echo Cleaning system temporary and cache directories ...&echo.
 dir /b %systemroot%\temp >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%systemroot%\temp\%%a"
 dir /b %temp% >temp.list
@@ -81,7 +93,7 @@ for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunD
 dir /b "%localappdata%\Microsoft\Windows\Explorer\thumbcache_*.db" >temp.list
 for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Microsoft\Windows\Explorer\%%a"
 ::
-echo Cleaning applications temporary and cache directories...
+echo Cleaning applications temporary and cache directories ...&echo.
 if exist "%localappdata%\Microsoft\Windows\INetCache" (
 	attrib -a -r -s -h "%localappdata%\Microsoft\Windows\INetCache\*.*" /s /d
 	dir /b "%localappdata%\Microsoft\Windows\INetCache" >temp.list
@@ -137,9 +149,16 @@ if exist "%localappdata%\Thunderbird\Profiles" (
 	for /f "delims=" %%a in (temp.list) do call rundll32.exe advpack.dll,DelNodeRunDLL32 "%localappdata%\Thunderbird\Profiles\%%a"
 	)
 del /f /q temp.list >nul
-echo Cleaning WinSxS directory...
+if "%ntver%"=="6.1" goto recycler
+echo Cleaning WinSxS directory ...&echo.
 dism.exe /online /Cleanup-Image /StartComponentCleanup
-echo Cleaning Recycle.Bin...
+:recycler
+echo Cleaning Recycle.Bin ...&echo.
 for %%p in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do if exist "%%p:\$Recycle.Bin" rundll32.exe advpack.dll,DelNodeRunDLL32 "%%p:\$Recycle.Bin"
-echo Ready. &echo. &color 0a &pause &exit
+if "%ntver%"=="10.0" ( 
+	echo [42;97mREADY. PRESS ANY KEY TO EXIT[0m
+	) else (
+	echo READY. PRESS ANY KEY TO EXIT
+	)
+pause >nul
 ::
