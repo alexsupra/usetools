@@ -8,7 +8,7 @@ if "%1"=="-s" goto os_check
 net session >nul 2>&1
 if %errorLevel% neq 0 echo Administrative permissions check failure!!&echo Restart as administrator&color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
-echo %cpuname% - %processor_architecture%
+echo %cpuname% ~ %processor_architecture%
 :os_check
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set ntver=%%i.%%j
 for /f "tokens=4-6 delims=. " %%i in ('ver') do set ntbuild=%%k
@@ -53,10 +53,15 @@ if "%ntver%"=="10.0" (
 set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
-echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
+if "%ntver%"=="10.0" (
+	if "%osarch%"=="x86" echo [44;97m%ntname% %codename%[0m [;96m NT %ntver%.%ntbuild% [0m [40;93m%osarch%[0m
+	if "%osarch%"=="x64" echo [44;97m%ntname% %codename%[0m [;96m NT %ntver%.%ntbuild% [0m [40;92m%osarch%[0m
+	) else (
+	echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
+	)
 echo %username%@%computername%
 ::
-set sysinstall_version=2310.04
+set sysinstall_version=2310.05
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -80,8 +85,7 @@ if "%1"=="-u" (
 	)
 ::
 :menu
-echo. &color 0a
-echo [1] Install system settings and software apps
+echo. &echo [1] Install system settings and software apps
 echo [2] Install system settings
 echo [3] Install software apps
 echo [4] Make system registry backup
@@ -461,7 +465,7 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\F
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" /v "ThisPCPolicy" /t reg_sz /d "Hide" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable OneDrive
-reg add "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t reg_dword /d "0" /f
+::reg add "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t reg_dword /d "0" /f
 reg add "HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t reg_dword /d "0" /f
 reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSync" /t reg_dword /d "1" /f
 reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSyncNGSC" /t reg_dword /d "1" /f
@@ -528,7 +532,7 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "MultipleInvokePromptMinimum" /t reg_dword /d "1" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable OneDrive
-reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul
+reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul 2>&1
 :: remove look for an app in Store
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
 :: no Store apps on taskbar
@@ -623,6 +627,7 @@ if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c
 ::copy /y "%programfiles%\conemu\conemu.xml" "%defaultuserprofile%\appdata\roaming"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 cd "%setupbin%"
+del /f /q "%public%\desktop\ConEmu (x86).lnk" >nul
 :: Notepad++32
 echo Installing Notepad++ ...
 if not exist "%setupbin%\npp.8.5.7.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.5.7/npp.8.5.7.Installer.exe"
@@ -704,7 +709,7 @@ if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c
 7za.exe x -r -y -o"%programfiles%" "%setupcfg%\conemu.7z"
 copy /y "%programfiles%\conemu\conemu.xml" "%defaultuserprofile%\appdata\roaming"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
-::del /f /q "%public%\desktop\ConEmu (x64).lnk"
+del /f /q "%public%\desktop\ConEmu (x64).lnk" >nul 2>&1
 cd "%setupbin%"
 :: Notepad++64
 echo Installing Notepad++ ...
@@ -876,6 +881,12 @@ echo Installing HWMonitor ...
 if not exist "%setupbin%\hwmonitor_1.52.exe" wget.exe --tries=2 --no-check-certificate -c "https://download.cpuid.com/hwmonitor/hwmonitor_1.52.exe"
 "%setupbin%\hwmonitor_1.52.exe" /VERYSILENT
 del /f /q "%public%\desktop\CPUID HWMonitor.lnk"
+:: CrystalDiskInfo
+echo Installing CrystalDiskInfo ...
+if not exist "%setupbin%\CrystalDiskInfo9_1_1.zip" wget.exe --tries=2 --no-check-certificate -c "https://crystalmark.info/download/zz/CrystalDiskInfo9_1_1.zip"
+7za.exe x -r -y -o"%programfiles%\crystaldiskinfo" "%setupbin%\CrystalDiskInfo9_1_1.zip"
+if %osarch%==x86 nircmdc.exe shortcut "%programfiles%\crystaldiskinfo\DiskInfo32.exe" "~$folder.common_programs$" "CrystalDiskInfo"
+if %osarch%==x64 nircmdc.exe shortcut "%programfiles%\crystaldiskinfo\DiskInfo64.exe" "~$folder.common_programs$" "CrystalDiskInfo"
 :: Keyboard LEDs
 echo Installing Keyboard LEDs ...
 if not exist "%setupbin%\keyboard-leds.exe" wget.exe --tries=2 --no-check-certificate -c "http://keyboard-leds.com/files/keyboard-leds.exe"
