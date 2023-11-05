@@ -61,7 +61,7 @@ if "%ntver%"=="10.0" (
 	)
 echo %username%@%computername%
 ::
-set sysinstall_version=2310.05
+set sysinstall_version=2311.01
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -151,7 +151,7 @@ echo. &echo Applying general SYSTEM settings ...&echo.
 :: end hung tasks automatically
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop" /v "AutoEndTasks" /t reg_sz /d "1" /f
 :: run Explorer windows as separate processes
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t reg_dword /d "1" /f
 :: optimize system perfomance
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePagingExecutive" /t reg_dword /d "1" /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "LargeSystemCache" /t reg_dword /d "1" /f
@@ -161,35 +161,35 @@ reg add "HKEY_USERS\.DEFAULT\keyboard layout\preload" /v "2" /t reg_sz /d "00000
 reg add "HKEY_USERS\.DEFAULT\keyboard layout\toggle" /v "hotkey" /t reg_sz /d "2" /f
 :: GUI/SHELL
 :: remove "is shortcut" text
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "link" /t reg_binary /d "000000000000" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v "link" /t reg_binary /d "000000000000" /f
 :: show file extensions
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t reg_dword /d "0" /f
 :: show hidden files
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t reg_dword /d "1" /f
 :: disable taskbar animations
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarAnimations" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarAnimations" /t reg_dword /d "0" /f
 :: taskbar small icons
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSmallIcons" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSmallIcons" /t reg_dword /d "1" /f
 :: show status bar in Explorer
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TShowStatusBar" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TShowStatusBar" /t reg_dword /d "1" /f
 :: open pc instead of libs in Explorer
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t reg_dword /d "1" /f
 :: show all folders in Explorer
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NavPaneShowAllFolders" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NavPaneShowAllFolders" /t reg_dword /d "1" /f
 :: show run in Start menu
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_ShowRun" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_ShowRun" /t reg_dword /d "1" /f
 :: show folder merge conflicts
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideMergeConflicts" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideMergeConflicts" /t reg_dword /d "0" /f
 :: hide task view button on taskbar
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t reg_dword /d "0" /f
 :: hide action center tray icon
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAHealth" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAHealth" /t reg_dword /d "1" /f
 :: grey out not fully installed apps
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "GreyMSIAds" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "GreyMSIAds" /t reg_dword /d "1" /f
 :: classic control panel
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "ForceClassicControlPanel" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllItemsIconView" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "StartupPage" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "ForceClassicControlPanel" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllItemsIconView" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "StartupPage" /t reg_dword /d "1" /f
 :: fast menus
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop" /v "MenuShowDelay" /t reg_sz /d "0" /f
 :: font smoothing
@@ -198,31 +198,31 @@ reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop" /v "FontSmoothing" /t reg_sz
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop\WindowMetrics" /v "MinAnimate" /t reg_sz /d "0" /f
 :: visual effects settings
 reg add "HKEY_USERS\.DEFAULT\Control Panel\Desktop" /v "UserPreferencesMask" /t reg_binary /d "9C12078010000000" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t reg_dword /d "3" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultApplied" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultValue" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultByAlphaTest" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t reg_dword /d "3" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultApplied" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultValue" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultByAlphaTest" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
 :: show pc shortcut on desktop
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\ClassicStartMenu" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\ClassicStartMenu" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
 :: register/unregister dll from shell menu
 reg add "HKEY_CLASSES_ROOT\dllfile\shell\Register\command" /v "" /t reg_sz /d "regsvr32.exe \"%%L\"" /f
 reg add "HKEY_CLASSES_ROOT\dllfile\shell\Unregister\command" /v "" /t reg_sz /d "regsvr32.exe /u \"%%L\"" /f
@@ -247,23 +247,23 @@ reg add "HKEY_CLASSES_ROOT\Drive\shell\runas\command" /v "" /t reg_sz /d "cmd.ex
 reg add "HKEY_CLASSES_ROOT\.cmd\ShellNew" /v "FileName" /t reg_sz /d "template.cmd" /f
 :: NETWORKING
 :: avoid CredSSP encryption oracle problem
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters" /v "AllowEncryptionOracle" /t reg_dword /d "0x00000002" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters" /v "AllowEncryptionOracle" /t reg_dword /d "0x00000002" /f
 :: APPS
 :: Edge
 reg add "HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "HomeButtonEnabled" /t reg_dword /d "1" /f
 reg add "HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "HomeButtonPage" /t reg_sz /d "http://www.google.com" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable automatic updates
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update" /v "AUOptions" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update" /v "AUOptions" /t reg_dword /d "1" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "AUOptions" /t reg_dword /d "1" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "NoAutoUpdate" /t reg_dword /d "1" /f
 :: disable error reporting
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\Windows Error Reporting" /v "DoNotSendAdditionalData" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Windows Error Reporting" /v "DoNotSendAdditionalData" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "DoNotSendAdditionalData" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "DoNotSendAdditionalData" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t reg_dword /d "1" /f
 :: disable remote registry service
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry" /v "Start" /t reg_dword /d "0x00000004" /f
 :: disable offline files service
@@ -275,7 +275,7 @@ echo. &echo Applying general USER settings ...&echo.
 :: end hung tasks automatically
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "AutoEndTasks" /t reg_sz /d "1" /f
 :: run Explorer windows as separate processes
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t reg_dword /d "1" /f
 :: optimize system perfomance
 reg add "HKEY_CURRENT_USER\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePagingExecutive" /t reg_dword /d "1" /f
 :: keyboard layout settings
@@ -284,35 +284,35 @@ reg add "HKEY_CURRENT_USER\keyboard layout\preload" /v "2" /t reg_sz /d "0000041
 reg add "HKEY_CURRENT_USER\keyboard layout\toggle" /v "hotkey" /t reg_sz /d "2" /f
 :: GUI/SHELL
 :: remove "is shortcut" text
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "link" /t reg_binary /d "000000000000" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v "link" /t reg_binary /d "000000000000" /f
 :: show file extensions
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t reg_dword /d "0" /f
 :: show hidden files
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t reg_dword /d "1" /f
 :: disable taskbar animations
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarAnimations" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarAnimations" /t reg_dword /d "0" /f
 :: taskbar small icons
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSmallIcons" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSmallIcons" /t reg_dword /d "1" /f
 :: show status bar in Explorer
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TShowStatusBar" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TShowStatusBar" /t reg_dword /d "1" /f
 :: open pc instead of libs in Explorer
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t reg_dword /d "1" /f
 :: show all folders in Explorer
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NavPaneShowAllFolders" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NavPaneShowAllFolders" /t reg_dword /d "1" /f
 :: show run in Start menu
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_ShowRun" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_ShowRun" /t reg_dword /d "1" /f
 :: show folder merge conflicts
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideMergeConflicts" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideMergeConflicts" /t reg_dword /d "0" /f
 :: hide task view button on taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowTaskViewButton" /t reg_dword /d "0" /f
 :: hide action center tray icon
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAHealth" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "HideSCAHealth" /t reg_dword /d "1" /f
 :: grey out not fully installed apps
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "GreyMSIAds" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "GreyMSIAds" /t reg_dword /d "1" /f
 :: classic control panel
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "ForceClassicControlPanel" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllItemsIconView" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "StartupPage" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "ForceClassicControlPanel" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllItemsIconView" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "StartupPage" /t reg_dword /d "1" /f
 :: fast menus
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "MenuShowDelay" /t reg_sz /d "0" /f
 :: font smoothing
@@ -321,31 +321,31 @@ reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "FontSmoothing" /t reg_sz /
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "MinAnimate" /t reg_sz /d "0" /f
 :: visual effects settings
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "UserPreferencesMask" /t reg_binary /d "9C12078010000000" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t reg_dword /d "3" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultApplied" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultValue" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultByAlphaTest" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t reg_dword /d "3" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\AnimateMinMax" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ComboBoxAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ControlAnimations" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultApplied" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultValue" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\FontSmoothing" /v "DefaultByAlphaTest" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\MenuAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
 :: show pc shortcut on desktop
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\ClassicStartMenu" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\ClassicStartMenu" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
 :: CMD
 :: console settings
 reg add "HKEY_CURRENT_USER\Console" /v "FaceName" /t reg_sz /d "Consolas" /f
@@ -370,7 +370,7 @@ reg add "HKEY_CURRENT_USER\Console" /v "ColorTable14" /t reg_dword /d "0x004fe9f
 reg add "HKEY_CURRENT_USER\Console" /v "ColorTable15" /t reg_dword /d "0x00fdfaf7" /f
 :: APPS
 :: Internet Explorer
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main" /v "Start Page" /t reg_sz /d "http://www.google.com" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\Main" /v "Start Page" /t reg_sz /d "http://www.google.com" /f
 ::
 if "%ntver%"=="6.2" goto config_system_win8x
 if "%ntver%"=="6.3" goto config_system_win8x
@@ -385,61 +385,61 @@ if "%1"=="-s" goto config_user_win8x
 echo. &echo Applying Windows 8.X SYSTEM settings ...&echo.
 :: SYSTEM
 :: disable startup delay
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
 :: GUI/SHELL
 :: disable charms bar
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableCharmsHint" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableTLCorner" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableTRCorner" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableCharmsHint" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableTLCorner" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableTRCorner" /t reg_dword /d "1" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable Windows Store feature
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore" /v "RemoveWindowsStore" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore" /v "RemoveWindowsStore" /t reg_dword /d "1" /f
 :: disable auto download and update of Store apps
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore" /v "AutoDownload" /t reg_dword /d "0x00000004" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore" /v "AutoDownload" /t reg_dword /d "0x00000004" /f
 :: remove look for an app in Store
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
 :: no Store apps on taskbar
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
 :: no pinning Store to taskbar
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
 :: list desktop apps first
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "DesktopFirst" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "DesktopFirst" /t reg_dword /d "1" /f
 :: show apps view automatically
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "MakeAllAppsDefault" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "MakeAllAppsDefault" /t reg_dword /d "1" /f
 :: disable live tiles notifications
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
 ::
 :config_user_win8x
 echo. &echo Applying Windows 8.X USER settings ...&echo.
 :: USER
 :: disable startup delay
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
 :: GUI/SHELL
 :: disable charms bar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableCharmsHint" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableTLCorner" /t reg_dword /d "1" /f
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableTRCorner" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableCharmsHint" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableTLCorner" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell\EdgeUi" /v "DisableTRCorner" /t reg_dword /d "1" /f
 :: disable Metro tips
-reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\EdgeUI" /v "DisableHelpSticker" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\EdgeUI" /v "DisableHelpSticker" /t reg_dword /d "1" /f
 :: go to the desktop instead of start
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "OpenAtLogon" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "OpenAtLogon" /t reg_dword /d "0" /f
 :: show my desktop background on start
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent" /v "MotionAccentId_v1.00" /t reg_dword /d "0x000000db" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Accent" /v "MotionAccentId_v1.00" /t reg_dword /d "0x000000db" /f
 :: DISABLED COMPONENTS AND FIXES
 :: remove look for an app in Store
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
 :: no Store apps on taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
 :: no pinning Store to taskbar
-reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
 :: list desktop apps first
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "DesktopFirst" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "DesktopFirst" /t reg_dword /d "1" /f
 :: show apps view automatically
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "MakeAllAppsDefault" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "MakeAllAppsDefault" /t reg_dword /d "1" /f
 :: disable live tiles notifications
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
 :: set transparent taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "UseOLEDTaskbarTransparency" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "UseOLEDTaskbarTransparency" /t reg_dword /d "1" /f
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t reg_dword /d "1" /f
 :: thin windows borders width
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics" /v "BorderWidth" /t reg_sz /d "1" /f
@@ -450,12 +450,13 @@ goto install
 ::
 :: System and user configuration settings for Windows NT 10.0
 :config_system_win10
+
 if "%ntname%"=="Windows 11" goto config_system_win11
 if "%1"=="-s" goto config_user_win10
 echo. &echo Applying Windows 10 SYSTEM settings ...&echo.
 :: SYSTEM
 :: disable startup delay
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
 :: GUI/SHELL
 :: disable first logon animations
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v "EnableFirstLogonAnimation" /t reg_dword /d "0" /f
@@ -465,26 +466,26 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\F
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" /v "ThisPCPolicy" /t reg_sz /d "Hide" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable OneDrive
-::reg add "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t reg_dword /d "0" /f
+reg add "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t reg_dword /d "0" /f
 reg add "HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSync" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSyncNGSC" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSync" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSyncNGSC" /t reg_dword /d "1" /f
 :: disable Windows Store feature
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore" /v "RemoveWindowsStore" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore" /v "RemoveWindowsStore" /t reg_dword /d "1" /f
 :: disable auto download and update of Store apps
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\WindowsStore" /v "AutoDownload" /t reg_dword /d "0x00000004" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore" /v "AutoDownload" /t reg_dword /d "0x00000004" /f
 :: remove look for an app in Store
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
 :: no Store apps on taskbar
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
 :: no pinning Store to taskbar
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
 :: list desktop apps first
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "DesktopFirst" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "DesktopFirst" /t reg_dword /d "1" /f
 :: disable live tiles notifications
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
 :: disable ads in explorer
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "ShowSyncProviderNotifications" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "ShowSyncProviderNotifications" /t reg_dword /d "0" /f
 :: disable Cortana but keep search and other search settings
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "PreventIndexOnBattery" /t reg_dword /d "1" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCortana" /t reg_dword /d "0" /f
@@ -501,18 +502,18 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search" 
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t reg_dword /d "0" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "AllowCloudSearch" /t reg_dword /d "0" /f
 :: dont show advices
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableSoftLanding" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableSoftLanding" /t reg_dword /d "1" /f
 :: dont show recommendations
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t reg_dword /d "1" /f
 :: dont show feedback notifications
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\CloudContent" /v "DoNotShowFeedbackNotifications" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "DoNotShowFeedbackNotifications" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DoNotShowFeedbackNotifications" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "DoNotShowFeedbackNotifications" /t reg_dword /d "1" /f
 :: disable telemetry
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack" /v "Start" /t reg_dword /d "0x00000004" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\DataCollection" /v "AllowDeviceNameInTelemetry" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t reg_dword /d "0" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack\TestHooks" /v "Disabled" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowDeviceNameInTelemetry" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack\TestHooks" /v "Disabled" /t reg_dword /d "1" /f
 :: remove "finish setting up your device" advertisment
 reg add "HKEY_USERS\.DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t reg_dword /d "0" /f
 ::
@@ -520,58 +521,95 @@ reg add "HKEY_USERS\.DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfi
 echo. &echo Applying Windows 10 USER settings ...&echo.
 :: USER
 :: disable startup delay
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
 :: GUI/SHELL
 :: dont show people on taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" /v "PeopleBand" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" /v "PeopleBand" /t reg_dword /d "0" /f
 :: disable search box on taskbar, but enable icon
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t reg_dword /d "1" /f
 :: remove weather and news from taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t reg_dword /d "2" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t reg_dword /d "2" /f
 :: make the "open", "print", "edit" context menu items available when more than 15 files selected
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "MultipleInvokePromptMinimum" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v "MultipleInvokePromptMinimum" /t reg_dword /d "1" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable OneDrive
-reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul 2>&1
+reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul 2>&1
 :: remove look for an app in Store
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
 :: no Store apps on taskbar
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
 :: no pinning Store to taskbar
-reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
 :: list desktop apps first
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "DesktopFirst" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "DesktopFirst" /t reg_dword /d "1" /f
 :: disable live tiles notifications
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "NoTileApplicationNotification" /t reg_dword /d "1" /f
 :: disable ads in explorer
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "ShowSyncProviderNotifications" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartPage" /v "ShowSyncProviderNotifications" /t reg_dword /d "0" /f
 :: turn off automatic installing suggested apps
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManage" /v "SilentInstalledAppsEnabled" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManage" /v "SilentInstalledAppsEnabled" /t reg_dword /d "0" /f
 :: dont offer tailored experiences based on the diagnostics data setting
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy" /v "TailoredExperiencesWithDiagnosticDataEnabled" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy" /v "TailoredExperiencesWithDiagnosticDataEnabled" /t reg_dword /d "0" /f
 :: dont allow apps to use advertising id
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t reg_dword /d "0" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t reg_dword /d "0" /f
 :: remove "finish setting up your device" advertisment
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t reg_dword /d "0" /f
 ::
-if "%ntname%"=="Windows 11" goto config_user_win11
 if "%1"=="-s" goto setup
 if %userinput%==2 goto menu
 goto install
 ::
 :: System configuration settings for Windows NT 10.0 version 11
 :config_system_win11
+if "%1"=="-s" goto config_user_win11
 echo. &echo Applying Windows 11 SYSTEM settings ...&echo.
+:: SYSTEM
+:: disable startup delay
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize" /v "StartupDelayInMSec" /t reg_dword /d "0" /f
 :: GUI/SHELL
+:: disable first logon animations
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v "EnableFirstLogonAnimation" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "EnableFirstLogonAnimation" /t reg_dword /d "0" /f
+:: hide 3d objects folder
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" /v "ThisPCPolicy" /t reg_sz /d "Hide" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" /v "ThisPCPolicy" /t reg_sz /d "Hide" /f
 :: get classic taskbar
 ::reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell\Update\Packages" /v "UndockingDisabled" /t reg_dword /d "1" /f
+:: DISABLED COMPONENTS AND FIXES
+:: disable OneDrive
+reg add "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t reg_dword /d "0" /f
+reg add "HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /v "System.IsPinnedToNameSpaceTree" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSync" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSyncNGSC" /t reg_dword /d "1" /f
+:: dont show advices
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableSoftLanding" /t reg_dword /d "1" /f
+:: dont show recommendations
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t reg_dword /d "1" /f
+:: dont show feedback notifications
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v "DoNotShowFeedbackNotifications" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "DoNotShowFeedbackNotifications" /t reg_dword /d "1" /f
+:: disable telemetry
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack" /v "Start" /t reg_dword /d "0x00000004" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowDeviceNameInTelemetry" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t reg_dword /d "0" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack\TestHooks" /v "Disabled" /t reg_dword /d "1" /f
 ::
 :: User configuration settings for Windows NT 10.0 version 11
 :config_user_win11
 echo. &echo Applying Windows 11 USER settings ...&echo.
 :: GUI/SHELL
 :: set taskbar size (0,1,2)
-::reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSi" /t reg_dword /d "1" /f
+::reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSi" /t reg_dword /d "1" /f
+:: DISABLED COMPONENTS AND FIXES
+:: disable OneDrive
+reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul 2>&1
+:: remove look for an app in Store
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
+:: no Store apps on taskbar
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
+:: no pinning Store to taskbar
+reg add "HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
 ::
 if "%1"=="-s" goto setup
 if %userinput%==2 goto menu
@@ -589,11 +627,11 @@ echo. &echo Running software APPS installation in 32-bit mode ...&echo.
 echo Installing 7-zip ...
 tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "7zfm.exe"
-if not exist "%setupbin%\7z1900.msi" wget.exe --tries=2 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900.msi"
-if not exist "%setupbin%\7z1900.msi" wget.exe --tries=1 --no-check-certificate -c "http://www.7-zip.org/a/7z1900.msi"
+if not exist "%setupbin%\7z1900.msi" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900.msi"
+if not exist "%setupbin%\7z1900.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z1900.msi"
 msiexec /package "%setupbin%\7z1900.msi" /quiet /norestart
-if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=2 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z"
-if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=1 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-extra.7z"
+if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z"
+if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-extra.7z"
 "%ProgramFiles%\7-Zip\7zg.exe" x -r -y -o"%ProgramFiles%\7-Zip" "%setupbin%\7z1900-extra.7z"
 copy /y "%ProgramFiles%\7-Zip\7za.exe" "%sysinstall%"
 copy /y "%ProgramFiles%\7-Zip\7za.exe" "%systemroot%\system32"
@@ -670,11 +708,11 @@ if "%PROCESSOR_ARCHITECTURE%"=="x86" color 0e &echo CMD process seems to be 32-b
 echo Installing 7-zip ...
 tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "7zfm.exe"
-if not exist "%setupbin%\7z1900-x64.msi" wget.exe --tries=2 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-x64.msi"
-if not exist "%setupbin%\7z1900-x64.msi" wget.exe --tries=1 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-x64.msi"
+if not exist "%setupbin%\7z1900-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-x64.msi"
+if not exist "%setupbin%\7z1900-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-x64.msi"
 msiexec /package "%setupbin%\7z1900-x64.msi" /quiet /norestart
-if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=2 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z"
-if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=1 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-extra.7z"
+if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z"
+if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-extra.7z"
 if exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles%\7-Zip
 if not exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles(x86)%\7-Zip
 "%sevenzip%\7zg.exe" x -r -y -o"%sevenzip%" "%setupbin%\7z1900-extra.7z"
@@ -755,7 +793,7 @@ echo Installing system clean up script ...
 cd "%sysinstall%"
 if not exist "%sysinstall%\sysclean.cmd" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/sysclean.cmd"
 copy /y "%sysinstall%\sysclean.cmd" %systemroot%\system32
-echo nircmdc.exe elevate %systemroot%\system32\sysclean.cmd >%systemroot%\system32\sysc.cmd
+echo nircmdc.exe elevate %systemroot%\system32\sysclean.cmd -c >%systemroot%\system32\sysc.cmd
 cd "%setupbin%"
 :: Anvir
 echo Installing Anvir ...
@@ -769,7 +807,7 @@ if not exist "%setupbin%\anvirrus-portable.zip" (
 cd "%setupcfg%"
 if not exist "%setupcfg%\anvir.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v "anvir task manager" /t reg_sz /d "\"%programfiles%\anvir\anvir.exe\" minimized" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "anvir task manager" /t reg_sz /d "\"%programfiles%\anvir\anvir.exe\" minimized" /f
 nircmdc.exe regsetval sz "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\anvir.exe" "" "%programfiles%\anvir\anvir.exe"
 nircmdc.exe regsetval sz "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\anvir.exe" "Path" "%programfiles%\anvir\"
 nircmdc.exe shortcut "%programfiles%\anvir\anvir.exe" "~$folder.common_programs$" "Anvir"
@@ -817,23 +855,23 @@ copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal comma
 7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\notepad2.7z"
 if not exist %systemroot%\fonts\gost_a.ttf (
 	copy /y "%systemdrive%\unreal commander\fonts\gost_a.ttf" %systemroot%\fonts
-	reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts" /v "GOST type A (TrueType)" /t reg_sz /d "gost_a.ttf" /f
+	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "GOST type A (TrueType)" /t reg_sz /d "gost_a.ttf" /f
 	)
 if not exist %systemroot%\fonts\gost_b.ttf (
 	copy /y "%systemdrive%\unreal commander\fonts\gost_b.ttf" %systemroot%\fonts
-	reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts" /v "GOST type B (TrueType)" /t reg_sz /d "gost_b.ttf" /f
+	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "GOST type B (TrueType)" /t reg_sz /d "gost_b.ttf" /f
 	)
 if not exist %systemroot%\fonts\droid.ttf (
 	copy /y "%systemdrive%\unreal commander\fonts\droid.ttf" %systemroot%\fonts
-	reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Droid Sans (TrueType)" /t reg_sz /d "droid.ttf" /f
+	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Droid Sans (TrueType)" /t reg_sz /d "droid.ttf" /f
 	)
 if not exist %systemroot%\fonts\droid_b.ttf (
 	copy /y "%systemdrive%\unreal commander\fonts\droid_b.ttf" %systemroot%\fonts
-	reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Droid Sans Bold (TrueType)" /t reg_sz /d "droid_b.ttf" /f
+	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Droid Sans Bold (TrueType)" /t reg_sz /d "droid_b.ttf" /f
 	)
 if not exist %systemroot%\fonts\droid_m.ttf (
 	copy /y "%systemdrive%\unreal commander\fonts\droid_m.ttf" %systemroot%\fonts
-	reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Droid Sans Mono (TrueType)" /t reg_sz /d "droid_m.ttf" /f
+	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Droid Sans Mono (TrueType)" /t reg_sz /d "droid_m.ttf" /f
 	)
 reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f 2>nul
 cd "%setupbin%"
@@ -898,8 +936,8 @@ if "%ntname%"=="Windows 11" goto openshell
 echo Installing Classic Shell ...
 if not exist "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/classicshell/Version 4.3.1 general release/ClassicShellSetup_4_3_1-ru.exe"
 "%setupbin%\ClassicShellSetup_4_3_1-ru.exe" /quiet
-if osarch==x86 regsvr32 /u /s "%programfiles%\classic shell\classicexplorer32.dll"
-%systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\classic shell\classicexplorer64.dll"
+if %osarch%==x86 regsvr32 /u /s "%programfiles%\classic shell\classicexplorer32.dll"
+if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\classic shell\classicexplorer64.dll"
 goto dotnetfx_win81
 ::
 :openshell
@@ -907,10 +945,11 @@ goto dotnetfx_win81
 echo Installing Open-Shell ...
 if not exist "%setupbin%\OpenShellSetup_4_4_191.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/Open-Shell/Open-Shell-Menu/releases/download/v4.4.191/OpenShellSetup_4_4_191.exe"
 "%setupbin%\OpenShellSetup_4_4_191.exe" /quiet
-if osarch==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
-%systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
+if %osarch%==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
+if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
 :: ExplorerPatcher
-if not exist "%setupbin%\ep_setup.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/valinet/ExplorerPatcher/releases/download/22621.2361.58.4_b157aba/ep_setup.exe"
+echo Installing ExplorerPatcher ...
+if not exist "%setupbin%\ep_setup.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/valinet/ExplorerPatcher/releases/download/22621.2428.59.1_a7c87ce/ep_setup.exe"
 "%setupbin%\ep_setup.exe"
 ::
 :dotnetfx
@@ -926,26 +965,37 @@ DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
 :apply_setup
 :: Active Setup
 echo Applying sysinstall.cmd to Active Setup ...
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "" /t reg_sz /d "sysinstall" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "component id" /t reg_sz /d "sysinstall" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "version" /t reg_sz /d "%sysinstall_version%" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "date" /t reg_sz /d "%date%" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "isinstalled" /t reg_dword /d "1" /f
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\sysinstall" /v "stubpath" /t reg_expand_sz /d "\"%sysinstall%\sysinstall.cmd\" -s" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\sysinstall" /v "" /t reg_sz /d "sysinstall" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\sysinstall" /v "component id" /t reg_sz /d "sysinstall" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\sysinstall" /v "version" /t reg_sz /d "%sysinstall_version%" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\sysinstall" /v "date" /t reg_sz /d "%date%" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\sysinstall" /v "isinstalled" /t reg_dword /d "1" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\sysinstall" /v "stubpath" /t reg_expand_sz /d "\"%sysinstall%\sysinstall.cmd\" -s" /f
 :: boot menu
 if "%ntver%" neq "6.1" (
 	echo Updating Windows boot menu settings ...
 	bcdedit /set "{bootmgr}" displaybootmenu yes
 	bcdedit /timeout 1
 	)
+if "%ntver%" neq "10.0" goto tango_patcher
+:: system clean-up
+echo Performing system clean-up ...
+taskkill /f /im OneDrive.exe >nul 2>&1
+OneDriveSetup.exe /uninstall >nul 2>&1
+:tango_patcher
 :: Tango Patcher
 echo Installing Windows Tango Patcher ...
 if not exist "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
 nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 3 min." 180 force reboot
 "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
-color 2f
-echo. &echo Already ready. Installation is completed.
-if "%1"=="-u" goto reboot
+echo. &echo INSTALLATION IS COMPLETED
+if "%1"=="-u" exit
+if "%ntver%"=="10.0" echo [40;92mPRESS ANY KEY TO EXIT[0m
+if "%ntver%" neq "10.0" (
+	echo PRESS ANY KEY TO EXIT
+	color 0a
+	)
+pause >nul &exit
 :reboot
 echo. &echo Trying to restart the machine ...
 shutdown /r /f
