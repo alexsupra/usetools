@@ -61,7 +61,7 @@ if "%ntver%"=="10.0" (
 	)
 echo %username%@%computername%
 ::
-set sysinstall_version=2311.01
+set sysinstall_version=2311.02
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -674,16 +674,20 @@ if not exist "%setupbin%\npp.8.5.7.Installer.exe" wget.exe --tries=3 --no-check-
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 118.0.2.exe" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/firefox/releases/118.0.2/win32/ru/Firefox Setup 118.0.2.exe"
-"%setupbin%\Firefox Setup 118.0.2.exe" /S
+if not exist "%setupbin%\Firefox Setup 120.0.exe" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/firefox/releases/120.0/win32/ru/Firefox Setup 120.0.exe"
+"%setupbin%\Firefox Setup 120.0.exe" /S
 :: Thunderbird32
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 115.3.2.exe" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/115.3.2/win32/ru/Thunderbird Setup 115.3.2.exe"
-"%setupbin%\Thunderbird Setup 115.3.2.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 115.5.0.exe" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/115.5.0/win32/ru/Thunderbird Setup 115.5.0.exe"
+"%setupbin%\Thunderbird Setup 115.5.0.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
+:: LibreOffice32
+echo Installing LibreOffice ...
+if not exist "%setupbin%\LibreOffice_7.5.8_Win_x86.msi" wget.exe --tries=3 --no-check-certificate -c "https://mirrors.iu13.net/tdf/libreoffice/stable/7.5.8/win/x86/LibreOffice_7.5.8_Win_x86.msi"
+msiexec /package "LibreOffice_7.5.8_Win_x86.msi" /quiet /norestart
 :: VLC32
 echo Installing VLC media player ...
 if not exist "%setupbin%\vlc-3.0.19-win32.exe" wget.exe --tries=3 --no-check-certificate -c "https://get.videolan.org/vlc/3.0.19/win32/vlc-3.0.19-win32.exe"
@@ -757,18 +761,21 @@ if not exist "%setupbin%\npp.8.5.7.Installer.x64.exe" wget.exe --tries=3 --no-ch
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 118.0.2.msi" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/firefox/releases/118.0.2/win64/ru/Firefox Setup 118.0.2.msi"
-msiexec /package "Firefox Setup 118.0.2.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 120.0.msi" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/firefox/releases/120.0/win64/ru/Firefox Setup 120.0.msi"
+msiexec /package "Firefox Setup 120.0.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird64
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 115.3.2.msi" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/115.3.2/win64/ru/Thunderbird Setup 115.3.2.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 115.3.2.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 115.5.0.msi" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/115.5.0/win64/ru/Thunderbird Setup 115.5.0.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 115.5.0.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
+echo Installing LibreOffice ...
+if not exist "%setupbin%\LibreOffice_7.6.3_Win_x86-64.msi" wget.exe --tries=3 --no-check-certificate -c "http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/7.6.3/win/x86_64/LibreOffice_7.6.3_Win_x86-64.msi"
+msiexec /package "LibreOffice_7.6.3_Win_x86-64.msi" /quiet /norestart
 :: VLC64
 echo Installing VLC media player ...
 if not exist "%setupbin%\vlc-3.0.19-win64.exe" wget.exe --tries=3 --no-check-certificate -c "https://get.videolan.org/vlc/3.0.19/win64/vlc-3.0.19-win64.exe"
@@ -876,10 +883,10 @@ if not exist %systemroot%\fonts\droid_m.ttf (
 reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f 2>nul
 cd "%setupbin%"
 :: OpenOffice
-echo Installing OpenOffice.org ...
-if not exist "%setupbin%\Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://cfhcable.dl.sourceforge.net/project/openofficeorg.mirror/4.1.14/binaries/ru/Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe"
-"%setupbin%\Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe" /S
-rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.14 (ru) Installation Files"
+::echo Installing OpenOffice.org ...
+::if not exist "%setupbin%\Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe" wget.exe --tries=3 --no-check-certificate -c "http://cfhcable.dl.sourceforge.net/project/openofficeorg.mirror/4.1.14/binaries/ru/Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe"
+::"%setupbin%\Apache_OpenOffice_4.1.14_Win_x86_install_ru.exe" /S
+::rundll32.exe advpack.dll,DelNodeRunDLL32 "%userprofile%\desktop\OpenOffice 4.1.14 (ru) Installation Files"
 :: XnView
 echo Installing XnView ...
 if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=2 --no-check-certificate -c "http://download.xnview.com/XnView-win-full.exe"
