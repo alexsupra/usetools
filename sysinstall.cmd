@@ -61,7 +61,7 @@ if "%ntver%"=="10.0" (
 	)
 echo %username%@%computername%
 ::
-set sysinstall_version=2312.01
+set sysinstall_version=2312.02
 echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -939,13 +939,13 @@ if not exist "%setupbin%\keyboard-leds.exe" wget.exe --tries=2 --no-check-certif
 del /f /q "%public%\desktop\Keyboard LEDs.lnk"
 :: dotSwitcher
 echo Installing dotSwitcher ...
-if errorlevel 1 taskkill /f /im "dotSwitcher.exe"
+if errorlevel 1 taskkill /f /im "dotswitcher.exe"
 if not exist "%setupbin%\dotswitcher.exe" wget.exe --tries=2 --no-check-certificate -c "https://github.com/kurumpa/dotSwitcher/releases/download/v0.45-alpha/dotSwitcher.exe"
 if %osarch%==x86 set dotswitcherdir=%programfiles%\dotswitcher
 if %osarch%==x64 set dotswitcherdir=%ProgramFiles(x86)%\dotswitcher
 if not exist "%dotswitcherdir%" md "%dotswitcherdir%"
 copy /y "%setupbin%\dotswitcher.exe" "%dotswitcherdir%"
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "dotswitcher" /t reg_sz /d "%ProgramFiles(x86)%\dotswitcher\dotswitcher.exe" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "dotswitcher" /t reg_sz /d "%dotswitcherdir%\dotswitcher\dotswitcher.exe" /f
 :: Classic Shell
 if "%ntver%"=="6.1" goto dotnetfx
 if "%ntname%"=="Windows 11" goto openshell
