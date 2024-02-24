@@ -61,7 +61,7 @@ if "%ntver%"=="10.0" (
 	)
 echo %username%@%computername%
 ::
-set sysinstall_version=2312.02
+set sysinstall_version=2402.01
 echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -450,7 +450,6 @@ goto install
 ::
 :: System and user configuration settings for Windows NT 10.0
 :config_system_win10
-
 if "%ntname%"=="Windows 11" goto config_system_win11
 if "%1"=="-s" goto config_user_win10
 echo. &echo Applying Windows 10 SYSTEM settings ...&echo.
@@ -814,7 +813,7 @@ if not exist "%setupbin%\anvirrus-portable.zip" (
 cd "%setupcfg%"
 if not exist "%setupcfg%\anvir.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/anvir.7z"
 7za.exe x -r -y -o"%programfiles%\anvir" "%setupcfg%\anvir.7z"
-reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "anvir task manager" /t reg_sz /d "\"%programfiles%\anvir\anvir.exe\" minimized" /f
+::reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "anvir task manager" /t reg_sz /d "\"%programfiles%\anvir\anvir.exe\" minimized" /f
 nircmdc.exe regsetval sz "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\anvir.exe" "" "%programfiles%\anvir\anvir.exe"
 nircmdc.exe regsetval sz "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\anvir.exe" "Path" "%programfiles%\anvir\"
 nircmdc.exe shortcut "%programfiles%\anvir\anvir.exe" "~$folder.common_programs$" "Anvir"
@@ -899,19 +898,20 @@ if not exist "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" wget.exe --tri
 "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
-if not exist "%setupbin%\foobar2000_v1.5.2.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.free-codecs.com/download_soft.php?d=6322151e23e301644d623c087e3cd99c&s=145&r=&f=foobar2000.htm" -O "foobar2000_v1.5.2.exe"
+if not exist "%setupbin%\foobar2000_v1.6.17.exe" wget.exe --tries=3 --no-check-certificate -c "https://www.foobar2000.org/files/foobar2000_v1.6.17.exe" -O "foobar2000_v1.6.17.exe"
 if not exist "%setupcfg%\foobar2k.7z" (
 	cd "%setupcfg%"
 	wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/foobar2k.7z"
 	cd "%sysinstall%"
 	)
-"%setupbin%\foobar2000_v1.5.2.exe" /S
+if exist "%setupbin%\foobar2000_v1.6.17.exe" foobar2000_v1.6.17.exe /S
 if %osarch%==x86 set fooprogdir=%programfiles%\foobar2000
 if %osarch%==x64 set fooprogdir=%programfiles(x86)%\foobar2000
 7za.exe x -r -y -o"%fooprogdir%" "%setupcfg%\foobar2k.7z"
 xcopy "%fooprogdir%\appdata" "%appdata%\foobar2000" /i /y /s /r /c
 :: WinDirStat
 echo Installing WinDirStat ...
+cd "%setupbin%"
 if not exist "%setupbin%\wds_current_setup.exe" wget.exe --tries=2 --no-check-certificate -c "http://windirstat.net/wds_current_setup.exe"
 "%setupbin%\wds_current_setup.exe" /S
 del /f /q "%userprofile%\desktop\WinDirStat.lnk"
