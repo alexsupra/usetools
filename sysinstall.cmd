@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-::setlocal enabledelayedexpansion
+set sysinstall_version=2403.01
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -61,7 +61,6 @@ if "%ntver%"=="10.0" (
 	)
 echo %username%@%computername%
 ::
-set sysinstall_version=2402.01
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
@@ -878,6 +877,18 @@ if not exist %systemroot%\fonts\droid_b.ttf (
 if not exist %systemroot%\fonts\droid_m.ttf (
 	copy /y "%systemdrive%\unreal commander\fonts\droid_m.ttf" %systemroot%\fonts
 	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Droid Sans Mono (TrueType)" /t reg_sz /d "droid_m.ttf" /f
+	)
+if not exist %systemroot%\fonts\sony.ttf (
+	copy /y "%systemdrive%\unreal commander\fonts\sony.ttf" %systemroot%\fonts
+	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Sony Sketch EF (TrueType)" /t reg_sz /d "sony.ttf" /f
+	)
+if not exist %systemroot%\fonts\sony_b.ttf (
+	copy /y "%systemdrive%\unreal commander\fonts\sony_b.ttf" %systemroot%\fonts
+	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Sony Sketch EF Bold (TrueType)" /t reg_sz /d "sony_b.ttf" /f
+	)
+if not exist %systemroot%\fonts\profont.ttf (
+	copy /y "%systemdrive%\unreal commander\fonts\profont.ttf" %systemroot%\fonts
+	reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "ProFontWindows (TrueType)" /t reg_sz /d "profont.ttf" /f
 	)
 reg delete "HKEY_CLASSES_ROOT\directory\shell\ Unreal Commander" /f 2>nul
 cd "%setupbin%"
