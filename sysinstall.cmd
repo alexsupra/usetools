@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2403.01
+set sysinstall_version=2403.02
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -48,6 +48,10 @@ if "%ntver%"=="10.0" (
 	if %ntbuild%==22631 (
 		set ntname=Windows 11
 		set codename=23H2
+	)
+	if %ntbuild%==26052 (
+		set ntname=Windows 11
+		set codename=24H2
 	)
 )
 set osarch=x86
@@ -532,6 +536,10 @@ reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /
 :: DISABLED COMPONENTS AND FIXES
 :: disable OneDrive
 reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul 2>&1
+:: remove share with Skype from ritht click context menu
+reg delete "HKEY_CLASSES_ROOT\PackagedCom\ClassIndex\{776DBC8D-7347-478C-8D71-791E12EF49D8}" /f
+:: remove modern sharing  from ritht click context menu
+reg delete "HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\ModernSharing" /f
 :: remove look for an app in Store
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
 :: no Store apps on taskbar
@@ -1029,7 +1037,7 @@ shutdown /r /f
 nircmdc.exe "Trying to restart the machine ..." 1 force reboot
 exit
 :setup
-nircmdc.exe shortcut "%systemroot%\system32\cmd.exe" "~$folder.programs$" "CMD"
+::nircmdc.exe shortcut "%systemroot%\system32\cmd.exe" "~$folder.programs$" "CMD"
 nircmdc.exe shortcut "%programfiles%\videolan\vlc\vlc.exe" "~$folder.appdata$\microsoft\windows\sendto" "VLC"
 copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 if not exist "%appdata%\unreal commander" md "%appdata%\unreal commander"
