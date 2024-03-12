@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2403.02
+set sysinstall_version=2403.03
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -223,7 +223,7 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\V
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultApplied" /t reg_dword /d "0" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultValue" /t reg_dword /d "0" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultByAlphaTest" /t reg_dword /d "0" /f
-:: show pc shortcut on desktop
+:: show this computer shortcut on desktop
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\ClassicStartMenu" /v "{20D04FE0-3AEA-1069-A2D8-08002B30309D}" /t reg_dword /d "0" /f
 :: register/unregister dll from shell menu
@@ -836,9 +836,9 @@ cd "%setupbin%"
 ::start clamwin-0.103.2.1-setup.exe /VERYSILENT
 :: Unreal Commander
 echo Installing Unreal Commander ...
-tasklist /fi "imagename eq UnrealCommander32.exe" |find ":" 2>nul
+tasklist /fi "imagename eq UnrealCommander32.exe" |find ":" >nul 2>&1
 if errorlevel 1 taskkill /f /im "UnrealCommander32.exe"
-tasklist /fi "imagename eq UnrealCommander64.exe" |find ":" 2>nul
+tasklist /fi "imagename eq UnrealCommander64.exe" |find ":" >nul 2>&1
 if errorlevel 1 taskkill /f /im "UnrealCommander64.exe"
 if not exist "%setupbin%\uncomsetup.exe" wget.exe --tries=3 --no-check-certificate -c "http://x-diesel.com/download/uncomsetup.exe"
 "%setupbin%\uncomsetup.exe" /VERYSILENT
@@ -857,7 +857,7 @@ if %osarch%==x64 (
 cd "%setupcfg%"
 if not exist "%setupcfg%\unreal.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/unreal.7z"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
-taskkill /IM "UnrealCommander*" /F 2>nul
+taskkill /IM "UnrealCommander*" /F >nul 2>&1
 7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\unreal.7z"
 if not exist "%defaultuserprofile%\appdata\roaming\unreal commander" md "%defaultuserprofile%\appdata\roaming\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%defaultuserprofile%\appdata\roaming\unreal commander"
@@ -923,6 +923,8 @@ if not exist "%setupcfg%\foobar2k.7z" (
 	wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/foobar2k.7z"
 	cd "%sysinstall%"
 	)
+tasklist /fi "imagename eq foobar2000.exe" |find ":" >nul
+if errorlevel 1 taskkill /f /im "foobar2000.exe"
 if exist "%setupbin%\foobar2000_v1.6.17.exe" foobar2000_v1.6.17.exe /S
 if %osarch%==x86 set fooprogdir=%programfiles%\foobar2000
 if %osarch%==x64 set fooprogdir=%programfiles(x86)%\foobar2000
@@ -964,7 +966,7 @@ if %osarch%==x86 set dotswitcherdir=%programfiles%\dotswitcher
 if %osarch%==x64 set dotswitcherdir=%ProgramFiles(x86)%\dotswitcher
 if not exist "%dotswitcherdir%" md "%dotswitcherdir%"
 copy /y "%setupbin%\dotswitcher.exe" "%dotswitcherdir%"
-reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "dotswitcher" /t reg_sz /d "%dotswitcherdir%\dotswitcher\dotswitcher.exe" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "dotswitcher" /t reg_sz /d "%dotswitcherdir%\dotswitcher.exe" /f
 :: Classic Shell
 if "%ntver%"=="6.1" goto dotnetfx
 if "%ntname%"=="Windows 11" goto openshell
