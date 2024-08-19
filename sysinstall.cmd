@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2403.03
+set sysinstall_version=2408.01
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -633,11 +633,11 @@ echo. &echo Running software APPS installation in 32-bit mode ...&echo.
 echo Installing 7-zip ...
 tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "7zfm.exe"
-if not exist "%setupbin%\7z1900.msi" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900.msi"
-if not exist "%setupbin%\7z1900.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z1900.msi"
-msiexec /package "%setupbin%\7z1900.msi" /quiet /norestart
-if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z"
-if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-extra.7z"
+if not exist "%setupbin%\7z2408.msi" wget.exe --tries=3 --no-check-certificate -c "http://7-zip.org/a/7z2408.msi"
+if not exist "%setupbin%\7z2408.msi" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/24.08/7z2408.msi"
+msiexec /package "%setupbin%\7z2408.msi" /quiet /norestart
+if not exist "%setupbin%\7z2408-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2408-extra.7z"
+if not exist "%setupbin%\7z2408-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/24.08/7z2408-extra.7z"
 "%ProgramFiles%\7-Zip\7zg.exe" x -r -y -o"%ProgramFiles%\7-Zip" "%setupbin%\7z1900-extra.7z"
 copy /y "%ProgramFiles%\7-Zip\7za.exe" "%sysinstall%"
 copy /y "%ProgramFiles%\7-Zip\7za.exe" "%systemroot%\system32"
@@ -651,8 +651,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b6161.x86.20230609.msi" wget.exe --tries=3 --no-check-certificate -c "https://www.farmanager.com/files/Far30b6161.x86.20230609.msi"
-msiexec /package "%setupbin%\Far30b6161.x86.20230609.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b6300.x86.20240407.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b6300.x86.20240407.msi"
+msiexec /package "%setupbin%\Far30b6300.x86.20240407.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -674,30 +674,30 @@ cd "%setupbin%"
 del /f /q "%public%\desktop\ConEmu (x86).lnk" >nul
 :: Notepad++32
 echo Installing Notepad++ ...
-if not exist "%setupbin%\npp.8.5.7.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.5.7/npp.8.5.7.Installer.exe"
-"%setupbin%\npp.8.5.7.Installer.exe" /S
+if not exist "%setupbin%\npp.8.6.9.Installer.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.6.9/npp.8.6.9.Installer.exe"
+"%setupbin%\npp.8.6.9.Installer.exe" /S
 :: Firefox32
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 120.0.exe" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/firefox/releases/120.0/win32/ru/Firefox Setup 120.0.exe"
-"%setupbin%\Firefox Setup 120.0.exe" /S
+if not exist "%setupbin%\Firefox Setup 129.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/129.0.1/win32/ru/Firefox Setup 129.0.1.exe"
+"%setupbin%\Firefox Setup 129.0.1.exe" /S
 :: Thunderbird32
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 115.5.0.exe" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/115.5.0/win32/ru/Thunderbird Setup 115.5.0.exe"
-"%setupbin%\Thunderbird Setup 115.5.0.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 129.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/129.0/win32/ru/Thunderbird Setup 129.0.exe"
+"%setupbin%\Thunderbird Setup 129.0.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: LibreOffice32
 echo Installing LibreOffice ...
-if not exist "%setupbin%\LibreOffice_7.5.8_Win_x86.msi" wget.exe --tries=3 --no-check-certificate -c "https://mirrors.iu13.net/tdf/libreoffice/stable/7.5.8/win/x86/LibreOffice_7.5.8_Win_x86.msi"
-msiexec /package "LibreOffice_7.5.8_Win_x86.msi" /quiet /norestart
+if not exist "%setupbin%\LibreOffice_24.2.5_Win_x86.msi" wget.exe --tries=3 --no-check-certificate -c "http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/24.2.5/win/x86/LibreOffice_24.2.5_Win_x86.msi"
+msiexec /package "LibreOffice_24.2.5_Win_x86.msi" /quiet /norestart
 :: VLC32
 echo Installing VLC media player ...
-if not exist "%setupbin%\vlc-3.0.19-win32.exe" wget.exe --tries=3 --no-check-certificate -c "https://get.videolan.org/vlc/3.0.19/win32/vlc-3.0.19-win32.exe"
-"%setupbin%\vlc-3.0.19-win32.exe" /S
+if not exist "%setupbin%\vlc-3.0.21-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://get.videolan.org/vlc/3.0.21/win32/vlc-3.0.21-win32.exe"
+"%setupbin%\vlc-3.0.21-win32.exe" /S
 :: PureText32
 echo Installing PureText ...
 if not exist "%setupbin%\puretext_6.2_32-bit.zip" wget.exe --tries=3 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_32-bit.zip"
@@ -718,14 +718,14 @@ if "%PROCESSOR_ARCHITECTURE%"=="x86" color 0e &echo CMD process seems to be 32-b
 echo Installing 7-zip ...
 tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "7zfm.exe"
-if not exist "%setupbin%\7z1900-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-x64.msi"
-if not exist "%setupbin%\7z1900-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-x64.msi"
-msiexec /package "%setupbin%\7z1900-x64.msi" /quiet /norestart
-if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/19.00/7z1900-extra.7z"
-if not exist "%setupbin%\7z1900-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z1900-extra.7z"
+if not exist "%setupbin%\7z2408-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://7-zip.org/a/7z2408-x64.msi"
+if not exist "%setupbin%\7z2408-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/24.08/7z2408-x64.msi"
+msiexec /package "%setupbin%\7z2408-x64.msi" /quiet /norestart
+if not exist "%setupbin%\7z2408-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2408-extra.7z"
+if not exist "%setupbin%\7z2408-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/24.08/7z2408-extra.7z"
 if exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles%\7-Zip
 if not exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles(x86)%\7-Zip
-"%sevenzip%\7zg.exe" x -r -y -o"%sevenzip%" "%setupbin%\7z1900-extra.7z"
+"%sevenzip%\7zg.exe" x -r -y -o"%sevenzip%" "%setupbin%\7z2408-extra.7z"
 copy /y "%sevenzip%\x64\7za.exe" "%sysinstall%"
 copy /y "%sevenzip%\x64\7za.exe" "%systemroot%\system32"
 :: NirCMD64
@@ -738,8 +738,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b6161.x64.20230609.msi" wget.exe --tries=3 --no-check-certificate -c "https://www.farmanager.com/files/Far30b6161.x64.20230609.msi"
-msiexec /package "%setupbin%\Far30b6161.x64.20230609.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b6300.x64.20240407.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b6300.x64.20240407.msi"
+msiexec /package "%setupbin%\Far30b6300.x64.20240407.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -750,7 +750,7 @@ echo nircmdc.exe elevate "%ProgramFiles%\Far Manager\far.exe" >%systemroot%\syst
 cd "%setupbin%"
 :: ConEmu64
 echo Installing ConEmu ...
-if not exist "%setupbin%\ConEmuSetup.230724.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/Maximus5/ConEmu/releases/download/v23.07.24/ConEmuSetup.230724.exe"
+if not exist "%setupbin%\ConEmuSetup.230724.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/Maximus5/ConEmu/releases/download/v23.07.24/ConEmuSetup.230724.exe"
 "%setupbin%\ConEmuSetup.230724.exe" /p:x64,adm /qr
 cd "%setupcfg%"
 if not exist "%setupcfg%\conemu.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/conemu.7z"
@@ -761,31 +761,31 @@ del /f /q "%public%\desktop\ConEmu (x64).lnk" >nul 2>&1
 cd "%setupbin%"
 :: Notepad++64
 echo Installing Notepad++ ...
-if not exist "%setupbin%\npp.8.5.7.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.5.7/npp.8.5.7.Installer.x64.exe"
-"%setupbin%\npp.8.5.7.Installer.x64.exe" /S
+if not exist "%setupbin%\npp.8.6.9.Installer.x64.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.6.9/npp.8.6.9.Installer.x64.exe"
+"%setupbin%\npp.8.6.9.Installer.x64.exe" /S
 :: Firefox64
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 120.0.msi" wget.exe --tries=3 --no-check-certificate -c "https://ftp.mozilla.org/pub/firefox/releases/120.0/win64/ru/Firefox Setup 120.0.msi"
-msiexec /package "Firefox Setup 120.0.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 129.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/129.0.1/win64/ru/Firefox Setup 129.0.1.msi"
+msiexec /package "Firefox Setup 129.0.1.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird64
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 115.5.0.msi" wget.exe --tries=3 --no-check-certificate -c "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/115.5.0/win64/ru/Thunderbird Setup 115.5.0.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 115.5.0.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 129.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/129.0/win64/ru/Thunderbird Setup 129.0.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 129.0.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 echo Installing LibreOffice ...
-if not exist "%setupbin%\LibreOffice_7.6.3_Win_x86-64.msi" wget.exe --tries=3 --no-check-certificate -c "http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/7.6.3/win/x86_64/LibreOffice_7.6.3_Win_x86-64.msi"
-msiexec /package "LibreOffice_7.6.3_Win_x86-64.msi" /quiet /norestart
+if not exist "%setupbin%\LibreOffice_24.2.5_Win_x86-64.msi" wget.exe --tries=3 --no-check-certificate -c "http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/24.2.5/win/x86_64/LibreOffice_24.2.5_Win_x86-64.msi"
+msiexec /package "LibreOffice_24.2.5_Win_x86-64.msi" /quiet /norestart
 :: VLC64
 echo Installing VLC media player ...
-if not exist "%setupbin%\vlc-3.0.19-win64.exe" wget.exe --tries=3 --no-check-certificate -c "https://get.videolan.org/vlc/3.0.19/win64/vlc-3.0.19-win64.exe"
-"%setupbin%\vlc-3.0.19-win64.exe" /S
+if not exist "%setupbin%\vlc-3.0.21-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe"
+"%setupbin%\vlc-3.0.21-win64.exe" /S
 :: PureText64
 echo Installing PureText ...
 if not exist "%setupbin%\puretext_6.2_64-bit.zip" wget.exe --tries=2 --no-check-certificate -c "http://stevemiller.net/downloads/puretext_6.2_64-bit.zip"
@@ -913,11 +913,11 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=2 --no-check-cert
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" wget.exe --tries=2 --no-check-certificate -c "http://cdn78.foxitsoftware.com/product/phantomPDF/desktop/win/2023.2.0/FoxitPDFReader20232_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitPDFReader20232_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitPDFReader202423_L10N_Setup_Prom.exe" wget.exe --tries=2 --no-check-certificate -c "http://cdn78.foxitsoftware.com/product/reader/desktop/win/2024.2.3/FoxitPDFReader202423_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitPDFReader202423_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
-if not exist "%setupbin%\foobar2000_v1.6.17.exe" wget.exe --tries=3 --no-check-certificate -c "https://www.foobar2000.org/files/foobar2000_v1.6.17.exe" -O "foobar2000_v1.6.17.exe"
+if not exist "%setupbin%\foobar2000_v1.6.17.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.foobar2000.org/files/foobar2000_v1.6.17.exe" -O "foobar2000_v1.6.17.exe"
 if not exist "%setupcfg%\foobar2k.7z" (
 	cd "%setupcfg%"
 	wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/foobar2k.7z"
@@ -938,14 +938,14 @@ if not exist "%setupbin%\wds_current_setup.exe" wget.exe --tries=2 --no-check-ce
 del /f /q "%userprofile%\desktop\WinDirStat.lnk"
 :: SIV
 echo Installing SIV ...
-if not exist "%setupbin%\siv_v5.73.zip" wget.exe --tries=2 --no-check-certificate -c "https://delivery2.filecroco.com/kits_6/siv_v5.73.zip"
-7za.exe x -r -y -o"%programfiles%\siv" "%setupbin%\siv_v5.73.zip"
+if not exist "%setupbin%\siv_v5.77.zip" wget.exe --tries=2 --no-check-certificate -c "http://delivery2.filecroco.com/kits_6/siv_v5.77.zip"
+7za.exe x -r -y -o"%programfiles%\siv" "%setupbin%\siv_v5.77.zip"
 if %osarch%==x86 nircmdc.exe shortcut "%programfiles%\siv\siv32x.exe" "~$folder.common_programs$" "SIV"
 if %osarch%==x64 nircmdc.exe shortcut "%programfiles%\siv\siv64x.exe" "~$folder.common_programs$" "SIV"
 :: HWMonitor
 echo Installing HWMonitor ...
-if not exist "%setupbin%\hwmonitor_1.52.exe" wget.exe --tries=2 --no-check-certificate -c "https://download.cpuid.com/hwmonitor/hwmonitor_1.52.exe"
-"%setupbin%\hwmonitor_1.52.exe" /VERYSILENT
+if not exist "%setupbin%\hwmonitor_1.54.exe" wget.exe --tries=2 --no-check-certificate -c "http://download.cpuid.com/hwmonitor/hwmonitor_1.54.exe"
+"%setupbin%\hwmonitor_1.54.exe" /VERYSILENT
 del /f /q "%public%\desktop\CPUID HWMonitor.lnk"
 :: CrystalDiskInfo
 echo Installing CrystalDiskInfo ...
