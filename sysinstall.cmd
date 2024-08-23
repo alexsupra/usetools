@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2408.01
+set sysinstall_version=2408.02
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -57,6 +57,7 @@ if "%ntver%"=="10.0" (
 set osarch=x86
 wmic OS get OSArchitecture|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
+for /f "tokens=2*" %%a in ('reg query "hklm\system\controlset001\control\nls\language" /v "Installlanguage"') do set "systemlang=%%b"
 if "%ntver%"=="10.0" (
 	if "%osarch%"=="x86" echo [44;97m%ntname% %codename%[0m [;96m NT %ntver%.%ntbuild% [0m [40;93m%osarch%[0m
 	if "%osarch%"=="x64" echo [44;97m%ntname% %codename%[0m [;96m NT %ntver%.%ntbuild% [0m [40;92m%osarch%[0m
@@ -255,6 +256,7 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\S
 :: Edge
 reg add "HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "HomeButtonEnabled" /t reg_dword /d "1" /f
 reg add "HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main" /v "HomeButtonPage" /t reg_sz /d "http://www.google.com" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge" /v "HideFirstRunExperience" /t reg_dword /d "1" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable automatic updates
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update" /v "AUOptions" /t reg_dword /d "1" /f
@@ -1019,12 +1021,38 @@ if "%ntver%" neq "10.0" goto tango_patcher
 echo Performing system clean-up ...
 taskkill /f /im OneDrive.exe >nul 2>&1
 OneDriveSetup.exe /uninstall >nul 2>&1
+:: unlock image and shell resource files
+echo Unlocking image and shell resources ...
+if "%systemlang%"=="0409" goto lang_en
+:lang_ru
+chcp 1251 >nul
+takeown /f %systemroot%\systemresources >nul
+icacls %systemroot%\systemresources /grant:r Администраторы:F >nul
+takeown /f %systemroot%\systemresources\imageres.dll.mun >nul
+icacls %systemroot%\systemresources\imageres.dll.mun /grant:r Администраторы:F >nul
+takeown /f %systemroot%\systemresources\imagesp1.dll.mun >nul
+icacls %systemroot%\systemresources\imagesp1.dll.mun /grant:r Администраторы:F >nul
+takeown /f %systemroot%\systemresources\shell32.dll.mun >nul
+icacls %systemroot%\systemresources\shell32.dll.mun /grant:r Администраторы:F >nul
+chcp 866 >nul
+goto tango_patcher
+:lang_en
+chcp 866 >nul
+takeown /f %systemroot%\systemresources >nul
+icacls %systemroot%\systemresources /grant:r Administrators:F >nul
+takeown /f %systemroot%\systemresources\imageres.dll.mun >nul
+icacls %systemroot%\systemresources\imageres.dll.mun /grant:r Administrators:F >nul
+takeown /f %systemroot%\systemresources\imagesp1.dll.mun >nul
+icacls %systemroot%\systemresources\imagesp1.dll.mun /grant:r Administrators:F >nul
+takeown /f %systemroot%\systemresources\shell32.dll.mun >nul
+icacls %systemroot%\systemresources\shell32.dll.mun /grant:r Administrators:F >nul
+::
 :tango_patcher
 :: Tango Patcher
 echo Installing Windows Tango Patcher ...
-if not exist "%setupbin%\WinTango-Patcher-16.12.24-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/WinTango-Patcher/releases/download/v16.12.24/WinTango-Patcher-16.12.24-offline.exe"
+if not exist "%setupbin%\WinTango-Patcher-24.08.01-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/WinTango-Patcher/releases/download/v.24.08.01/WinTango-Patcher-24.08.01-offline.exe"
 nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 3 min." 180 force reboot
-"%setupbin%\WinTango-Patcher-16.12.24-offline.exe" /S
+"%setupbin%\WinTango-Patcher-24.08.01-offline.exe" /S
 echo. &echo INSTALLATION IS COMPLETED
 if "%1"=="-u" exit
 if "%ntver%"=="10.0" echo [40;92mPRESS ANY KEY TO EXIT[0m
