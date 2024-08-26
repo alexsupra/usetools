@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2408.02
+set sysinstall_version=2408.03
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -1021,38 +1021,13 @@ if "%ntver%" neq "10.0" goto tango_patcher
 echo Performing system clean-up ...
 taskkill /f /im OneDrive.exe >nul 2>&1
 OneDriveSetup.exe /uninstall >nul 2>&1
-:: unlock image and shell resource files
-echo Unlocking image and shell resources ...
-if "%systemlang%"=="0409" goto lang_en
-:lang_ru
-chcp 1251 >nul
-takeown /f %systemroot%\systemresources >nul
-icacls %systemroot%\systemresources /grant:r Администраторы:F >nul
-takeown /f %systemroot%\systemresources\imageres.dll.mun >nul
-icacls %systemroot%\systemresources\imageres.dll.mun /grant:r Администраторы:F >nul
-takeown /f %systemroot%\systemresources\imagesp1.dll.mun >nul
-icacls %systemroot%\systemresources\imagesp1.dll.mun /grant:r Администраторы:F >nul
-takeown /f %systemroot%\systemresources\shell32.dll.mun >nul
-icacls %systemroot%\systemresources\shell32.dll.mun /grant:r Администраторы:F >nul
-chcp 866 >nul
-goto tango_patcher
-:lang_en
-chcp 866 >nul
-takeown /f %systemroot%\systemresources >nul
-icacls %systemroot%\systemresources /grant:r Administrators:F >nul
-takeown /f %systemroot%\systemresources\imageres.dll.mun >nul
-icacls %systemroot%\systemresources\imageres.dll.mun /grant:r Administrators:F >nul
-takeown /f %systemroot%\systemresources\imagesp1.dll.mun >nul
-icacls %systemroot%\systemresources\imagesp1.dll.mun /grant:r Administrators:F >nul
-takeown /f %systemroot%\systemresources\shell32.dll.mun >nul
-icacls %systemroot%\systemresources\shell32.dll.mun /grant:r Administrators:F >nul
 ::
 :tango_patcher
 :: Tango Patcher
 echo Installing Windows Tango Patcher ...
-if not exist "%setupbin%\WinTango-Patcher-24.08.01-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/WinTango-Patcher/releases/download/v.24.08.01/WinTango-Patcher-24.08.01-offline.exe"
+if not exist "%setupbin%\WinTango-Patcher-24.08.02-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/WinTango-Patcher/releases/download/v24.08.02/WinTango-Patcher-24.08.02-offline.exe"
 nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 3 min." 180 force reboot
-"%setupbin%\WinTango-Patcher-24.08.01-offline.exe" /S
+"%setupbin%\WinTango-Patcher-24.08.02-offline.exe" /S
 echo. &echo INSTALLATION IS COMPLETED
 if "%1"=="-u" exit
 if "%ntver%"=="10.0" echo [40;92mPRESS ANY KEY TO EXIT[0m
