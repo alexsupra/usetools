@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2408.03
+set sysinstall_version=2411.01
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -50,6 +50,10 @@ if "%ntver%"=="10.0" (
 		set codename=23H2
 	)
 	if %ntbuild%==26052 (
+		set ntname=Windows 11
+		set codename=24H2
+	)
+	if %ntbuild%==26100 (
 		set ntname=Windows 11
 		set codename=24H2
 	)
