@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2411.03
+set sysinstall_version=2411.04
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -689,14 +689,14 @@ if not exist "%setupbin%\npp.8.6.9.Installer.exe" wget.exe --tries=3 --no-check-
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 129.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/129.0.1/win32/ru/Firefox Setup 129.0.1.exe"
-"%setupbin%\Firefox Setup 129.0.1.exe" /S
+if not exist "%setupbin%\Firefox Setup 131.0.3.exe" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/131.0.3/win32/ru/Firefox Setup 131.0.3.exe"
+"%setupbin%\Firefox Setup 131.0.3.exe" /S
 :: Thunderbird32
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 129.0.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/129.0/win32/ru/Thunderbird Setup 129.0.exe"
-"%setupbin%\Thunderbird Setup 129.0.exe" /S
+if not exist "%setupbin%\Thunderbird Setup 132.0.1.exe" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/132.0.1/win32/ru/Thunderbird Setup 132.0.1.exe"
+"%setupbin%\Thunderbird Setup 132.0.1.exe" /S
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: LibreOffice32
@@ -776,16 +776,16 @@ if not exist "%setupbin%\npp.8.6.9.Installer.x64.exe" wget.exe --tries=3 --no-ch
 echo Installing Mozilla Firefox ...
 tasklist /fi "imagename eq firefox.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "firefox.exe"
-if not exist "%setupbin%\Firefox Setup 129.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/129.0.1/win64/ru/Firefox Setup 129.0.1.msi"
-msiexec /package "Firefox Setup 129.0.1.msi" /quiet /norestart
+if not exist "%setupbin%\Firefox Setup 131.0.3.msi" wget.exe --tries=3 --no-check-certificate -c "http://ftp.mozilla.org/pub/firefox/releases/131.0.3/win64/ru/Firefox Setup 131.0.3.msi"
+msiexec /package "Firefox Setup 131.0.3.msi" /quiet /norestart
 ::if not exist "%programfiles%\mozilla firefox\browser\default" md "%programfiles%\mozilla firefox\browser\default"
 ::echo user_pref("browser.urlbar.placeholderName", "Google"); >"%programfiles%\mozilla firefox\browser\default\prefs.js"
 :: Thunderbird64
 echo Installing Mozilla Thunderbird ...
 tasklist /fi "imagename eq thunderbird.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "thunderbird.exe"
-if not exist "%setupbin%\Thunderbird Setup 129.0.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/129.0/win64/ru/Thunderbird Setup 129.0.msi"
-msiexec /package "%setupbin%\Thunderbird Setup 129.0.msi" /quiet /norestart
+if not exist "%setupbin%\Thunderbird Setup 132.0.1.msi" wget.exe --tries=3 --no-check-certificate -c "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/132.0.1/win64/ru/Thunderbird Setup 132.0.1.msi"
+msiexec /package "%setupbin%\Thunderbird Setup 132.0.1.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 echo Installing LibreOffice ...
@@ -926,8 +926,8 @@ if not exist "%setupbin%\XnView-win-full.exe" wget.exe --tries=2 --no-check-cert
 echo Installing Foxit Reader ...
 tasklist /fi "imagename eq FoxitReader.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "FoxitReader.exe"
-if not exist "%setupbin%\FoxitPDFReader202423_L10N_Setup_Prom.exe" wget.exe --tries=2 --no-check-certificate -c "http://cdn78.foxitsoftware.com/product/reader/desktop/win/2024.2.3/FoxitPDFReader202423_L10N_Setup_Prom.exe"
-"%setupbin%\FoxitPDFReader202423_L10N_Setup_Prom.exe" /silent
+if not exist "%setupbin%\FoxitPDFReader20243_L10N_Setup_Prom.exe" wget.exe --tries=2 --no-check-certificate -c "http://cdn78.foxitsoftware.com/product/reader/desktop/win/2024.3.0/FoxitPDFReader20243_L10N_Setup_Prom.exe"
+"%setupbin%\FoxitPDFReader20243_L10N_Setup_Prom.exe" /silent
 :: foobar2000
 echo Installing foobar2000 ...
 if not exist "%setupbin%\foobar2000_v1.6.17.exe" wget.exe --tries=3 --no-check-certificate -c "http://www.foobar2000.org/files/foobar2000_v1.6.17.exe" -O "foobar2000_v1.6.17.exe"
@@ -1056,13 +1056,13 @@ nircmdc.exe "Trying to restart the machine ..." 1 force reboot
 exit
 :setup
 nircmdc.exe shortcut "%programfiles%\videolan\vlc\vlc.exe" "~$folder.appdata$\microsoft\windows\sendto" "VLC"
-copy /y "%programfiles%\conemu\conemu.xml" "%appdata%" 
+copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 if not exist "%appdata%\unreal commander" md "%appdata%\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%appdata%\unreal commander"
-copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander" 
-7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z" 
-if %osarch%==x86 set fooprogdir=%proframfiles%\foobar2000 
-if %osarch%==x64 set fooprogdir=%proframfiles(x86)%\foobar2000 
+copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander"
+7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
+if %osarch%==x86 set fooprogdir=%proframfiles%\foobar2000
+if %osarch%==x64 set fooprogdir=%proframfiles(x86)%\foobar2000
 xcopy "%fooprogdir%\appdata" "%appdata%\foobar2000" /i /y /s /r /c
 exit
 ::
