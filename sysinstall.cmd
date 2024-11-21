@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2411.01
+set sysinstall_version=2411.03
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -59,7 +59,7 @@ if "%ntver%"=="10.0" (
 	)
 )
 set osarch=x86
-wmic OS get OSArchitecture|find.exe "64" >nul
+echo %processor_architecture%|find.exe "64" >nul
 if not errorlevel 1 set osarch=x64
 for /f "tokens=2*" %%a in ('reg query "hklm\system\controlset001\control\nls\language" /v "Installlanguage"') do set "systemlang=%%b"
 if "%ntver%"=="10.0" (
@@ -280,6 +280,7 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CscService" /v "St
 ::
 :config_user
 echo. &echo Applying general USER settings ...&echo.
+echo %sysinstall_version%>>"%userprofile%\sysinstall.log"
 :: USER
 :: end hung tasks automatically
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "AutoEndTasks" /t reg_sz /d "1" /f
@@ -611,13 +612,15 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostic
 :config_user_win11
 echo. &echo Applying Windows 11 USER settings ...&echo.
 :: GUI/SHELL
+:: set start menu location
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarAI" /t reg_dword /d "0" /f
 :: set taskbar size (0,1,2)
 ::reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarSi" /t reg_dword /d "1" /f
 :: DISABLED COMPONENTS AND FIXES
 :: disable OneDrive
 reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f >nul 2>&1
 :: remove look for an app in Store
-reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "NoUseStoreOpenWith" /t reg_dword /d "1" /f 
 :: no Store apps on taskbar
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
 :: no pinning Store to taskbar
@@ -851,19 +854,23 @@ if not exist "%setupbin%\uncomsetup.exe" wget.exe --tries=3 --no-check-certifica
 nircmdc.exe killprocess UnrealCommander32.exe
 nircmdc.exe killprocess UnrealCommander64.exe
 if %osarch%==x86 (
-	if not exist "%setupbin%\notepad2_4.2.25_x86.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x86.zip"
-	taskkill /f /im "UnrealCommander32.exe" /F
-	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2_4.2.25_x86.zip"	
+	::if not exist "%setupbin%\notepad2_4.2.25_x86.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x86.zip"
+	if not exist "%setupbin%\notepad2mod.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupbin/notepad2mod.7z"
+	taskkill /f /im "UnrealCommander32.exe"
+	taskkill /f /im "notepad2.exe"
+	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2mod.7z"
 	)
 if %osarch%==x64 (
-	if not exist "%setupbin%\notepad2_4.2.25_x64.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x64.zip"
-	taskkill /IM "UnrealCommander64.exe" /F
-	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2_4.2.25_x64.zip"
+	::if not exist "%setupbin%\notepad2_4.2.25_x64.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.flos-freeware.ch/zip/notepad2_4.2.25_x64.zip"
+	if not exist "%setupbin%\notepad2mod-x64.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupbin/notepad2mod-x64.7z"
+	taskkill /f /im "UnrealCommander64.exe"
+	taskkill /f /im "notepad2.exe"
+	7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupbin%\notepad2mod-x64.7z"
 	)
 cd "%setupcfg%"
 if not exist "%setupcfg%\unreal.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/unreal.7z"
 if not exist "%setupcfg%\notepad2.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/master/setupcfg/notepad2.7z"
-taskkill /IM "UnrealCommander*" /F >nul 2>&1
+taskkill /f /im "UnrealCommander*" >nul 2>&1
 7za.exe x -r -y -o"%systemdrive%\unreal commander" "%setupcfg%\unreal.7z"
 if not exist "%defaultuserprofile%\appdata\roaming\unreal commander" md "%defaultuserprofile%\appdata\roaming\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%defaultuserprofile%\appdata\roaming\unreal commander"
@@ -966,6 +973,7 @@ if not exist "%setupbin%\keyboard-leds.exe" wget.exe --tries=2 --no-check-certif
 del /f /q "%public%\desktop\Keyboard LEDs.lnk"
 :: dotSwitcher
 echo Installing dotSwitcher ...
+tasklist /fi "imagename eq dotswitcher.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "dotswitcher.exe"
 if not exist "%setupbin%\dotswitcher.exe" wget.exe --tries=2 --no-check-certificate -c "https://github.com/kurumpa/dotSwitcher/releases/download/v0.45-alpha/dotSwitcher.exe"
 if %osarch%==x86 set dotswitcherdir=%programfiles%\dotswitcher
@@ -991,6 +999,7 @@ if not exist "%setupbin%\OpenShellSetup_4_4_191.exe" wget.exe --tries=3 --no-che
 if %osarch%==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
 if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
 :: ExplorerPatcher
+if %ntbuild%==26100 goto dotnetfx
 echo Installing ExplorerPatcher ...
 if not exist "%setupbin%\ep_setup.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/valinet/ExplorerPatcher/releases/download/22621.2428.59.1_a7c87ce/ep_setup.exe"
 "%setupbin%\ep_setup.exe"
@@ -1046,15 +1055,14 @@ shutdown /r /f
 nircmdc.exe "Trying to restart the machine ..." 1 force reboot
 exit
 :setup
-::nircmdc.exe shortcut "%systemroot%\system32\cmd.exe" "~$folder.programs$" "CMD"
 nircmdc.exe shortcut "%programfiles%\videolan\vlc\vlc.exe" "~$folder.appdata$\microsoft\windows\sendto" "VLC"
-copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
+copy /y "%programfiles%\conemu\conemu.xml" "%appdata%" 
 if not exist "%appdata%\unreal commander" md "%appdata%\unreal commander"
 copy /y "%systemdrive%\unreal commander\uncom.ini" "%appdata%\unreal commander"
-copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander"
-7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z"
-if %osarch%==x86 set fooprogdir=%proframfiles%\foobar2000
-if %osarch%==x64 set fooprogdir=%proframfiles(x86)%\foobar2000
+copy /y "%systemdrive%\unreal commander\uncomstyles.ini" "%appdata%\unreal commander" 
+7za.exe x -r -y -o"%appdata%" "%setupcfg%\far.7z" 
+if %osarch%==x86 set fooprogdir=%proframfiles%\foobar2000 
+if %osarch%==x64 set fooprogdir=%proframfiles(x86)%\foobar2000 
 xcopy "%fooprogdir%\appdata" "%appdata%\foobar2000" /i /y /s /r /c
 exit
 ::
