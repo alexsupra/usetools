@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2411.04
+set sysinstall_version=2412.02
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -280,7 +280,6 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CscService" /v "St
 ::
 :config_user
 echo. &echo Applying general USER settings ...&echo.
-echo %sysinstall_version%>>"%userprofile%\sysinstall.log"
 :: USER
 :: end hung tasks automatically
 reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v "AutoEndTasks" /t reg_sz /d "1" /f
@@ -701,8 +700,8 @@ if not exist "%setupbin%\Thunderbird Setup 132.0.1.exe" wget.exe --tries=3 --no-
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
 :: LibreOffice32
 echo Installing LibreOffice ...
-if not exist "%setupbin%\LibreOffice_24.2.5_Win_x86.msi" wget.exe --tries=3 --no-check-certificate -c "http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/24.2.5/win/x86/LibreOffice_24.2.5_Win_x86.msi"
-msiexec /package "LibreOffice_24.2.5_Win_x86.msi" /quiet /norestart
+if not exist "%setupbin%\LibreOffice_24.8.3_Win_x86.msi" wget.exe --tries=3 --no-check-certificate -c "http://mirror.truenetwork.ru/tdf/libreoffice/stable/24.8.3/win/x86/LibreOffice_24.8.3_Win_x86.msi"
+msiexec /package "LibreOffice_24.8.3_Win_x86.msi" /quiet /norestart
 :: VLC32
 echo Installing VLC media player ...
 if not exist "%setupbin%\vlc-3.0.21-win32.exe" wget.exe --tries=3 --no-check-certificate -c "http://get.videolan.org/vlc/3.0.21/win32/vlc-3.0.21-win32.exe"
@@ -788,9 +787,10 @@ if not exist "%setupbin%\Thunderbird Setup 132.0.1.msi" wget.exe --tries=3 --no-
 msiexec /package "%setupbin%\Thunderbird Setup 132.0.1.msi" /quiet /norestart
 ::if not exist "%setupbin%\addon-362387-latest.xpi" wget.exe --tries=3 --no-check-certificate -c "http://addons.thunderbird.net/thunderbird/downloads/latest/custom-address-sidebar/addon-362387-latest.xpi"
 ::copy /y "%setupbin%\addon-362387-latest.xpi" "%programfiles%\Mozilla Thunderbird\extensions"
+:: LibreOffice64
 echo Installing LibreOffice ...
-if not exist "%setupbin%\LibreOffice_24.2.5_Win_x86-64.msi" wget.exe --tries=3 --no-check-certificate -c "http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/24.2.5/win/x86_64/LibreOffice_24.2.5_Win_x86-64.msi"
-msiexec /package "LibreOffice_24.2.5_Win_x86-64.msi" /quiet /norestart
+if not exist "%setupbin%\LibreOffice_24.8.3_Win_x86-64.msi" wget.exe --tries=3 --no-check-certificate -c "http://libreoffice-mirror.rbc.ru/pub/libreoffice/libreoffice/stable/24.8.3/win/x86_64/LibreOffice_24.8.3_Win_x86-64.msi"
+msiexec /package "LibreOffice_24.8.3_Win_x86-64.msi" /quiet /norestart
 :: VLC64
 echo Installing VLC media player ...
 if not exist "%setupbin%\vlc-3.0.21-win64.exe" wget.exe --tries=3 --no-check-certificate -c "http://get.videolan.org/vlc/3.0.21/win64/vlc-3.0.21-win64.exe"
@@ -999,6 +999,7 @@ if not exist "%setupbin%\OpenShellSetup_4_4_191.exe" wget.exe --tries=3 --no-che
 if %osarch%==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
 if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
 :: ExplorerPatcher
+if %ntbuild%==22631 goto dotnetfx
 if %ntbuild%==26100 goto dotnetfx
 echo Installing ExplorerPatcher ...
 if not exist "%setupbin%\ep_setup.exe" wget.exe --tries=3 --no-check-certificate -c "https://github.com/valinet/ExplorerPatcher/releases/download/22621.2428.59.1_a7c87ce/ep_setup.exe"
