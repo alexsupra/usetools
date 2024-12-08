@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set sysinstall_version=2412.02
+set sysinstall_version=2412.03
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -624,6 +624,12 @@ reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Ad
 reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "StoreAppsOnTaskbar" /t reg_dword /d "0" /f
 :: no pinning Store to taskbar
 reg add "HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "NoPinningStoreToTaskbar" /t reg_dword /d "1" /f
+:: remove "finish setting up your device" advertisment
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v "ScoobeSystemSettingEnabled" /t reg_dword /d "0" /f
+:: welcome experience
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f
+:: tips, tricks and suggestions
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f
 ::
 if "%1"=="-s" goto setup
 if %userinput%==2 goto menu
