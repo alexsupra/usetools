@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set fastguitweak_version=2602.01
+set fastguitweak_version=2602.02
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -72,7 +72,7 @@ if "%ntver%"=="10.0" (
 	) else (
 	echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
 	)
-echo %username%@%computername%
+title %0 &echo %username%@%computername%
 ::
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
@@ -82,15 +82,15 @@ echo     ÛÛ    ÛÛ ÛÛ     Û Û      Û    ÛÛ    Û      Û Û      Û ÛÛ    ÛÛ ÛÛ     Û
 echo      ßßßßßßß ßßßßßßßß ßßßßßßßß    ßß    ßßßßßßßß ßßßßßßßß ßßßßßßßß ßßßßßßßß  
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-echo     ³ fastguitweak.cmd - making Windows GUI fast and smart v%fastguitweak_version%       ³
+echo     ³    fastguitweak.cmd - making Windows GUI fast and smart v%fastguitweak_version%    ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 cd /d "%~dp0"
 set sysinstall=%cd%
 set setupbin=%cd%\setupbin
 set path=%path%;%sysinstall%;%setupbin%
 echo.
-if "%ntver%"=="10.0" echo [40;32mPRESS ANY KEY TO MAKE WINDOWS GUI GREAT AGAIN[0m
-if "%ntver%" neq "10.0" echo PRESS ANY KEY TO MAKE WINDOWS GUI GREAT AGAIN
+if "%ntver%"=="10.0" echo [40;32mPRESS ANY KEY TO MAKE WINDOWS GUI SHELL GREAT AGAIN[0m
+if "%ntver%" neq "10.0" echo PRESS ANY KEY TO MAKE WINDOWS GUI SHELL GREAT AGAIN
 pause >nul
 ::
 :: run Explorer windows as separate processes
@@ -180,7 +180,6 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\S
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" /v "ThisPCPolicy" /t reg_sz /d "Hide" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" /f
 ::
-::
 if not exist "%sysinstall%\wget.exe" (
 	echo [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" >getwget.ps1
 	echo Invoke-WebRequest 'http://eternallybored.org/misc/wget/1.20.3/32/wget.exe' -OutFile 'wget.exe' >>getwget.ps1
@@ -190,7 +189,6 @@ if not exist "%sysinstall%\wget.exe" (
 		"%programfiles%\internet explorer\iexplore.exe" "http://eternallybored.org/misc/wget/1.20.3/32/wget.exe"
 		)
 	del /f /q getwget.ps1 >nul
-	echo Ok, now we should have wget.exe
 	)
 if not exist "%setupbin%" md "%setupbin%"
 cd "%setupbin%"
@@ -201,9 +199,10 @@ if not exist "%setupbin%\OpenShellSetup_4_4_196.exe" wget.exe --tries=3 --no-che
 if %osarch%==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
 if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
 ::
-if "%ntver%"=="10.0" echo [40;32mALLREADY READY. PRESS ANY KEY TO EXIT[0m
+title %0 - installation is completed
+if "%ntver%"=="10.0" echo [40;32mALREADY READY. PRESS ANY KEY TO EXIT[0m
 if "%ntver%" neq "10.0" (
-	echo ALLREADY READY. PRESS ANY KEY TO EXIT
+	echo ALREADY READY. PRESS ANY KEY TO EXIT
 	color 0a
 	)
 pause >nul
