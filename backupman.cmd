@@ -1,9 +1,8 @@
 @echo off
-:: backuper.cmd - Making Windows GUI fast and smart
+:: backupman.cmd - quickly create backup of user data
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
-@echo off &cls
-set backupman_version=2602.01
+set backupman_version=2602.02
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -83,7 +82,7 @@ echo     ÛÛ    ÛÛ ÛÛ     Û Û      Û    ÛÛ    Û      Û Û      Û ÛÛ    ÛÛ ÛÛ     Û
 echo      ßßßßßßß ßßßßßßßß ßßßßßßßß    ßß    ßßßßßßßß ßßßßßßßß ßßßßßßßß ßßßßßßßß  
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-echo     ³   backupman.cmd - quickly create backup of user data  v%backupman_version%      ³
+echo     ³    backupman.cmd - quickly create backup of user data  v%backupman_version%     ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 echo. &echo 	-f create full backup including web browsers profiles
 echo. &echo 	-b create web browsers profiles backup only
@@ -93,16 +92,19 @@ set setupbin=%cd%\setupbin
 set path=%path%;%sysinstall%;%setupbin%
 ::
 if not exist "%userprofile%\backup" md "%userprofile%\backup"
-set backupdir="%userprofile%\backup"
-echo. & echo	backup dir: %userprofile%\backup
+set backupdir=%userprofile%\backup
+echo. & echo	backup dir: %backupdir%
+::
+:check
+if not exist "%sysinstall%\7za.exe" goto get7z
+::
+if "%1"=="-b" goto browsers
+::
 if "%ntver%"=="10.0" echo [40;32mPRESS ANY KEY TO START BACKUP[0m
 if "%ntver%" neq "10.0" echo PRESS ANY KEY TO START BACKUP
 pause >nul
 ::
-if not exist "%sysinstall%\7za.exe" goto get7z
-::
 :startbackup
-if "%1"=="-b" goto browsers
 echo Creating current user %userprofile%\desktop archive ... &echo.
 7za.exe a "%backupdir%\desktop_%date%.7z" "%userprofile%\desktop" -o"%backupdir%\" -mx=4
 echo Creating current user %userprofile%\documents archive ... &echo.
