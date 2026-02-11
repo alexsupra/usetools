@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set fastguitweak_version=2602.02
+set fastguitweak_version=2602.03
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -82,15 +82,15 @@ echo     ÛÛ    ÛÛ ÛÛ     Û Û      Û    ÛÛ    Û      Û Û      Û ÛÛ    ÛÛ ÛÛ     Û
 echo      ßßßßßßß ßßßßßßßß ßßßßßßßß    ßß    ßßßßßßßß ßßßßßßßß ßßßßßßßß ßßßßßßßß  
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-echo     ³    fastguitweak.cmd - making Windows GUI fast and smart v%fastguitweak_version%    ³
+echo     ³ fastguitweak.cmd - making Windows GUI shell fast and smart v%fastguitweak_version% ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 cd /d "%~dp0"
 set sysinstall=%cd%
 set setupbin=%cd%\setupbin
 set path=%path%;%sysinstall%;%setupbin%
 echo.
-if "%ntver%"=="10.0" echo [40;32mPRESS ANY KEY TO MAKE WINDOWS GUI SHELL GREAT AGAIN[0m
-if "%ntver%" neq "10.0" echo PRESS ANY KEY TO MAKE WINDOWS GUI SHELL GREAT AGAIN
+if "%ntver%"=="10.0" echo [50;92mPRESS ANY KEY TO CONTINUE[0m
+if "%ntver%" neq "10.0" echo PRESS ANY KEY TO CONTINUE
 pause >nul
 ::
 :: run Explorer windows as separate processes
@@ -200,9 +200,9 @@ if %osarch%==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll
 if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
 ::
 title %0 - installation is completed
-if "%ntver%"=="10.0" echo [40;32mALREADY READY. PRESS ANY KEY TO EXIT[0m
+if "%ntver%"=="10.0" echo [30;102mPRESS ANY KEY TO EXIT[0m
 if "%ntver%" neq "10.0" (
-	echo ALREADY READY. PRESS ANY KEY TO EXIT
+	echo PRESS ANY KEY TO EXIT
 	color 0a
 	)
 pause >nul
