@@ -2,7 +2,7 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set netreset_version=2602.01
+set netreset_version=2602.02
 chcp 866 >nul
 net session >nul 2>&1
 if %errorLevel% neq 0 title Administrative permissions check failure &echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR&color 0e &pause &exit
@@ -92,32 +92,33 @@ echo [2] Reset NetBIOS, Winsock and DNS Cache
 echo [3] Remove all network interfaces and settings
 echo [0] Reboot
 echo [x] Exit &echo.
-set userinput=0
+set userinput=
 set /p userinput=Input your choice and press enter [1/2/3/0/x]:
+if "%userinput%"=="" goto menu
 if %userinput%==0 exit
 if %userinput%==1 goto reset
 if %userinput%==2 goto netbios
 if %userinput%==3 goto remove
 if %userinput%==0 shutdown /r /t 0
 if %userinput%==x exit
-echo Input seems to be incorrect. Please try one more time
+echo. &echo Input seems to be incorrect. Please try one more time
 goto menu
 ::
 :menu_win10
-echo. &echo [50;93m[1] Reset Winsock, IP configuration and DNS Cache[0m
-echo [50;93m[2] Reset NetBIOS, Winsock and DNS Cache[0m
-echo [50;93m[3] Remove all network interfaces and settings[0m
-echo [50;93m[0] Reboot[0m
-echo [50;93m[x] Exit &echo.[0m
-set userinput=0
-set /p userinput=[50;93mInput your choice and press enter [1/2/3/4/5/6/7/0]:[0m
-if %userinput%==0 exit
+echo. &echo [1;104m[1][0m [50;96mReset Winsock, IP configuration and DNS Cache[0m
+echo [1;104m[2][0m [50;96mReset NetBIOS, Winsock and DNS Cache[0m
+echo [1;104m[3][0m [50;96mRemove all network interfaces and settings[0m
+echo [1;104m[0][0m [50;96mReboot[0m
+echo [1;104m[x][0m [50;96mExit &echo.[0m
+set userinput=
+set /p userinput=[50;96mInput your choice and press enter[0m [1;104m[1/2/3/0/x][0m:
+if "%userinput%"=="" goto menu_win10
 if %userinput%==1 goto reset
 if %userinput%==2 goto netbios
 if %userinput%==3 goto remove
 if %userinput%==0 shutdown /r /t 0
 if %userinput%==x exit
-echo Input seems to be incorrect. Please try one more time
+echo. &echo [40;93mInput seems to be incorrect. Please try one more time[0m
 goto menu_win10
 ::
 :reset
