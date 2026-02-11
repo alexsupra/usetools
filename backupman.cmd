@@ -2,7 +2,7 @@
 :: backupman.cmd - quickly create backup of user data
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
-set backupman_version=2602.02
+set backupman_version=2602.03
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
@@ -72,7 +72,7 @@ if "%ntver%"=="10.0" (
 	) else (
 	echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
 	)
-echo %username%@%computername%
+title %0 &echo %username%@%computername%
 ::
 echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÛÛ    ÛÛ ÛÛßßßßÛÛ ÛßßßßßßÛ ßßßÛÛßßß ÛßßßßßßÛ ÛßßßßßßÛ ÛÛ       ÛÛßßßßÛÛ 
@@ -100,7 +100,7 @@ if not exist "%sysinstall%\7za.exe" goto get7z
 ::
 if "%1"=="-b" goto browsers
 ::
-if "%ntver%"=="10.0" echo [40;32mPRESS ANY KEY TO START BACKUP[0m
+if "%ntver%"=="10.0" echo [50;92mPRESS ANY KEY TO START BACKUP[0m
 if "%ntver%" neq "10.0" echo PRESS ANY KEY TO START BACKUP
 pause >nul
 ::
@@ -115,6 +115,10 @@ exit
 :full
 echo Creating current user downloads folder archive ... &echo.
 7za.exe a "%backupdir%\downloads_%date%.7z" "%userprofile%\downloads" -o"%backupdir%\" -mx=4
+echo Creating current user pictures folder archive ... &echo.
+7za.exe a "%backupdir%\pictures_%date%.7z" "%userprofile%\pictures" -o"%backupdir%\" -mx=4
+echo Creating current user videos folder archive ... &echo.
+7za.exe a "%backupdir%\videos_%date%.7z" "%userprofile%\videos" -o"%backupdir%\" -mx=4
 ::
 :browsers
 echo Creating current user web browsers profiles archives ... &echo.
@@ -154,6 +158,14 @@ if exist "%localappdata%\Thunderbird\Profiles\" (
 	echo Creating Thunderbird profile backup ... &echo.
 	7za.exe a "%backupdir%\thunderbird_%date%.7z" "%localappdata%\Thunderbird\Profiles\" -o"%backupdir%\" -mx=4
 	)
+::
+title %0 - task is completed
+if "%ntver%"=="10.0" echo [30;102mPRESS ANY KEY TO EXIT[0m
+if "%ntver%" neq "10.0" (
+	echo PRESS ANY KEY TO EXIT
+	color 0a
+	)
+pause >nul
 ::
 exit
 ::
