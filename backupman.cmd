@@ -1,12 +1,12 @@
-@echo off
 :: backupman.cmd - quickly create backup of user data
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
-set backupman_version=2602.03
+@echo off
+set backupman_version=2602.04
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
-if %errorLevel% neq 0 echo Administrative permissions check failure!!&echo Restart as administrator&color 0e &pause &exit
+if %errorLevel% neq 0 title Administrative permissions check failure &echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR&color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
 echo %cpuname% ~ %processor_architecture%
 :os_check
@@ -84,8 +84,8 @@ echo     ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 echo     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 echo     ³    backupman.cmd - quickly create backup of user data  v%backupman_version%     ³
 echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-echo. &echo 	-f create full backup including web browsers profiles
 echo. &echo 	-b create web browsers profiles backup only
+echo. &echo 	-f create full backup including web browsers profiles
 cd /d "%~dp0"
 set sysinstall=%cd%
 set setupbin=%cd%\setupbin
@@ -97,9 +97,8 @@ echo. & echo	backup dir: %backupdir%
 ::
 :check
 if not exist "%sysinstall%\7za.exe" goto get7z
-::
 if "%1"=="-b" goto browsers
-::
+if "%1"=="-f" goto startbackup
 if "%ntver%"=="10.0" echo [50;92mPRESS ANY KEY TO START BACKUP[0m
 if "%ntver%" neq "10.0" echo PRESS ANY KEY TO START BACKUP
 pause >nul
@@ -110,7 +109,7 @@ echo Creating current user %userprofile%\desktop archive ... &echo.
 echo Creating current user %userprofile%\documents archive ... &echo.
 7za.exe a "%backupdir%\documents_%date%.7z" "%userprofile%\documents" -o"%backupdir%\" -mx=4
 if "%1"=="-f" goto full
-exit
+goto completed
 ::
 :full
 echo Creating current user downloads folder archive ... &echo.
@@ -159,6 +158,7 @@ if exist "%localappdata%\Thunderbird\Profiles\" (
 	7za.exe a "%backupdir%\thunderbird_%date%.7z" "%localappdata%\Thunderbird\Profiles\" -o"%backupdir%\" -mx=4
 	)
 ::
+:completed
 title %0 - task is completed
 if "%ntver%"=="10.0" echo [30;102mPRESS ANY KEY TO EXIT[0m
 if "%ntver%" neq "10.0" (
@@ -166,7 +166,6 @@ if "%ntver%" neq "10.0" (
 	color 0a
 	)
 pause >nul
-::
 exit
 ::
 :get7z
