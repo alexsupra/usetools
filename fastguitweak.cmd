@@ -2,11 +2,11 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set fastguitweak_version=2602.05
+set fastguitweak_version=2602.06
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
-if %errorLevel% neq 0 title title %~nx0&echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR&color 0e &pause &exit
+if %errorLevel% neq 0 title %~nx0&echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR&color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
 echo %cpuname% ~ %processor_architecture%
 :os_check
@@ -230,10 +230,16 @@ if not exist "%sysinstall%\wget.exe" (
 	echo Invoke-WebRequest 'http://eternallybored.org/misc/wget/1.21.4/32/wget.exe' -OutFile 'wget.exe' >>getwget.ps1
 	powershell -ExecutionPolicy Bypass -File getwget.ps1
 	if not exist "%sysinstall%\wget.exe" (
-		echo. &echo Now we will start IE for downloading wget.exe, save it in the same dir with sysinstall.cmd and close browser window.&color 0e &pause
-		"%programfiles%\internet explorer\iexplore.exe" "http://eternallybored.org/misc/wget/1.20.3/32/wget.exe"
+		echo. &echo Starting Edge for downloading wget.exe, save it in the same dir with sysinstall.cmd and close browser window.&color 0e &pause
+		start msedge --new-window "http://eternallybored.org/misc/wget/1.21.4/32/wget.exe"
 		)
+	if not exist "%sysinstall%\wget.exe" (
+		echo. &echo Starting IE for downloading wget.exe, save it in the same dir with sysinstall.cmd and close browser window.&color 0e &pause
+		"%programfiles%\internet explorer\iexplore.exe" "http://eternallybored.org/misc/wget/1.21.4/32/wget.exe"
+		)
+	if not exist "%sysinstall%\wget.exe" goto prepair
 	del /f /q getwget.ps1 >nul
+	goto prepair
 	)
 if not exist "%setupbin%" md "%setupbin%"
 cd "%setupbin%"
