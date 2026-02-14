@@ -1,12 +1,12 @@
-:: fastguitweak.cmd - Making Windows GUI fast and smart
+:: fastguitweak.cmd - Making Windows GUI shell fast and smart
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set fastguitweak_version=2602.04
+set fastguitweak_version=2602.05
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
-if %errorLevel% neq 0 title %~nx0&echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR&color 0e &pause &exit
+if %errorLevel% neq 0 title title %~nx0&echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR&color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
 echo %cpuname% ~ %processor_architecture%
 :os_check
@@ -72,7 +72,7 @@ if "%ntver%"=="10.0" (
 	) else (
 	echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
 	)
-title %0 &echo %username%@%computername%
+title %~nx0&echo %username%@%computername%
 ::
 echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
@@ -93,14 +93,18 @@ if "%ntver%"=="10.0" goto menu_win10
 :menu
 echo. &echo [1] Apply system registry tweaks, install Open-Shell
 echo [2] Apply system registry tweaks
+echo [3] Apply system registry tweaks, install Open-Shell, OldNewExplorer, SecureUxTheme
+echo [4] Apply system registry tweaks, install Open-Shell, OldNewExplorer, SecureUxTheme, TangoPatcher
 echo [0] Reboot
 echo [x] Exit &echo.
 set userinput=
-set /p userinput=Input your choice and press enter [1/2/3/0/x]:
+set /p userinput=Input your choice and press enter [1/2/3/4/0/x]:
 if "%userinput%"=="" goto menu
 if %userinput%==0 exit
 if %userinput%==1 goto regtweaks
 if %userinput%==2 goto regtweaks
+if %userinput%==3 goto regtweaks
+if %userinput%==4 goto regtweaks
 if %userinput%==0 shutdown /r /t 0
 if %userinput%==x exit
 echo. &echo Input seems to be incorrect. Please try one more time
@@ -126,6 +130,12 @@ echo. &echo [40;93mInput seems to be incorrect. Please try one more time[0m
 goto menu_win10
 ::
 :regtweaks
+echo. &echo Creating system registry backup ...
+set backup=%sysinstall%\backup
+if not exist "%backup%" md "%backup%
+reg export "hkey_local_machine" "%backup%\hklm_%computername%_%date%.reg" /y
+reg export "hkey_current_user" "%backup%\hkcu_%computername%_%username%_%date%.reg" /y
+echo. &echo Applying system registry settings ...
 :: run Explorer windows as separate processes
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t reg_dword /d "1" /f
 :: show file extensions
@@ -227,6 +237,7 @@ if not exist "%sysinstall%\wget.exe" (
 	)
 if not exist "%setupbin%" md "%setupbin%"
 cd "%setupbin%"
+if %userinput%==1 goto openshell
 if "%osarch%"=="x64" goto 7-zip64
 ::
 :: 7-zip64
@@ -275,8 +286,9 @@ if not exist "%setupbin%\OpenShellSetup_4_4_196.exe" wget.exe --tries=3 --no-che
 "%setupbin%\OpenShellSetup_4_4_196.exe" /quiet
 if %osarch%==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
 if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
+if %userinput%==1 goto completed
 ::
-::OldNewExplorer
+:: OldNewExplorer
 :oldnewexplorer
 echo. &echo Installing OldNewExplorer ...
 if not exist "%setupbin%\oldnewexplorer.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.oldnewexplorer.com/dl/OldNewExplorer.zip"
@@ -288,6 +300,7 @@ if not exist "%setupcfg%\oldnewexplorer.7z" wget.exe --tries=3 --no-check-certif
 if %osarch%==x86 regsvr32 /s "%programfiles%\oldnewexplorer\oldnewexplorer32.dll"
 if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /s "%programfiles%\oldnewexplorer\oldnewexplorer32.dll"
 regedit /s "%programfiles%\oldnewexplorer\oldnewexplorer.reg"
+
 cd "%setupbin%"
 ::
 :: SecureUxTheme
@@ -309,15 +322,17 @@ DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
 ::
 :: Tango Patcher
 :tangopatcher
-echo Installing Windows Tango Patcher ...
+echo. &echo Installing Windows Tango Patcher ...
 if not exist "%setupbin%\WinTango-Patcher-24.08.02-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/WinTango-Patcher/releases/download/v24.08.02/WinTango-Patcher-24.08.02-offline.exe"
 nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 3 min." 180 force reboot
 "%setupbin%\WinTango-Patcher-24.08.02-offline.exe" /S
 ::
 :completed
-echo. &echo Restarting GUI shell ...
-nircmd.exe restartexplorer
-title %0 - installation is completed
+if exist "%sysinstall%\nircmd.exe" (
+	echo. &echo Restarting GUI shell ...
+	nircmd.exe restartexplorer
+	)
+title %~nx0 - installation is completed
 if "%ntver%"=="10.0" echo [30;102mPRESS ANY KEY TO EXIT[0m
 if "%ntver%" neq "10.0" (
 	echo PRESS ANY KEY TO EXIT
