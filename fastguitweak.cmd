@@ -2,11 +2,11 @@
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
 @echo off &cls
-set fastguitweak_version=2602.03
+set fastguitweak_version=2602.04
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
-if %errorLevel% neq 0 echo Administrative permissions check failure!!&echo Restart as administrator&color 0e &pause &exit
+if %errorLevel% neq 0 title %~nx0&echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR&color 0e &pause &exit
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
 echo %cpuname% ~ %processor_architecture%
 :os_check
@@ -87,12 +87,45 @@ echo     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 cd /d "%~dp0"
 set sysinstall=%cd%
 set setupbin=%cd%\setupbin
+set setupcfg=%cd%\setupcfg
 set path=%path%;%sysinstall%;%setupbin%
-echo.
-if "%ntver%"=="10.0" echo [50;92mPRESS ANY KEY TO CONTINUE[0m
-if "%ntver%" neq "10.0" echo PRESS ANY KEY TO CONTINUE
-pause >nul
+if "%ntver%"=="10.0" goto menu_win10
+:menu
+echo. &echo [1] Apply system registry tweaks, install Open-Shell
+echo [2] Apply system registry tweaks
+echo [0] Reboot
+echo [x] Exit &echo.
+set userinput=
+set /p userinput=Input your choice and press enter [1/2/3/0/x]:
+if "%userinput%"=="" goto menu
+if %userinput%==0 exit
+if %userinput%==1 goto regtweaks
+if %userinput%==2 goto regtweaks
+if %userinput%==0 shutdown /r /t 0
+if %userinput%==x exit
+echo. &echo Input seems to be incorrect. Please try one more time
+goto menu
 ::
+:menu_win10
+echo. &echo [1;104m[1][0m [50;96mApply system registry tweaks, install Open-Shell[0m
+echo [1;104m[2][0m [50;96mApply system registry tweaks[0m
+echo [1;104m[3][0m [50;96mApply system registry tweaks, install Open-Shell, OldNewExplorer, SecureUxTheme[0m
+echo [1;104m[4][0m [50;96mApply system registry tweaks, install Open-Shell, OldNewExplorer, SecureUxTheme, TangoPatcher[0m
+echo [1;104m[0][0m [50;96mReboot[0m
+echo [1;104m[x][0m [50;96mExit &echo.[0m
+set userinput=
+set /p userinput=[50;96mInput your choice and press enter[0m [1;104m[1/2/3/0/x][0m:
+if "%userinput%"=="" goto menu_win10
+if %userinput%==1 goto regtweaks
+if %userinput%==2 goto regtweaks
+if %userinput%==3 goto regtweaks
+if %userinput%==4 goto regtweaks
+if %userinput%==0 shutdown /r /t 0
+if %userinput%==x exit
+echo. &echo [40;93mInput seems to be incorrect. Please try one more time[0m
+goto menu_win10
+::
+:regtweaks
 :: run Explorer windows as separate processes
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "SeparateProcess" /t reg_dword /d "1" /f
 :: show file extensions
@@ -180,9 +213,11 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\S
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" /v "ThisPCPolicy" /t reg_sz /d "Hide" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{31C0DD25-9439-4F12-BF41-7FF4EDA38722}\PropertyBag" /f
 ::
+if %userinput%==2 goto completed
+::
 if not exist "%sysinstall%\wget.exe" (
 	echo [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" >getwget.ps1
-	echo Invoke-WebRequest 'http://eternallybored.org/misc/wget/1.20.3/32/wget.exe' -OutFile 'wget.exe' >>getwget.ps1
+	echo Invoke-WebRequest 'http://eternallybored.org/misc/wget/1.21.4/32/wget.exe' -OutFile 'wget.exe' >>getwget.ps1
 	powershell -ExecutionPolicy Bypass -File getwget.ps1
 	if not exist "%sysinstall%\wget.exe" (
 		echo. &echo Now we will start IE for downloading wget.exe, save it in the same dir with sysinstall.cmd and close browser window.&color 0e &pause
@@ -192,13 +227,96 @@ if not exist "%sysinstall%\wget.exe" (
 	)
 if not exist "%setupbin%" md "%setupbin%"
 cd "%setupbin%"
+if "%osarch%"=="x64" goto 7-zip64
+::
+:: 7-zip64
+echo. &echo Installing 7-zip 64-bit ...
+tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
+if errorlevel 1 taskkill /f /im "7zfm.exe"
+if not exist "%setupbin%\7z2600.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2600.msi"
+msiexec /package "%setupbin%\7z2600.msi" /quiet /norestart
+if not exist "%setupbin%\7z2600-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2600-extra.7z"
+"%ProgramFiles%\7-Zip\7zg.exe" x -r -y -o"%ProgramFiles%\7-Zip" "%setupbin%\7z2501-extra.7z"
+if not exist "%sysinstall%"\7za.exe copy /y "%ProgramFiles%\7-Zip\7za.exe" "%sysinstall%"
+copy /y "%ProgramFiles%\7-Zip\7za.exe" "%systemroot%\system32"
+::
+:: NirCMD32
+echo Installing NirCMD ...
+if not exist "%setupbin%\nircmd.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/nircmd.zip" -O "%setupbin%\nircmd.zip"
+7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd.zip"
+copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
+copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
+::
+:7-zip64
+:: 7-zip64
+echo. &echo Installing 7-zip 64-bit ...
+tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
+if errorlevel 1 taskkill /f /im "7zfm.exe"
+if not exist "%setupbin%\7z2600-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2600-x64.msi"
+msiexec /package "%setupbin%\7z2600-x64.msi" /quiet /norestart
+if not exist "%setupbin%\7z2600-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2600-extra.7z"
+if exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles%\7-Zip
+if not exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles(x86)%\7-Zip
+"%sevenzip%\7zg.exe" x -r -y -o"%sevenzip%" "%setupbin%\7z2501-extra.7z"
+if not exist "%sysinstall%\7za.exe" copy /y "%sevenzip%\x64\7za.exe" "%sysinstall%"
+copy /y "%sevenzip%\x64\7za.exe" "%systemroot%\system32"
+::
+:: NirCMD64
+echo Installing NirCMD ...
+if not exist "%setupbin%\nircmd-x64.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.nirsoft.net/utils/nircmd-x64.zip" -O "%setupbin%\nircmd-x64.zip"
+if not exist "%sysinstall%\nircmdc.exe" 7za.exe x -r -y -x!*.chm -o"%sysinstall%" "%setupbin%\nircmd-x64.zip"
+copy /y "%sysinstall%\nircmd.exe" "%systemroot%\system32"
+copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
+::
 :: Open-Shell
+:openshell
 echo. &echo Installing Open-Shell ...
 if not exist "%setupbin%\OpenShellSetup_4_4_196.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/Open-Shell/Open-Shell-Menu/releases/download/v4.4.196/OpenShellSetup_4_4_196.exe"
 "%setupbin%\OpenShellSetup_4_4_196.exe" /quiet
 if %osarch%==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
 if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
 ::
+::OldNewExplorer
+:oldnewexplorer
+echo. &echo Installing OldNewExplorer ...
+if not exist "%setupbin%\oldnewexplorer.zip" wget.exe --tries=3 --no-check-certificate -c "http://www.oldnewexplorer.com/dl/OldNewExplorer.zip"
+if not exist "%setupcfg%" md "%setupcfg%"
+cd "%setupcfg%"
+if not exist "%setupcfg%\oldnewexplorer.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/usetools/raw/refs/heads/master/setupcfg/oldnewexplorer.7z"
+7za.exe x -r -y -o"%programfiles%" "%setupbin%\oldnewexplorer.zip"
+7za.exe x -r -y -o"%programfiles%" "%setupcfg%\oldnewexplorer.7z"
+if %osarch%==x86 regsvr32 /s "%programfiles%\oldnewexplorer\oldnewexplorer32.dll"
+if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /s "%programfiles%\oldnewexplorer\oldnewexplorer32.dll"
+regedit /s "%programfiles%\oldnewexplorer\oldnewexplorer.reg"
+cd "%setupbin%"
+::
+:: SecureUxTheme
+:secureuxtheme
+echo. &echo Installing SecureUxTheme ...
+if not exist "%setupbin%\SecureUxTheme_%osarch%.msi" wget.exe --tries=3 --no-check-certificate -c "https://github.com/namazso/SecureUxTheme/releases/download/v4.0.0/SecureUxTheme_%osarch%.msi"
+msiexec /package "%setupbin%\SecureUxTheme_%osarch%.msi" /quiet /norestart
+if %userinput%==3 goto completed
+::
+:dotnetfx
+:: DotnetFX
+echo. &echo Installing DotnetFX ...
+if "%ntver%" neq "6.1" goto dotnetfx_win81
+if not exist "%setupbin%\dotnetfx35.exe" wget.exe --tries=3 --no-check-certificate -c "http://download.microsoft.com/download/2/0/e/20e90413-712f-438c-988e-fdaa79a8ac3d/dotnetfx35.exe"
+"%setupbin%\dotnetfx35.exe" /s
+goto tangopatcher
+:dotnetfx_win81
+DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
+::
+:: Tango Patcher
+:tangopatcher
+echo Installing Windows Tango Patcher ...
+if not exist "%setupbin%\WinTango-Patcher-24.08.02-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/WinTango-Patcher/releases/download/v24.08.02/WinTango-Patcher-24.08.02-offline.exe"
+nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 3 min." 180 force reboot
+"%setupbin%\WinTango-Patcher-24.08.02-offline.exe" /S
+::
+:completed
+echo. &echo Restarting GUI shell ...
+nircmd.exe restartexplorer
 title %0 - installation is completed
 if "%ntver%"=="10.0" echo [30;102mPRESS ANY KEY TO EXIT[0m
 if "%ntver%" neq "10.0" (
