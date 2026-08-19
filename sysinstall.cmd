@@ -1,14 +1,22 @@
 :: sysinstall.cmd - software and settings installation script providing better defaults
 :: for 32/64-bits OS Windows NT 6.1, 6.2, 6.3, 10.0
 :: https://github.com/alexsupra/usetools
-@echo off &cls
-set sysinstall_version=2602.05
+@echo off &cls &title %~nx0
+set sysinstall_version=2607.02
 chcp 866 >nul
 if "%1"=="-s" goto os_check
 net session >nul 2>&1
-if %errorLevel% neq 0 title %~nx0&echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR&color 0e &pause &exit
+if %errorLevel% neq 0 (
+	title %~nx0&echo Administrative permissions check failure!!&echo RESTART AS ADMINISTRATOR
+	color 0e &pause
+	if exist nircmd.exe nircmd.exe elevate cmd.exe /c "%~dp0sysinstall.cmd" &exit
+	if exist nircmdc.exe nircmdc.exe elevate cmd.exe /c "%~dp0sysinstall.cmd" &exit
+	exit	
+	)
 for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\centralprocessor\0" /v "ProcessorNameString"') do set "cpuname=%%b"
-echo %cpuname% ~ %processor_architecture%
+for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\bios" /v "BaseBoardManufacturer"') do set "mbname1=%%b"
+for /f "tokens=2*" %%a in ('reg query "hklm\hardware\description\system\bios" /v "BaseBoardProduct"') do set "mbname2=%%b"
+echo %mbname1% %mbname2% # %cpuname%
 :os_check
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set ntver=%%i.%%j
 for /f "tokens=4-6 delims=. " %%i in ('ver') do set ntbuild=%%k
@@ -61,6 +69,18 @@ if "%ntver%"=="10.0" (
 		set ntname=Windows 11
 		set codename=25H2
 	)
+	if %ntbuild%==28000 (
+		set ntname=Windows 11
+		set codename=26H1
+	)
+	if %ntbuild%==28020 (
+		set ntname=Windows 11
+		set codename=26H1
+	)
+	if %ntbuild%==28120 (
+		set ntname=Windows 11
+		set codename=26H1
+	)
 )
 set osarch=x86
 echo %processor_architecture%|find.exe "64" >nul
@@ -72,15 +92,18 @@ if "%ntver%"=="10.0" (
 	) else (
 	echo %ntname% %codename% NT %ntver%.%ntbuild% %osarch%
 	)
-title %~nx0&echo %username%@%computername%
-::
-echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+echo ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
+if "%ntver%"=="10.0" echo [107;30m %username%@%computername%[0m
+if "%ntver%" neq "10.0" echo %username%@%computername%
+if "%ntver%"=="10.0" echo [40;35m    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+if "%ntver%" neq "10.0" echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
 echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
 echo     ÛÛ    ÛÛ  ฿฿฿฿฿฿Û Û฿฿฿฿฿      ÛÛ    Û      Û Û      Û ÛÛ        ฿฿฿฿฿฿Û  
 echo     ÛÛ    ÛÛ ÛÛ     Û Û      Û    ÛÛ    Û      Û Û      Û ÛÛ    ÛÛ ÛÛ     Û 
-echo      ฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿    ฿฿    ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿  
-echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+echo      ฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿    ฿฿    ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿       
+if "%ntver%"=="10.0" echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ [0m
+if "%ntver%" neq "10.0" echo อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 echo     ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
 echo     ณ sysinstall.cmd - software and settings installation script v%sysinstall_version% ณ
 echo     ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
@@ -91,20 +114,31 @@ set setupcfg=%cd%\setupcfg
 set backup=%cd%\backup
 if "%1"=="-s" goto config
 if "%1"=="-u" (
-	echo. &echo Running in unattended mode ...
+	echo. &echo Running in UNATTENDED mode ...
 	set userinput=1
 	goto prepair
 	)
 ::
 :menu
-echo. &echo [1] Install system settings and software apps
-echo [2] Install system settings
-echo [3] Install software apps
-echo [4] Make system registry backup
-echo [5] Restore system from registry backup
-echo [6] Info
-echo [7] Reboot
-echo [0] Exit &echo.
+echo ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ &echo.
+if "%ntver%"=="10.0" echo [30;102m[1][;96m Install system settings and software apps
+if "%ntver%" neq "10.0" echo [1] Install system settings and software apps
+if "%ntver%"=="10.0" echo [30;102m[2][;96m Install system settings
+if "%ntver%" neq "10.0" echo [2] Install system settings
+if "%ntver%"=="10.0" echo [30;102m[3][;96m Install software apps
+if "%ntver%" neq "10.0" echo [3] Install software apps
+if "%ntver%"=="10.0" echo [30;102m[4][;96m Make system registry backup
+if "%ntver%" neq "10.0" echo [4] Make system registry backup
+if "%ntver%"=="10.0" echo [30;102m[5][;96m Restore system from registry backup
+if "%ntver%" neq "10.0" echo [5] Restore system from registry backup
+if "%ntver%"=="10.0" echo [30;102m[6][;96m Info
+if "%ntver%" neq "10.0" echo [6] Info
+if "%ntver%"=="10.0" echo [30;102m[7][;96m Reboot
+if "%ntver%" neq "10.0" echo [7] Reboot
+if "%ntver%"=="10.0" echo [30;102m[0][;96m Exit[0m
+if "%ntver%" neq "10.0" echo [0] Exit
+echo.
+echo ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
 set userinput=0
 set /p userinput=Input your choice and press enter [1/2/3/4/5/6/7/0]:
 if %userinput%==0 exit
@@ -119,20 +153,31 @@ echo Input seems to be incorrect. Please try one more time
 goto menu
 ::
 :info
-echo.
 echo ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
 echo [ABOUT] &echo sysinstall.cmd is software and settings installation script aiming to provide
 echo better defaults for Windows 7, 8, 10, 11 and also corresponding Server versions
 echo for 32-bit and 64-bit platforms.
 echo sysinstall.cmd installs software apps, software settings, system configuration
 echo and per-user configuration.
+echo. &echo [PHILOSOPHY]
+echo sysinstall.cmd is a creative, experimental project built with a pragmatic
+echo mindset. It bridges innovative tweaks with raw functionality, serving as
+echo a practical toolbox rather than a rigid corporate solution. Expect bold
+echo ideas, experimental features, and a heavy focus on everyday utility.
 echo. &echo [USAGE]
 echo Run sysinstall.cmd with administrator rights, input necessary action number.
 echo Command line options:
 echo -u unattended setup skipping input option for automated installation
 echo -s user installation mode, per-user system registry settings
+echo. &echo [DISCLAIMER]
+echo THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+echo IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY AND
+echo FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+echo ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+echo OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+echo USE OR OTHER DEALINGS IN THE SOFTWARE.
 echo ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
-echo. &pause
+pause 
 goto menu
 ::
 :backup
@@ -149,7 +194,7 @@ if %userinput%==4 goto menu
 ::
 :restore
 echo. &echo Restoring system from registry backup ...&echo.
-if not exist "%backup%" echo Backup not found &goto menu
+if not exist "%backup%" echo Backup NOT FOUND &goto menu
 if exist "%backup%\hklm.reg" regedit /s "%backup%\hklm_%computername%.reg" 
 if exist "%backup%\hkcr.reg" regedit /s "%backup%\hkcr_%computername%.reg" 
 if exist "%backup%\hkcu.reg" regedit /s "%backup%\hkcu_%computername%_%username%.reg" 
@@ -638,6 +683,15 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" 
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowDeviceNameInTelemetry" /t reg_dword /d "0" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection" /v "AllowTelemetry" /t reg_dword /d "0" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack\TestHooks" /v "Disabled" /t reg_dword /d "1" /f
+:: no autoupdate again
+powershell Start-Process -FilePath "%0" -ArgumentList "%*" -WindowStyle Hidden -Verb RunAs
+for /f "usebackq delims=" %%i in (`powershell -NoProfile -Command "(Get-Date).ToString('yyyy-MM-ddT00:00:00Z')"`) do set "CurrentDateISO=%%i"
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseUpdatesExpiryTime" /t REG_SZ /d "2050-12-31T23:59:59Z" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseUpdatesStartTime" /t REG_SZ /d "%CurrentDateISO%" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseFeatureUpdatesStartTime" /t REG_SZ /d "%CurrentDateISO%" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseQualityUpdatesStartTime" /t REG_SZ /d "%CurrentDateISO%" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseFeatureUpdatesExpiryTime" /t REG_SZ /d "2050-12-31T23:59:59Z" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /v "PauseQualityUpdatesExpiryTime" /t REG_SZ /d "2050-12-31T23:59:59Z" /f
 ::
 :: User configuration settings for Windows NT 10.0 version 11
 :config_user_win11
@@ -675,12 +729,12 @@ echo. &echo Running software APPS installation in 32-bit mode ...&echo.
 echo Installing 7-zip ...
 tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "7zfm.exe"
-if not exist "%setupbin%\7z2600.msi" wget.exe --tries=3 --no-check-certificate -c "http://7-zip.org/a/7z2600.msi"
-if not exist "%setupbin%\7z2600.msi" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/25.01/7z2600.msi"
-msiexec /package "%setupbin%\7z2600.msi" /quiet /norestart
-if not exist "%setupbin%\7z2600-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2600-extra.7z"
-if not exist "%setupbin%\7z2600-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/25.01/7z2600-extra.7z"
-"%ProgramFiles%\7-Zip\7zg.exe" x -r -y -o"%ProgramFiles%\7-Zip" "%setupbin%\7z2600-extra.7z"
+if not exist "%setupbin%\7z2602.msi" wget.exe --tries=3 --no-check-certificate -c "http://7-zip.org/a/7z2602.msi"
+if not exist "%setupbin%\7z2602.msi" wget.exe --tries=3 --no-check-certificate -c "http://github.com/ip7z/7zip/releases/download/26.02/7z2602.msi"
+msiexec /package "%setupbin%\7z2602.msi" /quiet /norestart
+if not exist "%setupbin%\7z2602-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2602-extra.7z"
+if not exist "%setupbin%\7z2602-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/ip7z/7zip/releases/download/26.02/7z2602-extra.7z"
+"%ProgramFiles%\7-Zip\7zg.exe" x -r -y -o"%ProgramFiles%\7-Zip" "%setupbin%\7z2602-extra.7z"
 if not exist "%sysinstall%"\7za.exe copy /y "%ProgramFiles%\7-Zip\7za.exe" "%sysinstall%"
 copy /y "%ProgramFiles%\7-Zip\7za.exe" "%systemroot%\system32"
 :: NirCMD32
@@ -693,8 +747,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b6647.x86.20260224.msi" wget.exe --tries=3 --no-check-certificate -c "http://farmanager.com/nightly/Far30b6647.x86.20260224.msi"
-msiexec /package "%setupbin%\Far30b6647.x86.20260224.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b6699.x86.20260614.msi" wget.exe --tries=3 --no-check-certificate -c "https://www.farmanager.com/files/Far30b6699.x86.20260614.msi"
+msiexec /package "%setupbin%\Far30b6699.x86.20260614.msi" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -772,14 +826,14 @@ if "%PROCESSOR_ARCHITECTURE%"=="x86" color 0e &echo CMD process seems to be 32-b
 echo Installing 7-zip ...
 tasklist /fi "imagename eq 7zfm.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "7zfm.exe"
-if not exist "%setupbin%\7z2600-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://7-zip.org/a/7z2600-x64.msi"
-if not exist "%setupbin%\7z2600-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/26.00/7z2600-x64.msi"
-msiexec /package "%setupbin%\7z2600-x64.msi" /quiet /norestart
-if not exist "%setupbin%\7z2600-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2600-extra.7z"
-if not exist "%setupbin%\7z2600-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://netcologne.dl.sourceforge.net/project/sevenzip/7-Zip/26.00/7z2600-extra.7z"
+if not exist "%setupbin%\7z2602-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://7-zip.org/a/7z2602-x64.msi"
+if not exist "%setupbin%\7z2602-x64.msi" wget.exe --tries=3 --no-check-certificate -c "http://github.com/ip7z/7zip/releases/download/26.02/7z2602-x64.msi"
+msiexec /package "%setupbin%\7z2602-x64.msi" /quiet /norestart
+if not exist "%setupbin%\7z2602-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://www.7-zip.org/a/7z2602-extra.7z"
+if not exist "%setupbin%\7z2602-extra.7z" wget.exe --tries=3 --no-check-certificate -c "http://github.com/ip7z/7zip/releases/download/26.02/7z2602-extra.7z"
 if exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles%\7-Zip
 if not exist "%ProgramFiles%\7-Zip" set sevenzip=%ProgramFiles(x86)%\7-Zip
-"%sevenzip%\7zg.exe" x -r -y -o"%sevenzip%" "%setupbin%\7z2600-extra.7z"
+"%sevenzip%\7zg.exe" x -r -y -o"%sevenzip%" "%setupbin%\7z2602-extra.7z"
 if not exist "%sysinstall%\7za.exe" copy /y "%sevenzip%\x64\7za.exe" "%sysinstall%"
 copy /y "%sevenzip%\x64\7za.exe" "%systemroot%\system32"
 :: NirCMD64
@@ -792,8 +846,8 @@ copy /y "%sysinstall%\nircmdc.exe" "%systemroot%\system32"
 echo Installing FAR ...
 tasklist /fi "imagename eq far.exe" |find ":" >nul
 if errorlevel 1 taskkill /f /im "far.exe"
-if not exist "%setupbin%\Far30b6647.x64.20260224.msi" wget.exe --tries=3 --no-check-certificate -c "http://farmanager.com/nightly/Far30b6647.x64.20260224.msi"
-msiexec /package "%setupbin%\Far30b6647.x64.20260224.msi" /quiet /norestart
+if not exist "%setupbin%\Far30b6699.x64.20260614" wget.exe --tries=3 --no-check-certificate -c "http://www.farmanager.com/files/Far30b6699.x86.20260614.msi"
+msiexec /package "%setupbin%\Far30b6699.x64.20260614" /quiet /norestart
 if not exist "%ProgramFiles%\Far Manager\plugins\7-zip" md "%ProgramFiles%\Far Manager\plugins\7-zip"
 copy /y "%ProgramFiles%\7-Zip\far\*.*" "%ProgramFiles%\Far Manager\plugins\7-zip"
 regedit /s "%ProgramFiles%\Far Manager\plugins\7-zip\far7z.reg"
@@ -1102,8 +1156,8 @@ goto dotnetfx_win81
 :openshell
 :: Open-Shell
 echo Installing Open-Shell ...
-if not exist "%setupbin%\OpenShellSetup_4_4_196.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/Open-Shell/Open-Shell-Menu/releases/download/v4.4.196/OpenShellSetup_4_4_196.exe"
-"%setupbin%\OpenShellSetup_4_4_196.exe" /quiet
+if not exist "%setupbin%\OpenShellSetup_4_4_198.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/Open-Shell/Open-Shell-Menu/releases/download/v4.4.198/OpenShellSetup_4_4_198.exe"
+"%setupbin%\OpenShellSetup_4_4_198.exe" /quiet
 if %osarch%==x86 regsvr32 /u /s "%programfiles%\open-shell\classicexplorer32.dll"
 if %osarch%==x64 %systemroot%\syswow64\regsvr32.exe /u /s "%programfiles%\open-shell\classicexplorer64.dll"
 :: ExplorerPatcher
@@ -1149,8 +1203,8 @@ if "%ntver%" neq "10.0" goto tango_patcher
 :: system clean-up
 echo. &echo Performing system clean-up ...
 taskkill /f /im OneDrive.exe >nul 2>&1
-if %osarch%==x86 %systemroot%\System32\OneDriveSetup.exe /uninstall /allusers
-if %osarch%==x64 %systemroot%\SysWOW64\OneDriveSetup.exe /uninstall /allusers
+%systemroot%\System32\OneDriveSetup.exe /uninstall /allusers >nul 2>&1
+powershell -NoProfile -Command "Get-AppxPackage -AllUsers *OneDrive* | Remove-AppxPackage -AllUsers"
 ::
 :dotnetfx
 :: DotnetFX
@@ -1168,7 +1222,23 @@ echo Installing Windows Tango Patcher ...
 if not exist "%setupbin%\WinTango-Patcher-24.08.02-offline.exe" wget.exe --tries=3 --no-check-certificate -c "http://github.com/alexsupra/WinTango-Patcher/releases/download/v24.08.02/WinTango-Patcher-24.08.02-offline.exe"
 nircmdc.exe initshutdown "sysinstall.cmd: system will be restarted automatically in a 3 min." 180 force reboot
 "%setupbin%\WinTango-Patcher-24.08.02-offline.exe" /S
-title %~nx0 - installation is completed&echo. &echo INSTALLATION IS COMPLETED
+::
+echo ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
+if "%ntver%"=="10.0" echo [107;30m %username%@%computername%[0m
+if "%ntver%" neq "10.0" echo %username%@%computername%
+if "%ntver%"=="10.0" echo [40;35m    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+if "%ntver%" neq "10.0" echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+echo     ÛÛ    ÛÛ ÛÛ฿฿฿฿ÛÛ Û฿฿฿฿฿฿Û ฿฿฿ÛÛ฿฿฿ Û฿฿฿฿฿฿Û Û฿฿฿฿฿฿Û ÛÛ       ÛÛ฿฿฿฿ÛÛ 
+echo     ÛÛ    ÛÛ ÛÛ       Û           ÛÛ    Û      Û Û      Û ÛÛ       ÛÛ       
+echo     ÛÛ    ÛÛ  ฿฿฿฿฿฿Û Û฿฿฿฿฿      ÛÛ    Û      Û Û      Û ÛÛ        ฿฿฿฿฿฿Û  
+echo     ÛÛ    ÛÛ ÛÛ     Û Û      Û    ÛÛ    Û      Û Û      Û ÛÛ    ÛÛ ÛÛ     Û 
+echo      ฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿    ฿฿    ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿ ฿฿฿฿฿฿฿฿       
+if "%ntver%"=="10.0" echo     อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ [0m
+if "%ntver%" neq "10.0" echo อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+echo     ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+echo     ณ sysinstall.cmd - software and settings installation script v%sysinstall_version% ณ
+echo     ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+echo. &title %~nx0 - installation is completed&echo. &echo INSTALLATION IS COMPLETED
 if "%1"=="-u" exit
 if "%ntver%"=="10.0" echo [30;102mPRESS ANY KEY TO EXIT[0m
 if "%ntver%" neq "10.0" (
@@ -1195,5 +1265,5 @@ copy /y "%programfiles%\conemu\conemu.xml" "%appdata%"
 if %osarch%==x86 set fooprogdir=%proframfiles%\foobar2000
 if %osarch%==x64 set fooprogdir=%proframfiles(x86)%\foobar2000
 xcopy "%fooprogdir%\appdata" "%appdata%\foobar2000" /i /y /s /r /c
-color 0a&exit
+exit
 ::
